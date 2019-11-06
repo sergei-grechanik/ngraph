@@ -67,12 +67,21 @@ void pass::Manager::run_passes(shared_ptr<Function> func, bool /* transitive */)
     overall_timer.start();
     for (shared_ptr<PassBase> pass : m_pass_list)
     {
+        PassBase* p = pass.get();
+        string pass_name = typeid(*p).name();
+#ifndef _WIN32
+        int status;
+        pass_name = abi::__cxa_demangle(name.c_str(), nullptr, nullptr, &status);
+#endif
+
         pass_timer.start();
         pass->set_state(get_state());
         auto module_pass = dynamic_pointer_cast<ModulePass>(pass);
         auto function_pass = dynamic_pointer_cast<FunctionPass>(pass);
         auto node_pass = dynamic_pointer_cast<NodePass>(pass);
         auto call_graph_pass = dynamic_pointer_cast<CallGraphPass>(pass);
+        try
+        {
         if (module_pass)
         {
             if (auto vt_pass = dynamic_pointer_cast<pass::VisualizeTree>(module_pass))
@@ -133,6 +142,11 @@ void pass::Manager::run_passes(shared_ptr<Function> func, bool /* transitive */)
                 f_pair.second = (function_modified == true) ? f->is_dynamic() : f_pair.second;
             }
         }
+        }
+        catch(exception err)
+        {
+            NGRAPH_INFO << "Pass exception " << pass_name;
+        }
 
         if (m_visualize || m_serialize)
         {
@@ -162,13 +176,7 @@ void pass::Manager::run_passes(shared_ptr<Function> func, bool /* transitive */)
         pass_timer.stop();
         if (profile_enabled)
         {
-            PassBase* p = pass.get();
-            string name = typeid(*p).name();
-#ifndef _WIN32
-            int status;
-            name = abi::__cxa_demangle(name.c_str(), nullptr, nullptr, &status);
-#endif
-            cout << setw(7) << pass_timer.get_milliseconds() << "ms " << name << "\n";
+            cout << setw(7) << pass_timer.get_milliseconds() << "ms " << pass_name << "\n";
         }
     }
     if (profile_enabled)
