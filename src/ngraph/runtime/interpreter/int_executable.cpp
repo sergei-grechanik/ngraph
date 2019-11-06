@@ -39,6 +39,11 @@ using namespace ngraph;
 
 using descriptor::layout::DenseTensorLayout;
 
+static bool supported(const Node& node)
+{
+    throw runtime_error("yikes");
+}
+
 runtime::interpreter::INTExecutable::INTExecutable(const shared_ptr<Function>& function,
                                                    bool enable_performance_collection)
     : m_is_compiled{true}
@@ -47,7 +52,7 @@ runtime::interpreter::INTExecutable::INTExecutable(const shared_ptr<Function>& f
     m_function = clone_function(*function);
     pass::Manager pass_manager;
     pass_manager.register_pass<pass::LikeReplacement>();
-    pass_manager.register_pass<pass::FusedOpDecomposition>();
+    pass_manager.register_pass<pass::FusedOpDecomposition>(supported);
     pass_manager.register_pass<pass::Opset0Downgrade>();
     pass_manager.register_pass<pass::AssignLayout<DenseTensorLayout>>();
     pass_manager.register_pass<pass::Liveness>();

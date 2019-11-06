@@ -71,7 +71,7 @@ void pass::Manager::run_passes(shared_ptr<Function> func, bool /* transitive */)
         string pass_name = typeid(*p).name();
 #ifndef _WIN32
         int status;
-        pass_name = abi::__cxa_demangle(name.c_str(), nullptr, nullptr, &status);
+        pass_name = abi::__cxa_demangle(pass_name.c_str(), nullptr, nullptr, &status);
 #endif
 
         pass_timer.start();
@@ -82,68 +82,71 @@ void pass::Manager::run_passes(shared_ptr<Function> func, bool /* transitive */)
         auto call_graph_pass = dynamic_pointer_cast<CallGraphPass>(pass);
         try
         {
-        if (module_pass)
-        {
-            if (auto vt_pass = dynamic_pointer_cast<pass::VisualizeTree>(module_pass))
+            if (module_pass)
             {
-                vt_pass->set_ops_to_details(get_state().get_visualize_tree_ops_map());
+                if (auto vt_pass = dynamic_pointer_cast<pass::VisualizeTree>(module_pass))
+                {
+                    vt_pass->set_ops_to_details(get_state().get_visualize_tree_ops_map());
+                }
+                module_pass->run_on_module(f_array);
             }
-            module_pass->run_on_module(f_array);
-        }
-        else if (function_pass)
-        {
-            for (auto f_pair : fs)
+            else if (function_pass)
             {
-                shared_ptr<Function> f = f_pair.first;
-                // This checks is to skip the graph optimization when the graph pass relies on
-                // static shape but the function state is dynamic.
-                // we update the function dynamic state only if we run the graph pass successfully.
-                if (function_pass->get_property(PassProperty::REQUIRE_STATIC_SHAPE) &&
-                    f_pair.second)
+                for (auto f_pair : fs)
                 {
-                    continue;
-                }
-                bool function_modified = function_pass->run_on_function(f);
-                // If the pass may change the function's is_dynamic property, we need to
-                // update the cached value.
-                if (function_modified &&
-                    function_pass->get_property(PassProperty::CHANGE_DYNAMIC_STATE))
-                {
-                    f_pair.second = f->is_dynamic();
-                }
-            }
-        }
-        else if (node_pass)
-        {
-            for (auto f_pair : fs)
-            {
-                shared_ptr<Function> f = f_pair.first;
-                if (node_pass->get_property(PassProperty::REQUIRE_STATIC_SHAPE) && f_pair.second)
-                {
-                    continue;
-                }
-                for (shared_ptr<Node> n : f->get_ops())
-                {
-                    node_pass->run_on_node(n);
+                    shared_ptr<Function> f = f_pair.first;
+                    // This checks is to skip the graph optimization when the graph pass relies on
+                    // static shape but the function state is dynamic.
+                    // we update the function dynamic state only if we run the graph pass
+                    // successfully.
+                    if (function_pass->get_property(PassProperty::REQUIRE_STATIC_SHAPE) &&
+                        f_pair.second)
+                    {
+                        continue;
+                    }
+                    bool function_modified = function_pass->run_on_function(f);
+                    // If the pass may change the function's is_dynamic property, we need to
+                    // update the cached value.
+                    if (function_modified &&
+                        function_pass->get_property(PassProperty::CHANGE_DYNAMIC_STATE))
+                    {
+                        f_pair.second = f->is_dynamic();
+                    }
                 }
             }
-        }
-        else if (call_graph_pass)
-        {
-            for (auto f_pair : fs)
+            else if (node_pass)
             {
-                shared_ptr<Function> f = f_pair.first;
-                if (call_graph_pass->get_property(PassProperty::REQUIRE_STATIC_SHAPE) &&
-                    f_pair.second)
+                for (auto f_pair : fs)
                 {
-                    continue;
+                    shared_ptr<Function> f = f_pair.first;
+                    if (node_pass->get_property(PassProperty::REQUIRE_STATIC_SHAPE) &&
+                        f_pair.second)
+                    {
+                        continue;
+                    }
+                    for (shared_ptr<Node> n : f->get_ops())
+                    {
+                        node_pass->run_on_node(n);
+                    }
                 }
-                bool function_modified = call_graph_pass->run_on_call_graph(f->get_ordered_ops());
-                f_pair.second = (function_modified == true) ? f->is_dynamic() : f_pair.second;
+            }
+            else if (call_graph_pass)
+            {
+                for (auto f_pair : fs)
+                {
+                    shared_ptr<Function> f = f_pair.first;
+                    if (call_graph_pass->get_property(PassProperty::REQUIRE_STATIC_SHAPE) &&
+                        f_pair.second)
+                    {
+                        continue;
+                    }
+                    bool function_modified =
+                        call_graph_pass->run_on_call_graph(f->get_ordered_ops());
+                    f_pair.second = (function_modified == true) ? f->is_dynamic() : f_pair.second;
+                }
             }
         }
-        }
-        catch(exception err)
+        catch (exception err)
         {
             NGRAPH_INFO << "Pass exception " << pass_name;
         }
