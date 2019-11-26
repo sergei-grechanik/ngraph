@@ -44,6 +44,7 @@ namespace ngraph
             Atan2(const Output<Node>& y,
                   const Output<Node>& x,
                   const AutoBroadcastSpec& autob = AutoBroadcastSpec());
+            bool visit_attributes(AttributeVisitor& visitor) override;
             std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const override;
 
         protected:

@@ -74,6 +74,7 @@ namespace ngraph
 
                 size_t get_version() const override { return 1; }
                 void validate_and_infer_types() override;
+                bool visit_attributes(AttributeVisitor& visitor) override;
 
                 virtual std::shared_ptr<Node>
                     copy_with_new_args(const NodeVector& new_args) const override;
