@@ -17,6 +17,7 @@
 #include "ngraph/op/binary_convolution.hpp"
 #include "ngraph/axis_vector.hpp"
 #include "ngraph/coordinate_diff.hpp"
+#include "ngraph/enum_names.hpp"
 #include "ngraph/op/reshape.hpp"
 #include "ngraph/op/reverse.hpp"
 #include "ngraph/util.hpp"
@@ -160,14 +161,24 @@ void op::v1::BinaryConvolution::generate_adjoints(autodiff::Adjoints& adjoints,
     throw ngraph_error("BinaryConvolution generate_adjoints not implemented");
 }
 
+namespace ngraph
+{
+    template <>
+    EnumNames<op::v1::BinaryConvolution::BinaryConvolutionMode>&
+        EnumNames<op::v1::BinaryConvolution::BinaryConvolutionMode>::get()
+    {
+        static auto enum_names = EnumNames<op::v1::BinaryConvolution::BinaryConvolutionMode>(
+            "op::v1::BinaryConvolution::BinaryConvolutionMode",
+            {{"xnor-popcount", op::v1::BinaryConvolution::BinaryConvolutionMode::XNOR_POPCOUNT}});
+        return enum_names;
+    }
+
+    constexpr DiscreteTypeInfo
+        AttributeAdapter<op::v1::BinaryConvolution::BinaryConvolutionMode>::type_info;
+}
+
 op::v1::BinaryConvolution::BinaryConvolutionMode
     op::v1::BinaryConvolution::mode_from_string(const std::string& mode) const
 {
-    static const std::map<std::string, BinaryConvolutionMode> allowed_values = {
-        {"xnor-popcount", BinaryConvolutionMode::XNOR_POPCOUNT}};
-
-    NODE_VALIDATION_CHECK(
-        this, allowed_values.count(mode) > 0, "Invalid binary convolution mode value passed in.");
-
-    return allowed_values.at(mode);
+    return as_enum<op::v1::BinaryConvolution::BinaryConvolutionMode>(mode);
 }

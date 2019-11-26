@@ -114,4 +114,21 @@ namespace ngraph
             };
         }
     } // namespace op
+
+    template <>
+    class AttributeAdapter<op::v1::BinaryConvolution::BinaryConvolutionMode>
+        : public EnumAttributeAdapterBase<op::v1::BinaryConvolution::BinaryConvolutionMode>
+    {
+    public:
+        AttributeAdapter(op::v1::BinaryConvolution::BinaryConvolutionMode& value)
+            : EnumAttributeAdapterBase<op::v1::BinaryConvolution::BinaryConvolutionMode>(value)
+        {
+        }
+
+        NGRAPH_API
+        static constexpr DiscreteTypeInfo type_info{
+            "AttributeAdapter<op::v1::BinaryConvolution::BinaryConvolutionMode>", 0};
+        const DiscreteTypeInfo& get_type_info() const override { return type_info; }
+    };
+
 } // namespace ngraph
