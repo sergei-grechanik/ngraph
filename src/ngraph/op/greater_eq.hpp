@@ -52,7 +52,8 @@ namespace ngraph
             class NGRAPH_API GreaterEqual : public util::BinaryElementwiseComparison
             {
             public:
-                static constexpr NodeTypeInfo type_info{"GreaterEqual", 1};
+                // Name temporarily wrong until OpenVINO fixes their CI
+                static constexpr NodeTypeInfo type_info{"GreaterEq", 1};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 /// \brief Constructs a greater-than-or-equal operation.
                 GreaterEqual() = default;
