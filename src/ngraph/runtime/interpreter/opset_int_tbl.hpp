@@ -14,34 +14,14 @@
 // limitations under the License.
 //*****************************************************************************
 
-#include "ngraph/coordinate_diff.hpp"
-#include "ngraph/util.hpp"
+#define ID_SUFFIX(NAME) NAME
+#include "ngraph/opsets/opset0_tbl.hpp"
+#undef ID_SUFFIX
 
-using namespace std;
-using namespace ngraph;
-
-std::ostream& ngraph::operator<<(std::ostream& s, const CoordinateDiff& coordinate_diff)
-{
-    s << "CoordinateDiff{";
-    s << ngraph::join(coordinate_diff);
-    s << "}";
-    return s;
-}
-
-NGRAPH_API constexpr DiscreteTypeInfo AttributeAdapter<CoordinateDiff>::type_info;
-
-const vector<int64_t>& AttributeAdapter<CoordinateDiff>::get()
-{
-    if (!m_buffer_valid)
-    {
-        m_buffer = copy_from<vector<int64_t>>(m_value);
-        m_buffer_valid = true;
-    }
-    return m_buffer;
-}
-
-void AttributeAdapter<CoordinateDiff>::set(const vector<int64_t>& value)
-{
-    m_value = copy_from<CoordinateDiff>(m_value);
-    m_buffer_valid = false;
-}
+#define ID_SUFFIX(NAME) NAME##_v1
+NGRAPH_OP(LessEqual, op::v1)
+NGRAPH_OP(LogicalAnd, op::v1)
+NGRAPH_OP(LogicalOr, op::v1)
+NGRAPH_OP(LogicalXor, op::v1)
+NGRAPH_OP(LogicalNot, op::v1)
+#undef ID_SUFFIX
