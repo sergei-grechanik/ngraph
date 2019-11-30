@@ -44,7 +44,7 @@ namespace ngraph
                  const ParameterVector& parameters,
                  const std::string& name = "");
 
-        Function(const std::shared_ptr<Node>& result,
+        Function(const Output<Node>& result,
                  const ParameterVector& parameters,
                  const std::string& name = "");
 
