@@ -102,7 +102,7 @@ autodiff::Adjoints::Adjoints(const OutputVector& ys, const OutputVector& cs)
     // before a node is visited.
     for (size_t i = 0; i < ys.size(); i++)
     {
-        m_adjoint_map.insert(std::make_pair(ys.at(i).get_node(), OutputVector{cs.at(i)}));
+        m_adjoint_map.insert(std::make_pair(ys.at(i), OutputVector{cs.at(i)}));
     }
 
     for (auto& y : ys)
@@ -132,11 +132,11 @@ autodiff::Adjoints::Adjoints(const OutputVector& ys, const OutputVector& cs)
 
 const OutputVector& autodiff::Adjoints::get(const Output<Node>& x)
 {
-    auto adjoint_it = m_adjoint_map.find(x.get_node());
+    auto adjoint_it = m_adjoint_map.find(x);
     if (m_adjoint_map.end() == adjoint_it)
     {
         adjoint_it =
-            m_adjoint_map.insert({x.get_node(), make_zeros(x.get_node_shared_ptr())}).first;
+            m_adjoint_map.insert({x, make_zeros(x.get_node_shared_ptr())}).first;
     }
     return adjoint_it->second;
 }
@@ -145,12 +145,12 @@ void autodiff::Adjoints::add_delta(const Output<Node>& x,
                                    const Output<Node>& delta,
                                    size_t output_index)
 {
-    auto adjoint_it = m_adjoint_map.find(x.get_node());
+    auto adjoint_it = m_adjoint_map.find(x);
     if (m_adjoint_map.end() == adjoint_it)
     {
         auto zeros = make_zeros(x.get_node_shared_ptr());
         zeros.at(output_index) = delta;
-        m_adjoint_map.insert({x.get_node(), zeros});
+        m_adjoint_map.insert({x, zeros});
     }
     else
     {
@@ -174,13 +174,13 @@ void autodiff::Adjoints::add_delta_to_slice(const Output<Node>& x,
             "Autodiff internal error: Mismatch on backprop and op in add_delta_to_slice.");
     }
 
-    auto adjoint_it = m_adjoint_map.find(x.get_node());
+    auto adjoint_it = m_adjoint_map.find(x);
     if (m_adjoint_map.end() == adjoint_it)
     {
         auto zero = make_broadcast_zero(x);
         OutputVector zeros{
             std::make_shared<op::ReplaceSlice>(zero, delta, lower_bounds, upper_bounds, strides)};
-        m_adjoint_map.insert({x.get_node(), zeros});
+        m_adjoint_map.insert({x, zeros});
     }
     else
     {

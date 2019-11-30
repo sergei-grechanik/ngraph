@@ -79,7 +79,7 @@ namespace ngraph
             Output<Node> backprop_output(const Output<Node>& x);
 
         protected:
-            std::map<Node*, OutputVector> m_adjoint_map;
+            std::map<Output<Node>, OutputVector> m_adjoint_map;
         };
     }
 }
