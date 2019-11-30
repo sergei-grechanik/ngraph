@@ -289,9 +289,9 @@ public:
         auto Gamma = make_shared<op::Parameter>(etype, channel_shape);
         auto Beta = make_shared<op::Parameter>(etype, channel_shape);
         auto BN = make_shared<op::BatchNormTraining>(Input, Gamma, Beta, epsilon);
-        auto NormedInput = make_shared<op::Result>(make_shared<op::GetOutputElement>(BN, 0));
-        auto Mean = make_shared<op::Result>(make_shared<op::GetOutputElement>(BN, 1));
-        auto Variance = make_shared<op::Result>(make_shared<op::GetOutputElement>(BN, 2));
+        auto NormedInput = make_shared<op::Result>(BN->output(0));
+        auto Mean = make_shared<op::Result>(BN->output(1));
+        auto Variance = make_shared<op::Result>(BN->output(2));
         m_function = make_shared<Function>(ResultVector{NormedInput, Mean, Variance},
                                            ParameterVector{Input, Gamma, Beta});
 
@@ -522,11 +522,11 @@ NGRAPH_TEST(${BACKEND_NAME}, batch_norm_fprop_b1c2h2w2)
     auto shape_r = Shape{1, 2, 2, 2};
     auto bn = make_shared<op::BatchNormTraining>(input, gamma, beta, eps);
 
-    auto output_rt = std::make_shared<op::GetOutputElement>(bn, 0);
-    auto mean_rt = std::make_shared<op::GetOutputElement>(bn, 1);
-    auto variance_rt = std::make_shared<op::GetOutputElement>(bn, 2);
+    auto output_rt = bn->output(0);
+    auto mean_rt = bn->output(1);
+    auto variance_rt = bn->output(2);
 
-    auto f = make_shared<Function>(NodeVector{output_rt, mean_rt, variance_rt},
+    auto f = make_shared<Function>(OutputVector{output_rt, mean_rt, variance_rt},
                                    ParameterVector{input, gamma, beta});
 
     auto backend = runtime::Backend::create("${BACKEND_NAME}");
@@ -585,11 +585,11 @@ NGRAPH_TEST(${BACKEND_NAME}, batch_norm_fprop_b2c2h2w1)
     auto shape_r = Shape{2, 2, 2, 1};
     auto bn = make_shared<op::BatchNormTraining>(input, gamma, beta, eps);
 
-    auto output_rt = std::make_shared<op::GetOutputElement>(bn, 0);
-    auto mean_rt = std::make_shared<op::GetOutputElement>(bn, 1);
-    auto variance_rt = std::make_shared<op::GetOutputElement>(bn, 2);
+    auto output_rt = bn->output(0);
+    auto mean_rt = bn->output(1);
+    auto variance_rt = bn->output(2);
 
-    auto f = make_shared<Function>(NodeVector{output_rt, mean_rt, variance_rt},
+    auto f = make_shared<Function>(OutputVector{output_rt, mean_rt, variance_rt},
                                    ParameterVector{input, gamma, beta});
     auto backend = runtime::Backend::create("${BACKEND_NAME}");
     // Create some tensors for input/output
@@ -639,11 +639,11 @@ NGRAPH_TEST(${BACKEND_NAME}, batch_norm_fprop_b2c2d2h1w1)
     auto shape_r = Shape{2, 2, 2, 1, 1};
     auto bn = make_shared<op::BatchNormTraining>(eps, gamma, beta, input);
 
-    auto output_rt = std::make_shared<op::GetOutputElement>(bn, 0);
-    auto mean_rt = std::make_shared<op::GetOutputElement>(bn, 1);
-    auto variance_rt = std::make_shared<op::GetOutputElement>(bn, 2);
+    auto output_rt = bn->output(0);
+    auto mean_rt = bn->output(1);
+    auto variance_rt = bn->output(2);
 
-    auto f = make_shared<Function>(NodeVector{output_rt, mean_rt, variance_rt},
+    auto f = make_shared<Function>(OutputVector{output_rt, mean_rt, variance_rt},
                                    ParameterVector{input, gamma, beta});
     auto backend = runtime::Backend::create("${BACKEND_NAME}");
     // Create some tensors for input/output
@@ -695,9 +695,12 @@ NGRAPH_TEST(${BACKEND_NAME}, batch_norm_bprop_n4c3h2w2)
     double eps = 0.001;
     auto shape_r = Shape{4, 3, 2, 2};
     auto bn = make_shared<op::BatchNormTraining>(input, gamma, beta, eps);
-    auto bn_dx = make_shared<op::GetOutputElement>(bn, 0);
-    auto bn_dgamma = make_shared<op::GetOutputElement>(bn, 1);
-    auto bn_dbeta = make_shared<op::GetOutputElement>(bn, 2);
+    // auto bn_dx = make_shared<op::GetOutputElement>(bn, 0)->output(0);
+    // auto bn_dgamma = make_shared<op::GetOutputElement>(bn, 1)->output(0);
+    // auto bn_dbeta = make_shared<op::GetOutputElement>(bn, 2)->output(0);
+    auto bn_dx = bn->output(0);
+    auto bn_dgamma = bn->output(1);
+    auto bn_dbeta = bn->output(2);
 
     auto backend = runtime::Backend::create("${BACKEND_NAME}");
 
@@ -727,12 +730,13 @@ NGRAPH_TEST(${BACKEND_NAME}, batch_norm_bprop_n4c3h2w2)
     vector<float> deltaData(shape_size(shape_r), 20.0f);
     copy_data(_delta, deltaData);
 
-    auto f = make_shared<Function>(NodeVector{bn_dx, bn_dgamma, bn_dbeta},
+    auto f = make_shared<Function>(OutputVector{bn_dx, bn_dgamma, bn_dbeta},
                                    ParameterVector{mean, var, input, gamma, beta});
 
     auto C = std::make_shared<op::Parameter>(element::f32, shape_r);
 
-    auto zero = ngraph::make_zero(bn_dgamma->get_element_type(), bn_dgamma->get_shape());
+
+    auto zero = ngraph::make_zero(bn_dgamma.get_element_type(), bn_dgamma.get_shape());
     ngraph::autodiff::Adjoints adjoints(OutputVector{bn_dx, bn_dgamma, bn_dbeta},
                                         OutputVector{C, zero, zero});
 

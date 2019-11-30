@@ -639,8 +639,8 @@ namespace ngraph
         Output(const std::shared_ptr<T>& node)
             : Output(node, 0)
         {
-            NGRAPH_CHECK(node->get_output_size() == 1,
-                         "Node castable to Output<Node> only for single-output nodes");
+            // NGRAPH_CHECK(node->get_output_size() == 1,
+            //              "Node castable to Output<Node> only for single-output nodes");
         }
 
         /// A null output

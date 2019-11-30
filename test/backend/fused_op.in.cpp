@@ -287,9 +287,9 @@ NGRAPH_TEST(${BACKEND_NAME}, conv_bias_bprop_2d)
                                                                           CoordinateDiff{0, 0},
                                                                           CoordinateDiff{0, 0},
                                                                           Strides{1, 1});
-    auto goe0 = make_shared<op::GetOutputElement>(conv_bprop, 0);
-    auto goe1 = make_shared<op::GetOutputElement>(conv_bprop, 1);
-    auto f0 = make_shared<Function>(NodeVector{goe0, goe1}, ParameterVector{data, delta});
+    auto output0 = conv_bprop->output(0);
+    auto output1 = conv_bprop->output(1);
+    auto f0 = make_shared<Function>(OutputVector{output0, output1}, ParameterVector{data, delta});
 
     auto backend = runtime::Backend::create("${BACKEND_NAME}");
 
@@ -1408,7 +1408,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_no_bias_no_peepholes)
     const auto lstm_cell =
         make_shared<op::LSTMCell>(X, H_t, C_t, W, R, hidden_size, op::LSTMWeightsFormat::IOFC);
 
-    auto ht_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 0),
+    auto ht_function = make_shared<Function>(lstm_cell->output(0),
                                              ParameterVector{X, H_t, C_t, W, R});
     auto ht_test_case = ngraph::test::NgraphTestCase(ht_function, "${BACKEND_NAME}");
     // X
@@ -1442,7 +1442,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_no_bias_no_peepholes)
         {0.81457126f, 0.61109227f, 0.769522f, 0.52239674f, 0.4324641f, 0.63183f});
     ht_test_case.run();
 
-    auto ct_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 1),
+    auto ct_function = make_shared<Function>(lstm_cell->output(1),
                                              ParameterVector{X, H_t, C_t, W, R});
     auto ct_test_case = ngraph::test::NgraphTestCase(ct_function, "${BACKEND_NAME}");
     ct_test_case.add_multiple_inputs(vector<vector<float>>{in_X, in_Ht, in_Ct, in_W, in_R});
@@ -1472,7 +1472,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_zero_bias_peepholes)
     const auto lstm_cell = make_shared<op::LSTMCell>(
         X, H_t, C_t, W, R, B, P, hidden_size, op::LSTMWeightsFormat::IOFC);
 
-    auto ht_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 0),
+    auto ht_function = make_shared<Function>(lstm_cell->output(0),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ht_test_case = ngraph::test::NgraphTestCase(ht_function, "${BACKEND_NAME}");
 
@@ -1512,7 +1512,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_zero_bias_peepholes)
         {0.81457126f, 0.61109227f, 0.769522f, 0.52239674f, 0.4324641f, 0.63183f});
     ht_test_case.run();
 
-    auto ct_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 1),
+    auto ct_function = make_shared<Function>(lstm_cell->output(1),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ct_test_case = ngraph::test::NgraphTestCase(ct_function, "${BACKEND_NAME}");
     ct_test_case.add_multiple_inputs(
@@ -1545,7 +1545,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_zero_bias_peepholes_constant)
     const auto lstm_cell = make_shared<op::LSTMCell>(
         X, H_t, C_t, W, R, B, P, hidden_size, op::LSTMWeightsFormat::IOFC);
 
-    auto ht_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 0),
+    auto ht_function = make_shared<Function>(lstm_cell->output(0),
                                              ParameterVector{X, H_t, C_t, W, R});
     auto ht_test_case = ngraph::test::NgraphTestCase(ht_function, "${BACKEND_NAME}");
 
@@ -1580,7 +1580,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_zero_bias_peepholes_constant)
         {0.81457126f, 0.61109227f, 0.769522f, 0.52239674f, 0.4324641f, 0.63183f});
     ht_test_case.run();
 
-    auto ct_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 1),
+    auto ct_function = make_shared<Function>(lstm_cell->output(1),
                                              ParameterVector{X, H_t, C_t, W, R});
     auto ct_test_case = ngraph::test::NgraphTestCase(ct_function, "${BACKEND_NAME}");
     ct_test_case.add_multiple_inputs(vector<vector<float>>{in_X, in_Ht, in_Ct, in_W, in_R});
@@ -1608,7 +1608,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_fixed_no_bias_no_peepholes)
     const auto lstm_cell =
         make_shared<op::LSTMCell>(X, H_t, C_t, W, R, hidden_size, op::LSTMWeightsFormat::IOFC);
 
-    auto ht_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 0),
+    auto ht_function = make_shared<Function>(lstm_cell->output(0),
                                              ParameterVector{X, H_t, C_t, W, R});
     auto ht_test_case = ngraph::test::NgraphTestCase(ht_function, "${BACKEND_NAME}");
 
@@ -1629,7 +1629,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_fixed_no_bias_no_peepholes)
         {0.56633735f, 0.56633735f, 0.56633735f, 0.56633735f, 0.56633735f, 0.56633735f});
     ht_test_case.run();
 
-    auto ct_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 1),
+    auto ct_function = make_shared<Function>(lstm_cell->output(1),
                                              ParameterVector{X, H_t, C_t, W, R});
     auto ct_test_case = ngraph::test::NgraphTestCase(ct_function, "${BACKEND_NAME}");
     ct_test_case.add_multiple_inputs(vector<vector<float>>{in_X, in_Ht, in_Ct, in_W, in_R});
@@ -1659,7 +1659,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_bias_peepholes)
     const auto lstm_cell = make_shared<op::LSTMCell>(
         X, H_t, C_t, W, R, B, P, hidden_size, op::LSTMWeightsFormat::IOFC);
 
-    auto ht_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 0),
+    auto ht_function = make_shared<Function>(lstm_cell->output(0),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ht_test_case = ngraph::test::NgraphTestCase(ht_function, "${BACKEND_NAME}");
 
@@ -1718,7 +1718,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_bias_peepholes)
         {0.9218244f, 0.78787273f, 0.8754273f, 0.7361462f, 0.70927656f, 0.83522964f});
     ht_test_case.run();
 
-    auto ct_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 1),
+    auto ct_function = make_shared<Function>(lstm_cell->output(1),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ct_test_case = ngraph::test::NgraphTestCase(ct_function, "${BACKEND_NAME}");
     ct_test_case.add_multiple_inputs(
@@ -1762,7 +1762,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_bias_peepholes_clip_input_forget)
                                                      vector<float>{},
                                                      clip_threshold,
                                                      input_forget);
-    auto ht_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 0),
+    auto ht_function = make_shared<Function>(lstm_cell->output(0),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ht_test_case = ngraph::test::NgraphTestCase(ht_function, "${BACKEND_NAME}");
 
@@ -1821,7 +1821,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_bias_peepholes_clip_input_forget)
         {0.71485436f, 0.71844107f, 0.72704613f, 0.6235602f, 0.68306124f, 0.6978715f});
     ht_test_case.run();
 
-    auto ct_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 1),
+    auto ct_function = make_shared<Function>(lstm_cell->output(1),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ct_test_case = ngraph::test::NgraphTestCase(ct_function, "${BACKEND_NAME}");
     ct_test_case.add_multiple_inputs(
@@ -1868,7 +1868,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_activaction_functions)
                                                      activation_beta,
                                                      clip_threshold,
                                                      input_forget);
-    auto ht_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 0),
+    auto ht_function = make_shared<Function>(lstm_cell->output(0),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ht_test_case = ngraph::test::NgraphTestCase(ht_function, "${BACKEND_NAME}");
 
@@ -1927,7 +1927,7 @@ NGRAPH_TEST(${BACKEND_NAME}, lstm_cell_activaction_functions)
         {0.96834344f, 0.9695254f, 0.97068775f, 0.9077866f, 0.94161016f, 0.96599925f});
     ht_test_case.run();
 
-    auto ct_function = make_shared<Function>(make_shared<op::GetOutputElement>(lstm_cell, 1),
+    auto ct_function = make_shared<Function>(lstm_cell->output(1),
                                              ParameterVector{X, H_t, C_t, W, R, B, P});
     auto ct_test_case = ngraph::test::NgraphTestCase(ct_function, "${BACKEND_NAME}");
     ct_test_case.add_multiple_inputs(
