@@ -54,6 +54,7 @@ set(SRC
     constant_folding.cpp
     concat_fusion.cpp
     control_dependencies.cpp
+    convert_u1_to_string.cpp
     coordinate.cpp
     copy.cpp
     cpio.cpp
@@ -70,9 +71,16 @@ set(SRC
     node_input_output.cpp
     nop_elimination.cpp
     op.cpp
+    opset1.cpp
+    opset_pass/binary_elementwise_opset_pass.cpp
     opset_pass/broadcast_opset_pass.cpp
     opset_pass/convolution_opset_pass.cpp
     opset_pass/dyn_reshape_opset_pass.cpp
+    opset_pass/logical_and_opset_pass.cpp
+    opset_pass/logical_not_opset_pass.cpp
+    opset_pass/logical_or_opset_pass.cpp
+    opset_pass/logical_xor_opset_pass.cpp
+    opset_pass/one_hot_opset_pass.cpp
     opset_pass/gather_opset_pass.cpp
     opset_pass/generate_mask_opset_pass.cpp
     opset_pass/pad_opset_pass.cpp
@@ -101,6 +109,7 @@ set(SRC
     type_prop/any.cpp
     type_prop/avg_pool.cpp
     type_prop/batch_mat_mul.cpp
+    type_prop/batch_mat_mul_transpose.cpp
     type_prop/batch_norm.cpp
     type_prop/binary_elementwise.cpp
     type_prop/broadcast.cpp
@@ -110,6 +119,7 @@ set(SRC
     type_prop/convert.cpp
     type_prop/convolution.cpp
     type_prop/convolution_bias.cpp
+    type_prop/crop_and_resize.cpp
     type_prop/depth_to_space.cpp
     type_prop/dequantize.cpp
     type_prop/dot.cpp
@@ -133,6 +143,7 @@ set(SRC
     type_prop/hard_sigmoid.cpp
     type_prop/index_reduction.cpp
     type_prop/layer_norm.cpp
+    type_prop/log_softmax.cpp
     type_prop/lrn.cpp
     type_prop/lstm_cell.cpp
     type_prop/lstm_sequence.cpp
@@ -262,6 +273,7 @@ set(MULTI_TEST_SRC
     backend/arg_reduce.in.cpp
     backend/asin.in.cpp
     backend/atan.in.cpp
+    backend/atan2.in.cpp
     backend/auto_broadcast.in.cpp
     backend/autodiff.in.cpp
     backend/batch_mat_mul.in.cpp
@@ -278,6 +290,7 @@ set(MULTI_TEST_SRC
     backend/convolution.in.cpp
     backend/cos.in.cpp
     backend/cosh.in.cpp
+    backend/cum_sum.in.cpp
     backend/divide.in.cpp
     backend/dot.in.cpp
     backend/dyn_broadcast.in.cpp
@@ -295,6 +308,7 @@ set(MULTI_TEST_SRC
     backend/gather.in.cpp
     backend/gelu.in.cpp
     backend/generate_mask.in.cpp
+    backend/group_convolution.in.cpp
     backend/layer_norm.in.cpp
     backend/log.in.cpp
     backend/logical_and.in.cpp
@@ -343,7 +357,6 @@ set(MULTI_TEST_SRC
     backend/sum.in.cpp
     backend/tan.in.cpp
     backend/tanh.in.cpp
-    backend/tensorview_custom_mem.in.cpp
     backend/tile.in.cpp
     backend/topk.in.cpp
     backend/transpose.in.cpp
@@ -425,7 +438,6 @@ if (NGRAPH_UNIT_TEST_OPENVINO_ENABLE)
             backend/subtract.in.cpp
             backend/tan.in.cpp
             backend/tanh.in.cpp
-            backend/tensorview_custom_mem.in.cpp
             backend/transpose.in.cpp
             backend/validate_call.in.cpp
             backend/zero_sized.in.cpp
@@ -464,6 +476,7 @@ endif()
 
 if (NGRAPH_MLIR_ENABLE)
     list(APPEND MULTI_TEST_SRC backend/mlir.in.cpp)
+    list(APPEND SRC mlir/ops_test.cpp)
 endif()
 
 if(NGRAPH_DISTRIBUTED_ENABLE)
@@ -522,11 +535,7 @@ if(NGRAPH_ADDRESS_SANITIZER)
 endif()
 
 target_link_libraries(unit-test PRIVATE ngraph_test_util)
-if(NGRAPH_UNIT_TEST_OPENVINO_ENABLE)
-    target_link_libraries(unit-test PRIVATE ngraph gtest)
-else()
-    target_link_libraries(unit-test PRIVATE ngraph libgtest)
-endif()
+target_link_libraries(unit-test PRIVATE ngraph libgtest)
 
 target_compile_definitions(unit-test PRIVATE NGRAPH_VERSION_LABEL="${NGRAPH_VERSION_LABEL}")
 if (NGRAPH_JSON_ENABLE)
@@ -541,9 +550,9 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "^(Apple)?Clang$")
     target_compile_options(unit-test PRIVATE -Wno-undef -Wno-reserved-id-macro)
 endif()
 
-# So many type_prop tests these days that we need to set /bigobj flag for MSVS.
+# So many type_prop tests these days that we need to set /bigobj flag for MSVC.
 # We should probably split up type_prop.cpp.
-if (MSVS)
+if (MSVC)
     target_compile_options(unit-test PRIVATE "/bigobj")
 endif()
 
@@ -593,22 +602,28 @@ if (NGRAPH_ONNXIFI_ENABLE)
     target_link_libraries(unit-test PRIVATE onnxifi-ngraph)
 endif()
 
-# If all the runtime libraries are installed into one location, that will make life easier.
-if (MSVS)
-    add_custom_target(unit-test-check
-        COMMAND set "PATH=${EXTERNAL_PROJECTS_ROOT}/src/ngraph/Release;${EXTERNAL_PROJECTS_ROOT}/mkldnn/lib/;${EXTERNAL_PROJECTS_ROOT}/mkl/src/ext_mkl/lib/;${EXTERNAL_PROJECTS_ROOT}/ext_tbb-prefix/src/ext_tbb/tbb2019_20181203oss/bin/intel64/vc14;%PATH%"
-        COMMAND ${PROJECT_BINARY_DIR}/test/unit-test \${ARGS}
-        DEPENDS unit-test
-    )
-else()
-    add_custom_target(unit-test-check
-        COMMAND ${PROJECT_BINARY_DIR}/test/unit-test --cpath ${EXTERNAL_PROJECTS_ROOT}/src/ngraph/ \${ARGS}
-        DEPENDS unit-test
-    )
+if (NGRAPH_MLIR_ENABLE)
+    target_include_directories(unit-test PRIVATE ${CMAKE_BINARY_DIR}/src/contrib/mlir)
 endif()
 
-add_custom_target(check
-    DEPENDS
-    style-check
-    unit-test-check
-)
+if (NOT NGRAPH_UNIT_TEST_OPENVINO_ENABLE)
+    # If all the runtime libraries are installed into one location, that will make life easier.
+    if (MSVC)
+        add_custom_target(unit-test-check
+            COMMAND set "PATH=${EXTERNAL_PROJECTS_ROOT}/src/ngraph/Release;${EXTERNAL_PROJECTS_ROOT}/mkldnn/lib/;${EXTERNAL_PROJECTS_ROOT}/mkl/src/ext_mkl/lib/;${EXTERNAL_PROJECTS_ROOT}/ext_tbb-prefix/src/ext_tbb/tbb2019_20181203oss/bin/intel64/vc14;%PATH%"
+            COMMAND ${PROJECT_BINARY_DIR}/test/unit-test \${ARGS}
+            DEPENDS unit-test
+        )
+    else()
+        add_custom_target(unit-test-check
+            COMMAND ${PROJECT_BINARY_DIR}/test/unit-test --cpath ${EXTERNAL_PROJECTS_ROOT}/src/ngraph/ \${ARGS}
+            DEPENDS unit-test
+        )
+    endif()
+
+    add_custom_target(check
+        DEPENDS
+        style-check
+        unit-test-check
+    )
+endif()

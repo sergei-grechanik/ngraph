@@ -19,6 +19,7 @@
 
 #include "ops.hpp"
 #include "assertion.hpp"
+#include "llvm/ADT/StringSwitch.h"
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/Regex.h"
 #include "llvm/Support/raw_ostream.h"
@@ -31,6 +32,8 @@ using llvm::SmallVector;
 using llvm::StringRef;
 using llvm::Twine;
 using namespace mlir;
+
+#include "ops_attributes.cpp.inc"
 // TODO:
 // - Move verifiers and other OP helpers (e.g. getSomeAttribute()) to separate files
 //
@@ -274,13 +277,10 @@ mlir::LogicalResult verifyOp(NGConvolutionOp* op)
         auto s = std::get<0>(attrs).cast<IntegerAttr>().getInt();
         auto pb = std::get<1>(attrs).cast<IntegerAttr>().getInt();
         auto pa = std::get<2>(attrs).cast<IntegerAttr>().getInt();
+
         if (s <= 0)
         {
             return op->emitOpError("Window stride must be non-negative");
-        }
-        if (pb < 0 || pa < 0)
-        {
-            return op->emitOpError("Paddings must be positive");
         }
         stridesVal.push_back(s);
         padBelowVal.push_back(pb);
@@ -330,6 +330,105 @@ mlir::IntegerAttr getBufferId(mlir::Operation* op)
 
 namespace mlir
 {
+#include "ops_interfaces.cpp.inc"
+
 #define GET_OP_CLASSES
 #include "ops.cpp.inc"
+}
+
+// Fused Ops decompose
+// Stubs for now
+// TODO: Implement and move to another file
+void mlir::NGSpaceToDepthOp::decompose()
+{
+}
+void mlir::NGSplitOp::decompose()
+{
+}
+void mlir::NGScaleShiftOp::decompose()
+{
+}
+void mlir::NGUnSqueezeOp::decompose()
+{
+}
+void mlir::NGSquaredDiffOp::decompose()
+{
+}
+void mlir::NGSqueezeOp::decompose()
+{
+}
+void mlir::NGShuffleChannelsOp::decompose()
+{
+}
+void mlir::NGRNNCellOp::decompose()
+{
+}
+void mlir::NGFakeQuantOp::decompose()
+{
+}
+void mlir::NGMVN::decompose()
+{
+}
+void mlir::NGHardSigmoid::decompose()
+{
+}
+void mlir::NGGRNOp::decompose()
+{
+}
+void mlir::NGNormalizeL2Op::decompose()
+{
+}
+void mlir::NGConvBiasBackpropFiltersBias::decompose()
+{
+}
+void mlir::NGPrelu::decompose()
+{
+}
+void mlir::NGLayerNormBackpropOp::decompose()
+{
+}
+void mlir::NGGemmOp::decompose()
+{
+}
+void mlir::NGClampOp::decompose()
+{
+}
+void mlir::NGGroupConvTransposeOp::decompose()
+{
+}
+void mlir::NGConvBiasOp::decompose()
+{
+}
+void mlir::NGConvBiasAddOp::decompose()
+{
+}
+void mlir::NGGRUCellOp::decompose()
+{
+}
+void mlir::NGGroupConvOp::decompose()
+{
+}
+void mlir::NGGeluOp::decompose()
+{
+}
+void mlir::NGGeluBackpropFactorOp::decompose()
+{
+}
+void mlir::NGLSTMCellOp::decompose()
+{
+}
+void mlir::NGLSTMSequenceOp::decompose()
+{
+}
+void mlir::NGMatMul::decompose()
+{
+}
+void mlir::NGLayerNormOp::decompose()
+{
+}
+void mlir::NGDepthToSpaceOp::decompose()
+{
+}
+void mlir::NGEluOp::decompose()
+{
 }

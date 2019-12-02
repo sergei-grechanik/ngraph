@@ -13,11 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //*****************************************************************************
+#include <map>
 
+#include "ngraph/check.hpp"
+#include "ngraph/enum_names.hpp"
 #include "ngraph/op/util/attr_types.hpp"
 #include "ngraph/enum_names.hpp"
 
 using namespace ngraph;
+
+const op::AutoBroadcastSpec op::AutoBroadcastSpec::NUMPY(AutoBroadcastType::NUMPY, 0);
+const op::AutoBroadcastSpec op::AutoBroadcastSpec::NONE{AutoBroadcastType::NONE, 0};
 
 namespace ngraph
 {
@@ -32,8 +38,7 @@ namespace ngraph
         return enum_names;
     }
 
-    template <>
-    const DiscreteTypeInfo AttributeAdapter<op::PadMode>::type_info = {"op::PadMode", 0};
+    constexpr DiscreteTypeInfo AttributeAdapter<op::PadMode>::type_info;
 
     std::ostream& op::operator<<(std::ostream& s, const op::PadMode& type)
     {
@@ -51,8 +56,7 @@ namespace ngraph
         return enum_names;
     }
 
-    template <>
-    const DiscreteTypeInfo AttributeAdapter<op::PadType>::type_info = {"op::PadType", 0};
+    constexpr DiscreteTypeInfo AttributeAdapter<op::PadType>::type_info;
 
     std::ostream& op::operator<<(std::ostream& s, const op::PadType& type)
     {
@@ -68,8 +72,7 @@ namespace ngraph
         return enum_names;
     }
 
-    template <>
-    const DiscreteTypeInfo AttributeAdapter<op::RoundingType>::type_info = {"op::RoundingType", 0};
+    constexpr DiscreteTypeInfo AttributeAdapter<op::RoundingType>::type_info;
 
     std::ostream& op::operator<<(std::ostream& s, const op::RoundingType& type)
     {
@@ -87,11 +90,7 @@ namespace ngraph
         return enum_names;
     }
 
-    template <>
-    const DiscreteTypeInfo AttributeAdapter<op::AutoBroadcastType>::type_info = {
-        "op::AutoBroadcastType",
-
-        0};
+    constexpr DiscreteTypeInfo AttributeAdapter<op::AutoBroadcastType>::type_info;
 
     std::ostream& op::operator<<(std::ostream& s, const op::AutoBroadcastType& type)
     {
@@ -106,11 +105,43 @@ namespace ngraph
         return enum_names;
     }
 
-    template <>
-    const DiscreteTypeInfo AttributeAdapter<op::EpsMode>::type_info = {"op::EpsMode", 0};
+    constexpr DiscreteTypeInfo AttributeAdapter<op::EpsMode>::type_info;
 
     std::ostream& op::operator<<(std::ostream& s, const op::EpsMode& type)
     {
         return s << as_string(type);
     }
+
+    template <>
+    EnumNames<op::TopKSortType>& EnumNames<op::TopKSortType>::get()
+    {
+        static auto enum_names =
+            EnumNames<op::TopKSortType>("op::TopKSortType",
+                                        {{"NONE", op::TopKSortType::NONE},
+                                         {"SORT_INDICES", op::TopKSortType::SORT_INDICES},
+                                         {"SORT_VALUES", op::TopKSortType::SORT_VALUES}});
+        return enum_names;
+    }
+
+    constexpr DiscreteTypeInfo AttributeAdapter<op::TopKSortType>::type_info;
+
+    std::ostream& op::operator<<(std::ostream& s, const op::TopKSortType& type)
+    {
+        return s << as_string(type);
+    }
+
+    op::AutoBroadcastType op::AutoBroadcastSpec::type_from_string(const std::string& type) const
+    {
+        static const std::map<std::string, AutoBroadcastType> allowed_values = {
+            {"NONE", AutoBroadcastType::NONE},
+            {"NUMPY", AutoBroadcastType::NUMPY},
+            {"PDPD", AutoBroadcastType::PDPD},
+            {"EXPLICIT", AutoBroadcastType::EXPLICIT}};
+
+        NGRAPH_CHECK(allowed_values.count(type) > 0, "Invalid 'type' value passed in.");
+
+        return allowed_values.at(type);
+    }
+
+    NGRAPH_API constexpr DiscreteTypeInfo AttributeAdapter<op::AutoBroadcastSpec>::type_info;
 }

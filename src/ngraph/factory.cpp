@@ -18,20 +18,7 @@
 
 #include "ngraph/factory.hpp"
 #include "ngraph/node.hpp"
-#include "ngraph/op/abs.hpp"
-#include "ngraph/op/acos.hpp"
-#include "ngraph/op/add.hpp"
-#include "ngraph/op/all.hpp"
-#include "ngraph/op/allreduce.hpp"
-#include "ngraph/op/and.hpp"
-#include "ngraph/op/any.hpp"
-#include "ngraph/op/argmax.hpp"
-#include "ngraph/op/argmin.hpp"
-#include "ngraph/op/avg_pool.hpp"
-#include "ngraph/op/batch_norm.hpp"
-#include "ngraph/op/broadcast.hpp"
-#include "ngraph/op/broadcast_distributed.hpp"
-#include "ngraph/op/parameter.hpp"
+#include "ngraph/ops.hpp"
 
 using namespace std;
 
@@ -42,6 +29,8 @@ namespace ngraph
         static mutex registry_mutex;
         return registry_mutex;
     }
+
+    template class NGRAPH_API FactoryRegistry<Node>;
 
     template <>
     FactoryRegistry<Node>& FactoryRegistry<Node>::get()
@@ -54,27 +43,9 @@ namespace ngraph
             lock_guard<mutex> guard(init_guard);
             if (registry.m_factory_map.size() == 0)
             {
-                registry.register_factory<op::Abs>();
-                registry.register_factory<op::Acos>();
-                registry.register_factory<op::Add>();
-                registry.register_factory<op::All>();
-                registry.register_factory<op::AllReduce>();
-                registry.register_factory<op::And>();
-                registry.register_factory<op::Any>();
-                registry.register_factory<op::ArgMax>();
-                registry.register_factory<op::ArgMin>();
-                registry.register_factory<op::v0::AvgPool>();
-                registry.register_factory<op::v0::AvgPoolBackprop>();
-                registry.register_factory<op::v1::AvgPool>();
-                registry.register_factory<op::v1::AvgPoolBackprop>();
-                registry.register_factory<op::BatchNormInference>();
-                registry.register_factory<op::BatchNormTraining>();
-                registry.register_factory<op::BatchNormTrainingBackprop>();
-                registry.register_factory<op::BroadcastDistributed>();
-                registry.register_factory<op::v0::Broadcast>();
-                registry.register_factory<op::v0::BroadcastLike>();
-                registry.register_factory<op::v1::Broadcast>();
-                registry.register_factory<op::Parameter>();
+#define NGRAPH_OP(NAME, NAMESPACE, VERSION) registry.register_factory<NAMESPACE::NAME>();
+#include "ngraph/op/op_version_tbl.hpp"
+#undef NGRAPH_OP
             }
         }
         return registry;
