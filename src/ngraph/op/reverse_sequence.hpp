@@ -35,8 +35,8 @@ namespace ngraph
                 /// \param arg Node that produces the input tensor.
                 ReverseSequence(const Output<Node>& arg,
                                 const Output<Node>& seq_lengths,
-                                size_t batch_axis,
-                                size_t seq_axis);
+                                int64_t batch_axis,
+                                int64_t seq_axis);
 
                 void validate_and_infer_types() override;
 

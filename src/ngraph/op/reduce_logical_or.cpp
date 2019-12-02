@@ -16,7 +16,8 @@
 
 #include "ngraph/op/reduce_logical_or.hpp"
 
-#include "ngraph/ngraph.hpp"
+using namespace ngraph;
+using namespace std;
 
 constexpr NodeTypeInfo op::v1::ReduceLogicalOr::type_info;
 
