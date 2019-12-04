@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <functional>
 #include <numeric>
+#include <type_traits>
 
 #include "ngraph/builder/reshape.hpp"
 #include "ngraph/graph_util.hpp"
@@ -34,24 +35,22 @@ using namespace ngraph;
 namespace
 {
     template <typename OpV0, typename OpV1>
-    void op_cast_binary_elementwise_node(const shared_ptr<OpV1>& node)
+    bool replace_op_binary_elementwise_node(const shared_ptr<OpV1>& node)
     {
         const auto input_arg0 = node->input_value(0);
         const auto input_arg1 = node->input_value(1);
         const auto autob = node->get_autob();
         auto replacement_node = make_shared<OpV0>(input_arg0, input_arg1, autob);
         replace_node(node, replacement_node);
-    }
-
-    // Default is that we didn nothing
-    bool op_cast(shared_ptr<Node> node) { return false; }
-    bool op_cast(shared_ptr<op::v1::Add> node)
-    {
-        op_cast_binary_elementwise_node<op::v0::Add, op::v1::Add>(node);
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::AvgPool> node)
+    bool replace_op(shared_ptr<op::v1::Add> node)
+    {
+        return replace_op_binary_elementwise_node<op::v0::Add, op::v1::Add>(node);
+    }
+
+    bool replace_op(shared_ptr<op::v1::AvgPool> node)
     {
         auto const input_arg = node->input_value(0);
         const auto ceil_mode = static_cast<bool>(node->get_rounding_type());
@@ -74,7 +73,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::AvgPoolBackprop> node)
+    bool replace_op(shared_ptr<op::v1::AvgPoolBackprop> node)
     {
         NGRAPH_CHECK(node->input_value(1).get_node_shared_ptr()->is_constant());
         const auto forward_arg_shape =
@@ -99,7 +98,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Broadcast> node)
+    bool replace_op(shared_ptr<op::v1::Broadcast> node)
     {
         auto arg = node->input_value(0);
         NGRAPH_CHECK(node->input_value(1).get_node_shared_ptr()->is_constant());
@@ -114,7 +113,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Convolution> node)
+    bool replace_op(shared_ptr<op::v1::Convolution> node)
     {
         const auto data_arg = node->input_value(0);
         const auto filters_arg = node->input_value(1);
@@ -132,7 +131,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::ConvolutionBackpropData> node)
+    bool replace_op(shared_ptr<op::v1::ConvolutionBackpropData> node)
     {
         auto output_shape = as_type_ptr<op::Constant>(node->input_value(2).get_node_shared_ptr());
         const auto data_arg = node->input(0).get_source_output();
@@ -167,7 +166,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::ConvolutionBackpropFilters> node)
+    bool replace_op(shared_ptr<op::v1::ConvolutionBackpropFilters> node)
     {
         NGRAPH_CHECK(node->input_value(2).get_node_shared_ptr()->is_constant());
         auto filters_shape =
@@ -190,7 +189,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Divide> node)
+    bool replace_op(shared_ptr<op::v1::Divide> node)
     {
         const auto input_arg0 = node->input_value(0);
         const auto input_arg1 = node->input_value(1);
@@ -201,7 +200,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Reshape> node)
+    bool replace_op(shared_ptr<op::v1::Reshape> node)
     {
         auto replacement_node = make_shared<op::v0::DynReshape>(
             node->input_value(0), node->input_value(1), node->get_special_zero());
@@ -209,13 +208,12 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Equal> node)
+    bool replace_op(shared_ptr<op::v1::Equal> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Equal, op::v1::Equal>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Equal, op::v1::Equal>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::GenerateMask> node)
+    bool replace_op(shared_ptr<op::v1::GenerateMask> node)
     {
         NGRAPH_CHECK(node->input_value(1).get_node_shared_ptr()->is_constant());
         auto mask_shape =
@@ -233,19 +231,17 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Greater> node)
+    bool replace_op(shared_ptr<op::v1::Greater> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Greater, op::v1::Greater>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Greater, op::v1::Greater>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::GreaterEqual> node)
+    bool replace_op(shared_ptr<op::v1::GreaterEqual> node)
     {
-        op_cast_binary_elementwise_node<op::v0::GreaterEq, op::v1::GreaterEqual>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::GreaterEq, op::v1::GreaterEqual>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::GroupConvolution> node)
+    bool replace_op(shared_ptr<op::v1::GroupConvolution> node)
     {
         const auto data_arg = node->input_value(0);
         const auto filters_arg = node->input_value(1);
@@ -263,49 +259,43 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Less> node)
+    bool replace_op(shared_ptr<op::v1::Less> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Less, op::v1::Less>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Less, op::v1::Less>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::LessEqual> node)
+    bool replace_op(shared_ptr<op::v1::LessEqual> node)
     {
-        op_cast_binary_elementwise_node<op::v0::LessEq, op::v1::LessEqual>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::LessEq, op::v1::LessEqual>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::LogicalAnd> node)
+    bool replace_op(shared_ptr<op::v1::LogicalAnd> node)
     {
-        op_cast_binary_elementwise_node<op::v0::And, op::v1::LogicalAnd>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::And, op::v1::LogicalAnd>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::LogicalNot> node)
+    bool replace_op(shared_ptr<op::v1::LogicalNot> node)
     {
         replace_node(node, make_shared<op::v0::Not>(node->input_value(0)));
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::LogicalOr> node)
+    bool replace_op(shared_ptr<op::v1::LogicalOr> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Or, op::v1::LogicalOr>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Or, op::v1::LogicalOr>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::LogicalXor> node)
+    bool replace_op(shared_ptr<op::v1::LogicalXor> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Xor, op::v1::LogicalXor>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Xor, op::v1::LogicalXor>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::Maximum> node)
+    bool replace_op(shared_ptr<op::v1::Maximum> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Maximum, op::v1::Maximum>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Maximum, op::v1::Maximum>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::MaxPool> node)
+    bool replace_op(shared_ptr<op::v1::MaxPool> node)
     {
         auto const input_arg = node->input_value(0);
         auto ceil_mode = static_cast<bool>(node->get_rounding_type());
@@ -326,7 +316,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::MaxPoolBackprop> node)
+    bool replace_op(shared_ptr<op::v1::MaxPoolBackprop> node)
     {
         const auto padding_below = node->get_pads_begin();
         const auto padding_above = node->get_pads_end();
@@ -361,25 +351,22 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Minimum> node)
+    bool replace_op(shared_ptr<op::v1::Minimum> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Minimum, op::v1::Minimum>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Minimum, op::v1::Minimum>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::Multiply> node)
+    bool replace_op(shared_ptr<op::v1::Multiply> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Multiply, op::v1::Multiply>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Multiply, op::v1::Multiply>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::NotEqual> node)
+    bool replace_op(shared_ptr<op::v1::NotEqual> node)
     {
-        op_cast_binary_elementwise_node<op::v0::NotEqual, op::v1::NotEqual>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::NotEqual, op::v1::NotEqual>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::OneHot> node)
+    bool replace_op(shared_ptr<op::v1::OneHot> node)
     {
         const auto indices = node->input_value(0).get_node_shared_ptr();
         const auto depth = node->input_value(1).get_node_shared_ptr();
@@ -410,7 +397,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Pad> node)
+    bool replace_op(shared_ptr<op::v1::Pad> node)
     {
         const auto pad_arg = node->input_value(0);
         const auto pad_value = node->input_value(3);
@@ -421,13 +408,12 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Power> node)
+    bool replace_op(shared_ptr<op::v1::Power> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Power, op::v1::Power>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Power, op::v1::Power>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::ReduceProd> node)
+    bool replace_op(shared_ptr<op::v1::ReduceProd> node)
     {
         auto replacement_node =
             make_shared<op::v0::Product>(node->input_value(0), node->input_value(1));
@@ -460,7 +446,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Reverse> node)
+    bool replace_op(shared_ptr<op::v1::Reverse> node)
     {
         auto axes_node = node->input_value(1).get_node_shared_ptr();
         NGRAPH_CHECK(axes_node->is_constant(),
@@ -490,7 +476,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::StridedSlice> node)
+    bool replace_op(shared_ptr<op::v1::StridedSlice> node)
     {
         auto convert_mask_to_axes = [](const std::vector<int64_t>& mask) {
             AxisSet axes{};
@@ -556,7 +542,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Softmax> node)
+    bool replace_op(shared_ptr<op::v1::Softmax> node)
     {
         auto axis = node->get_axis();
         auto data = node->input(0);
@@ -568,13 +554,12 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::Subtract> node)
+    bool replace_op(shared_ptr<op::v1::Subtract> node)
     {
-        op_cast_binary_elementwise_node<op::v0::Subtract, op::v1::Subtract>(node);
-        return true;
+        return replace_op_binary_elementwise_node<op::v0::Subtract, op::v1::Subtract>(node);
     }
 
-    bool op_cast(shared_ptr<op::v1::ReduceSum> node)
+    bool replace_op(shared_ptr<op::v1::ReduceSum> node)
     {
         auto replacement_node =
             make_shared<op::v0::Sum>(node->input_value(0), node->input_value(1));
@@ -607,7 +592,7 @@ namespace
         return true;
     }
 
-    bool op_cast(shared_ptr<op::v1::TopK> node)
+    bool replace_op(shared_ptr<op::v1::TopK> node)
     {
         const auto axis = node->get_axis();
         const auto sort_type = node->get_sort_type();
@@ -635,21 +620,38 @@ namespace
 
     using DispatchMap = map<NodeTypeInfo, std::function<bool(shared_ptr<Node> node)>>;
 
-    template <typename T>
-    bool op_cast_thunk(shared_ptr<Node> node)
+    // Used to not insert a table entry
+    void replace_op(shared_ptr<Node> node) {}
+    template <
+        typename T,
+        typename enable_if<is_same<void, decltype(replace_op(declval<shared_ptr<T>>()))>::value,
+                           bool>::type = false>
+    void insert_thunk(DispatchMap& dm, shared_ptr<T> node)
     {
-        return op_cast(as_type_ptr<T>(node));
+        // Reference to avoid unnused function error
+        replace_op(node);
+    }
+
+    template <
+        typename T,
+        typename enable_if<is_same<bool, decltype(replace_op(declval<shared_ptr<T>>()))>::value,
+                           bool>::type = false>
+    void insert_thunk(DispatchMap& dm, shared_ptr<T> node)
+    {
+        dm[T::type_info] = [](shared_ptr<Node> n) -> bool { return replace_op(as_type_ptr<T>(n)); };
     }
 
     DispatchMap& get_dispatch_map()
     {
-        static DispatchMap dispatch_map{
-#define NGRAPH_OP(NAME, NAMESPACE) {NAMESPACE::NAME::type_info, op_cast_thunk<NAMESPACE::NAME>},
+        static DispatchMap dispatch_map;
+#define NGRAPH_OP(NAME, NAMESPACE)                                                                 \
+    insert_thunk<NAMESPACE::NAME>(dispatch_map, shared_ptr<NAMESPACE::NAME>());
 #include "ngraph/opsets/opset1_tbl.hpp"
-            NGRAPH_OP(AvgPoolBackprop, op::v1) NGRAPH_OP(ConvolutionBackpropFilters, op::v1)
-                NGRAPH_OP(GenerateMask, op::v1) NGRAPH_OP(MaxPoolBackprop, op::v1)
+        NGRAPH_OP(AvgPoolBackprop, op::v1)
+        NGRAPH_OP(ConvolutionBackpropFilters, op::v1)
+        NGRAPH_OP(GenerateMask, op::v1)
+        NGRAPH_OP(MaxPoolBackprop, op::v1)
 #undef NGRAPH_OP
-        };
         return dispatch_map;
     }
 }
