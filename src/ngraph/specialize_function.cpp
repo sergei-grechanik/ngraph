@@ -16,6 +16,7 @@
 
 #include "ngraph/specialize_function.hpp"
 #include <pass/constant_folding.hpp>
+#include <pass/get_output_element_elimination.hpp>
 #include "ngraph/op/constant.hpp"
 
 using namespace ngraph;
@@ -60,6 +61,7 @@ std::shared_ptr<Function>
             m[f->get_parameters()[i].get()] =
                 std::make_shared<op::Parameter>(parameter_element_types[i], parameter_shapes[i]);
         }
+        m[f->get_parameters()[i].get()]->get_rt_info() = f->get_parameters()[i]->get_rt_info();
     }
 
     for (auto old_node : f->get_ordered_ops())
@@ -119,5 +121,8 @@ std::shared_ptr<Function>
     {
         ngraph::pass::ConstantFolding().run_on_function(function);
     }
+
+    ngraph::pass::GetOutputElementElimination().run_on_function(function);
+
     return function;
 }
