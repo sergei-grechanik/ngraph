@@ -26,9 +26,9 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::QuantizedMatmul::type_info;
 
-op::QuantizedMatmul::QuantizedMatmul(const Output<Node>& data,
-                                     const Output<Node>& weights,
-                                     const Output<Node>& scale,
+op::QuantizedMatmul::QuantizedMatmul(const Output& data,
+                                     const Output& weights,
+                                     const Output& scale,
                                      const element::Type& output_type)
     : Op({data, weights, scale})
     , m_output_type(output_type)

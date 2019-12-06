@@ -55,9 +55,9 @@ namespace ngraph
                 ///                           should be split into.
                 /// \param deformable_group   The number of groups which deformable values and
                 ///                           output should be split into along the channel axis.
-                DeformableConvolution(const Output<Node>& arg,
-                                      const Output<Node>& deformable_values,
-                                      const Output<Node>& filters,
+                DeformableConvolution(const Output& arg,
+                                      const Output& deformable_values,
+                                      const Output& filters,
                                       const Strides& strides,
                                       const CoordinateDiff& pads_begin,
                                       const CoordinateDiff& pads_end,

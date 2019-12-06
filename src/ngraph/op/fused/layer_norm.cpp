@@ -37,9 +37,9 @@ using namespace ngraph;
 constexpr NodeTypeInfo op::LayerNorm::type_info;
 constexpr NodeTypeInfo op::LayerNormBackprop::type_info;
 
-op::LayerNorm::LayerNorm(const Output<Node>& data,
-                         const Output<Node>& scale,
-                         const Output<Node>& bias,
+op::LayerNorm::LayerNorm(const Output& data,
+                         const Output& scale,
+                         const Output& bias,
                          bool keep_stats,
                          int64_t begin_norm_axis,
                          double epsilon)
@@ -52,7 +52,7 @@ op::LayerNorm::LayerNorm(const Output<Node>& data,
     constructor_validate_and_infer_types();
 }
 
-op::LayerNorm::LayerNorm(const Output<Node>& data,
+op::LayerNorm::LayerNorm(const Output& data,
                          bool keep_stats,
                          int64_t begin_norm_axis,
                          double epsilon)
@@ -280,11 +280,11 @@ void op::LayerNorm::generate_adjoints(autodiff::Adjoints& adjoints, const NodeVe
     }
 }
 
-op::LayerNormBackprop::LayerNormBackprop(const Output<Node>& data,
-                                         const Output<Node>& delta,
-                                         const Output<Node>& mean,
-                                         const Output<Node>& variance,
-                                         const Output<Node>& scale,
+op::LayerNormBackprop::LayerNormBackprop(const Output& data,
+                                         const Output& delta,
+                                         const Output& mean,
+                                         const Output& variance,
+                                         const Output& scale,
                                          int64_t begin_norm_axis,
                                          double epsilon)
     : FusedOp({data, delta, mean, variance, scale})
@@ -296,10 +296,10 @@ op::LayerNormBackprop::LayerNormBackprop(const Output<Node>& data,
     constructor_validate_and_infer_types();
 }
 
-op::LayerNormBackprop::LayerNormBackprop(const Output<Node>& data,
-                                         const Output<Node>& delta,
-                                         const Output<Node>& mean,
-                                         const Output<Node>& variance,
+op::LayerNormBackprop::LayerNormBackprop(const Output& data,
+                                         const Output& delta,
+                                         const Output& mean,
+                                         const Output& variance,
                                          int64_t begin_norm_axis,
                                          double epsilon)
     : FusedOp({data, delta, mean, variance})
@@ -311,9 +311,9 @@ op::LayerNormBackprop::LayerNormBackprop(const Output<Node>& data,
     constructor_validate_and_infer_types();
 }
 
-op::LayerNormBackprop::LayerNormBackprop(const Output<Node>& data,
-                                         const Output<Node>& delta,
-                                         const Output<Node>& scale,
+op::LayerNormBackprop::LayerNormBackprop(const Output& data,
+                                         const Output& delta,
+                                         const Output& scale,
                                          int64_t begin_norm_axis,
                                          double epsilon)
     : FusedOp({data, delta, scale})
@@ -325,8 +325,8 @@ op::LayerNormBackprop::LayerNormBackprop(const Output<Node>& data,
     constructor_validate_and_infer_types();
 }
 
-op::LayerNormBackprop::LayerNormBackprop(const Output<Node>& data,
-                                         const Output<Node>& delta,
+op::LayerNormBackprop::LayerNormBackprop(const Output& data,
+                                         const Output& delta,
                                          int64_t begin_norm_axis,
                                          double epsilon)
     : FusedOp({data, delta})

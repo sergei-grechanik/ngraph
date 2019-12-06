@@ -40,9 +40,7 @@ namespace ngraph
             /// \param broadcast_axes Node that produces the axis positions (0-based) in the result
             ///                       that are being broadcast. The remaining axes in shape must be
             ///                       the same as the shape of arg.
-            DynBroadcast(const Output<Node>& arg,
-                         const Output<Node>& shape,
-                         const Output<Node>& broadcast_axes);
+            DynBroadcast(const Output& arg, const Output& shape, const Output& broadcast_axes);
 
             void validate_and_infer_types() override;
 

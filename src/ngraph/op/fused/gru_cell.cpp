@@ -30,10 +30,10 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::GRUCell::type_info;
 
-op::GRUCell::GRUCell(const Output<Node>& X,
-                     const Output<Node>& W,
-                     const Output<Node>& R,
-                     const Output<Node>& initial_hidden_state,
+op::GRUCell::GRUCell(const Output& X,
+                     const Output& W,
+                     const Output& R,
+                     const Output& initial_hidden_state,
                      size_t hidden_size)
     : GRUCell(X,
               W,
@@ -48,10 +48,10 @@ op::GRUCell::GRUCell(const Output<Node>& X,
 {
 }
 
-op::GRUCell::GRUCell(const Output<Node>& X,
-                     const Output<Node>& W,
-                     const Output<Node>& R,
-                     const Output<Node>& initial_hidden_state,
+op::GRUCell::GRUCell(const Output& X,
+                     const Output& W,
+                     const Output& R,
+                     const Output& initial_hidden_state,
                      size_t hidden_size,
                      const vector<string>& activations,
                      const vector<float>& activations_alpha,
@@ -68,12 +68,12 @@ op::GRUCell::GRUCell(const Output<Node>& X,
     constructor_validate_and_infer_types();
 }
 
-op::GRUCell::GRUCell(const Output<Node>& X,
-                     const Output<Node>& W,
-                     const Output<Node>& R,
-                     const Output<Node>& initial_hidden_state,
+op::GRUCell::GRUCell(const Output& X,
+                     const Output& W,
+                     const Output& R,
+                     const Output& initial_hidden_state,
                      size_t hidden_size,
-                     const Output<Node>& B,
+                     const Output& B,
                      const vector<string>& activations,
                      const vector<float>& activations_alpha,
                      const vector<float>& activations_beta,
@@ -187,11 +187,11 @@ NodeVector op::GRUCell::decompose_op() const
     // Ht = (1 - zt) (.) ht + zt (.) Ht-1
     // -------------------
 
-    Output<Node> X = input_value(0);
-    Output<Node> W = input_value(1);
-    Output<Node> R = input_value(2);
-    Output<Node> H_t = input_value(3);
-    Output<Node> B = input_value(4);
+    Output X = input_value(0);
+    Output W = input_value(1);
+    Output R = input_value(2);
+    Output H_t = input_value(3);
+    Output B = input_value(4);
 
     // Get W and R biases separately.
     NodeVector b_W_R = builder::split(B, 2);
@@ -243,7 +243,7 @@ NodeVector op::GRUCell::decompose_op() const
     const auto& z_t = zr_t_gates.at(0);
     const auto& r_t = zr_t_gates.at(1);
 
-    Output<Node> h_t;
+    Output h_t;
 
     if (m_linear_before_reset)
     {
@@ -272,10 +272,9 @@ NodeVector op::GRUCell::decompose_op() const
 
 void op::GRUCell::add_default_bias_input()
 {
-    Output<Node> B =
-        op::Constant::create(input(0).get_element_type(),
-                             Shape{2 * s_gates_count * get_hidden_size()},
-                             vector<float>(2 * s_gates_count * get_hidden_size(), 0.f));
+    Output B = op::Constant::create(input(0).get_element_type(),
+                                    Shape{2 * s_gates_count * get_hidden_size()},
+                                    vector<float>(2 * s_gates_count * get_hidden_size(), 0.f));
     set_argument(4, B);
 }
 

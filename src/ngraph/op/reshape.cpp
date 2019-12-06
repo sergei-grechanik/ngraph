@@ -26,9 +26,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::Reshape::type_info;
 
-op::Reshape::Reshape(const Output<Node>& arg,
-                     const AxisVector& input_order,
-                     const Shape& output_shape)
+op::Reshape::Reshape(const Output& arg, const AxisVector& input_order, const Shape& output_shape)
     : Op({arg})
     , m_input_order(input_order)
     , m_output_shape(output_shape)
@@ -149,7 +147,7 @@ void op::Reshape::generate_adjoints(autodiff::Adjoints& adjoints, const NodeVect
 
 constexpr NodeTypeInfo op::v1::Reshape::type_info;
 
-op::v1::Reshape::Reshape(const Output<Node>& arg, const Output<Node>& pattern, bool zero_flag)
+op::v1::Reshape::Reshape(const Output& arg, const Output& pattern, bool zero_flag)
     : Op({arg, pattern})
     , m_special_zero(zero_flag)
 {

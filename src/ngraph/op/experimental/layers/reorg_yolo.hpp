@@ -34,7 +34,7 @@ namespace ngraph
                 ///
                 /// \param input          Input
                 /// \param strides        Stride to reorganize input by
-                ReorgYolo(const Output<Node>& input, const Strides& strides);
+                ReorgYolo(const Output& input, const Strides& strides);
 
                 void validate_and_infer_types() override;
 

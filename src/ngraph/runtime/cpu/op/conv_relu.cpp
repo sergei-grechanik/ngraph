@@ -38,8 +38,8 @@ op::ConvolutionRelu::ConvolutionRelu(const std::shared_ptr<op::Convolution>& con
     set_output_type(0, conv->get_element_type(), conv->get_shape());
 }
 
-op::ConvolutionRelu::ConvolutionRelu(const Output<Node>& data_batch,
-                                     const Output<Node>& filters,
+op::ConvolutionRelu::ConvolutionRelu(const Output& data_batch,
+                                     const Output& filters,
                                      const Strides& window_movement_strides,
                                      const Strides& window_dilation_strides,
                                      const CoordinateDiff& padding_below,

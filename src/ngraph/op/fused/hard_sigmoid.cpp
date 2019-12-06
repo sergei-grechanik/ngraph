@@ -29,9 +29,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::HardSigmoid::type_info;
 
-op::HardSigmoid::HardSigmoid(const Output<Node>& data,
-                             const Output<Node>& alpha,
-                             const Output<Node>& beta)
+op::HardSigmoid::HardSigmoid(const Output& data, const Output& alpha, const Output& beta)
     : FusedOp({data, alpha, beta})
 {
     constructor_validate_and_infer_types();

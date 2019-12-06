@@ -44,8 +44,8 @@ namespace ngraph
                 ///
                 /// Output `[d0, ...]`
                 ///
-                LogicalOr(const Output<Node>& arg0,
-                          const Output<Node>& arg1,
+                LogicalOr(const Output& arg0,
+                          const Output& arg1,
                           const AutoBroadcastSpec& auto_broadcast =
                               AutoBroadcastSpec(AutoBroadcastType::NUMPY));
 
@@ -75,8 +75,8 @@ namespace ngraph
                 ///
                 /// Output `[d0, ...]`
                 ///
-                Or(const Output<Node>& arg0,
-                   const Output<Node>& arg1,
+                Or(const Output& arg0,
+                   const Output& arg1,
                    const AutoBroadcastSpec& auto_broadcast = AutoBroadcastSpec());
 
                 virtual std::shared_ptr<Node>

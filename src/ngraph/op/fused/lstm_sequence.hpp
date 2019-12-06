@@ -56,14 +56,14 @@ namespace ngraph
                     BIDIRECTIONAL
                 };
 
-                explicit LSTMSequence(const Output<Node>& X,
-                                      const Output<Node>& initial_hidden_state,
-                                      const Output<Node>& initial_cell_state,
-                                      const Output<Node>& sequence_lengths,
-                                      const Output<Node>& W,
-                                      const Output<Node>& R,
-                                      const Output<Node>& B,
-                                      const Output<Node>& P,
+                explicit LSTMSequence(const Output& X,
+                                      const Output& initial_hidden_state,
+                                      const Output& initial_cell_state,
+                                      const Output& sequence_lengths,
+                                      const Output& W,
+                                      const Output& R,
+                                      const Output& B,
+                                      const Output& P,
                                       const std::int64_t hidden_size,
                                       const direction lstm_direction,
                                       LSTMWeightsFormat weights_format = LSTMWeightsFormat::IFCO,
@@ -94,13 +94,13 @@ namespace ngraph
                     constructor_validate_and_infer_types();
                 }
 
-                explicit LSTMSequence(const Output<Node>& X,
-                                      const Output<Node>& initial_hidden_state,
-                                      const Output<Node>& initial_cell_state,
-                                      const Output<Node>& sequence_lengths,
-                                      const Output<Node>& W,
-                                      const Output<Node>& R,
-                                      const Output<Node>& B,
+                explicit LSTMSequence(const Output& X,
+                                      const Output& initial_hidden_state,
+                                      const Output& initial_cell_state,
+                                      const Output& sequence_lengths,
+                                      const Output& W,
+                                      const Output& R,
+                                      const Output& B,
                                       const std::int64_t hidden_size,
                                       const direction lstm_direction,
                                       LSTMWeightsFormat weights_format = LSTMWeightsFormat::IFCO,
@@ -171,7 +171,7 @@ namespace ngraph
                 NodeVector lstm_pass(bool is_reverse = false) const;
 
                 // Split(bi-directional) and squeeze input data to remove 'num_direction' dimension.
-                std::shared_ptr<Node> prepare_input(Output<Node> node, bool is_reverse) const;
+                std::shared_ptr<Node> prepare_input(Output node, bool is_reverse) const;
 
                 std::vector<float> m_activations_alpha;
                 std::vector<float> m_activations_beta;

@@ -40,7 +40,7 @@ namespace ngraph
                 ///
                 /// \param data Input tensor
                 /// \param alpha Multiplier for negative values
-                Elu(const Output<Node>& data, const double alpha);
+                Elu(const Output& data, const double alpha);
 
                 virtual NodeVector decompose_op() const override;
 

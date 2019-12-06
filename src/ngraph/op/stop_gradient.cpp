@@ -22,7 +22,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::StopGradient::type_info;
 
-op::StopGradient::StopGradient(const Output<Node>& arg)
+op::StopGradient::StopGradient(const Output& arg)
     : UnaryElementwiseArithmetic(arg)
 {
     constructor_validate_and_infer_types();

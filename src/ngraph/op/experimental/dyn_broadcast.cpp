@@ -22,9 +22,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::DynBroadcast::type_info;
 
-op::DynBroadcast::DynBroadcast(const Output<Node>& arg,
-                               const Output<Node>& shape,
-                               const Output<Node>& broadcast_axes)
+op::DynBroadcast::DynBroadcast(const Output& arg, const Output& shape, const Output& broadcast_axes)
     : Op({arg, shape, broadcast_axes})
 {
     constructor_validate_and_infer_types();

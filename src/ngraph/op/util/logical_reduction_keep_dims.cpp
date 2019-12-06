@@ -20,10 +20,9 @@
 using namespace std;
 using namespace ngraph;
 
-op::util::LogicalReductionKeepDims::LogicalReductionKeepDims(
-    const ngraph::Output<ngraph::Node>& arg,
-    const ngraph::Output<ngraph::Node>& reduction_axes,
-    const bool keep_dims)
+op::util::LogicalReductionKeepDims::LogicalReductionKeepDims(const ngraph::Output& arg,
+                                                             const ngraph::Output& reduction_axes,
+                                                             const bool keep_dims)
     : LogicalReduction(arg, reduction_axes)
     , m_keep_dims{keep_dims}
 {

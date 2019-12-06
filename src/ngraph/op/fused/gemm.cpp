@@ -27,9 +27,9 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::Gemm::type_info;
 
-op::Gemm::Gemm(const Output<Node>& A,
-               const Output<Node>& B,
-               const Output<Node>& C,
+op::Gemm::Gemm(const Output& A,
+               const Output& B,
+               const Output& C,
                double alpha,
                double beta,
                bool transA,

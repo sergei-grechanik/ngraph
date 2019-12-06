@@ -68,9 +68,9 @@ namespace ngraph
                 /// \param class_logits    Class prediction logits
                 /// \param image_shape     Shape of image
                 /// \param attrs           Proposal op attributes
-                Proposal(const Output<Node>& class_probs,
-                         const Output<Node>& class_logits,
-                         const Output<Node>& image_shape,
+                Proposal(const Output& class_probs,
+                         const Output& class_logits,
+                         const Output& image_shape,
                          const ProposalAttrs& attrs);
 
                 void validate_and_infer_types() override;

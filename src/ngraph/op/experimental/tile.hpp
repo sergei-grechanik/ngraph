@@ -36,7 +36,7 @@ namespace ngraph
                 ///
                 /// \param data The node producing input tensor to be padded.
                 /// \param repeats The node producing the per-dimension replication factor
-                Tile(const Output<Node>& data, const Output<Node>& repeats);
+                Tile(const Output& data, const Output& repeats);
 
                 void validate_and_infer_types() override;
 

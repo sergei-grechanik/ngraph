@@ -59,8 +59,8 @@ namespace ngraph
                 /// \param[in]  output_shape    The output shape. When provided padding values are
                 ///                             automatically inferred.
                 ///
-                GroupConvolutionTranspose(const Output<Node>& data,
-                                          const Output<Node>& filters,
+                GroupConvolutionTranspose(const Output& data,
+                                          const Output& filters,
                                           const Strides& strides,
                                           const Strides& dilations,
                                           const CoordinateDiff& padding_begin,
@@ -79,8 +79,8 @@ namespace ngraph
                 /// channels
                 ///                       are divided into.
                 ///
-                GroupConvolutionTranspose(const Output<Node>& data,
-                                          const Output<Node>& filters,
+                GroupConvolutionTranspose(const Output& data,
+                                          const Output& filters,
                                           const std::size_t groups = 1UL);
 
                 ///
@@ -98,8 +98,8 @@ namespace ngraph
                 /// \param[in]  groups          The number of groups the input channels and output
                 ///                             channels are divided into.
                 ///
-                GroupConvolutionTranspose(const Output<Node>& data,
-                                          const Output<Node>& filters,
+                GroupConvolutionTranspose(const Output& data,
+                                          const Output& filters,
                                           const Strides& strides,
                                           const Strides& dilations,
                                           const CoordinateDiff& output_padding,
@@ -116,13 +116,13 @@ namespace ngraph
                 /// \param[in]  groups          The number of groups the input channels and output
                 ///                             channels are divided into.
                 ///
-                GroupConvolutionTranspose(const Output<Node>& data,
-                                          const Output<Node>& filters,
+                GroupConvolutionTranspose(const Output& data,
+                                          const Output& filters,
                                           const Shape& output_shape,
                                           const std::size_t groups = 1UL);
 
-                Output<Node> get_data() { return input_value(0); }
-                Output<Node> get_filters() { return input_value(1); }
+                Output get_data() { return input_value(0); }
+                Output get_filters() { return input_value(1); }
                 const Strides& get_strides() const { return m_strides; }
                 const Strides& get_dilations() const { return m_dilations; }
                 const CoordinateDiff& get_padding_begin() const { return m_padding_begin; }

@@ -30,11 +30,11 @@ namespace ngraph
             CPU_BACKEND_API
             static constexpr NodeTypeInfo type_info{"Dropout", 0};
             const NodeTypeInfo& get_type_info() const override { return type_info; }
-            Dropout(const Output<Node>& input,
-                    const Output<Node>& gm_const,
-                    const Output<Node>& use_seed,
-                    const Output<Node>& seed,
-                    const Output<Node>& keep_prob); // keep_prob = 1 - dropout_prob
+            Dropout(const Output& input,
+                    const Output& gm_const,
+                    const Output& use_seed,
+                    const Output& seed,
+                    const Output& keep_prob); // keep_prob = 1 - dropout_prob
 
             bool get_use_seed() const;
             uint64_t get_seed() const;

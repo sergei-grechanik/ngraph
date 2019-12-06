@@ -26,8 +26,8 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::MatMul::type_info;
 
-op::MatMul::MatMul(const Output<Node>& A,
-                   const Output<Node>& B,
+op::MatMul::MatMul(const Output& A,
+                   const Output& B,
                    const bool& transpose_a,
                    const bool& transpose_b)
     : FusedOp(OutputVector{A, B})

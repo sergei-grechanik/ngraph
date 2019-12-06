@@ -23,9 +23,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::v0::Add::type_info;
 
-op::v0::Add::Add(const Output<Node>& arg0,
-                 const Output<Node>& arg1,
-                 const AutoBroadcastSpec& auto_broadcast)
+op::v0::Add::Add(const Output& arg0, const Output& arg1, const AutoBroadcastSpec& auto_broadcast)
     : BinaryElementwiseArithmetic(arg0, arg1, auto_broadcast)
 {
     constructor_validate_and_infer_types();
@@ -59,7 +57,7 @@ void op::v0::Add::generate_adjoints(autodiff::Adjoints& adjoints, const NodeVect
     adjoints.add_delta(y, delta);
 }
 
-shared_ptr<Node> ngraph::operator+(const Output<Node>& arg0, const Output<Node>& arg1)
+shared_ptr<Node> ngraph::operator+(const Output& arg0, const Output& arg1)
 {
     return make_shared<op::Add>(arg0, arg1);
 }
@@ -68,9 +66,7 @@ shared_ptr<Node> ngraph::operator+(const Output<Node>& arg0, const Output<Node>&
 
 constexpr NodeTypeInfo op::v1::Add::type_info;
 
-op::v1::Add::Add(const Output<Node>& arg0,
-                 const Output<Node>& arg1,
-                 const AutoBroadcastSpec& auto_broadcast)
+op::v1::Add::Add(const Output& arg0, const Output& arg1, const AutoBroadcastSpec& auto_broadcast)
     : BinaryElementwiseArithmetic(arg0, arg1, auto_broadcast)
 {
     constructor_validate_and_infer_types();

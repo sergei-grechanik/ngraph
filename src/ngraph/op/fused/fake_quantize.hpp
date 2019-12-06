@@ -58,11 +58,11 @@ namespace ngraph
                 /// \param[in]  auto_broadcast  AutoBroadcast mode to be used for broadcasting
                 ///                             limit values
                 ///
-                FakeQuantize(const Output<Node>& data,
-                             const Output<Node>& input_low,
-                             const Output<Node>& input_high,
-                             const Output<Node>& output_low,
-                             const Output<Node>& output_high,
+                FakeQuantize(const Output& data,
+                             const Output& input_low,
+                             const Output& input_high,
+                             const Output& output_low,
+                             const Output& output_high,
                              std::size_t levels,
                              const AutoBroadcastSpec& auto_broadcast =
                                  AutoBroadcastSpec(AutoBroadcastType::NUMPY));

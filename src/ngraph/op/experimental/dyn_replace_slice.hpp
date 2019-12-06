@@ -44,11 +44,11 @@ namespace ngraph
             /// \param new_axis          Add dimension one axis at the set positions
             /// \param shrink_axis       Delete dimensions at the set positions
             /// \param ellipsis_mask     Inserts missing dimensions on the set position
-            DynReplaceSlice(const Output<Node>& arg,
-                            const Output<Node>& replacement,
-                            const Output<Node>& lower_bounds,
-                            const Output<Node>& upper_bounds,
-                            const Output<Node>& strides,
+            DynReplaceSlice(const Output& arg,
+                            const Output& replacement,
+                            const Output& lower_bounds,
+                            const Output& upper_bounds,
+                            const Output& strides,
                             const AxisSet& lower_bounds_mask = AxisSet{},
                             const AxisSet& upper_bounds_mask = AxisSet{},
                             const AxisSet& new_axis = AxisSet{},

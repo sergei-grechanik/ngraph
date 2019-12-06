@@ -380,7 +380,7 @@ namespace ngraph
     // Check if all paths from X to a result go through Y
     bool is_post_dominated(Node* X, Node* Y);
 
-    bool is_equal_to_const_value(std::string const_value, const Output<Node>& reduce_constant);
+    bool is_equal_to_const_value(std::string const_value, const Output& reduce_constant);
 
     // input nodes are cloned and returned
     // NodeMap input may contain default node mapping i.e. pre-cloned nodes
@@ -414,7 +414,7 @@ namespace ngraph
                                                     const element::Type& element_type,
                                                     const Shape& shape);
 
-    bool is_zero(const Output<Node>& reduce_constant);
+    bool is_zero(const Output& reduce_constant);
 
     NodeVector get_subgraph_outputs(const NodeVector& nodes,
                                     const NodeVector& exclusions,
@@ -455,7 +455,7 @@ namespace ngraph
     std::vector<Input> get_inputs_from(Node& src, Node& dst);
     /// \return A vector containing a handle for each output of src that is connected to an input
     ///         of `dst`.
-    std::vector<Output<Node>> get_outputs_to(Node& src, Node& dst);
+    std::vector<Output> get_outputs_to(Node& src, Node& dst);
 
     /// Checks the func for graph cycles starting from results going backwards, then from parameters
     /// going forward.

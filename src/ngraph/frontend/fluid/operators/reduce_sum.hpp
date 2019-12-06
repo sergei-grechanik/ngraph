@@ -37,10 +37,7 @@ namespace ngraph
             /// \brief Constructs a ReduceSum operation.
             ///
             /// \param data Input tensor
-            ReduceSum(const Output<Node>& data,
-                      const vector<int>& dim,
-                      bool reduce_all,
-                      bool keep_dim);
+            ReduceSum(const Output& data, const vector<int>& dim, bool reduce_all, bool keep_dim);
 
             virtual NodeVector decompose_op() const override;
 
@@ -67,8 +64,8 @@ namespace ngraph
             /// \brief Constructs a ReduceSumGrad operation.
             ///
             /// \param data Input tensor
-            ReduceSumGrad(const Output<Node>& x,
-                          const Output<Node>& y,
+            ReduceSumGrad(const Output& x,
+                          const Output& y,
                           const vector<int>& dim,
                           bool reduce_all,
                           bool keep_dim);

@@ -22,9 +22,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::v1::ReduceProd::type_info;
 
-op::v1::ReduceProd::ReduceProd(const Output<Node>& arg,
-                               const Output<Node>& reduction_axes,
-                               bool keep_dims)
+op::v1::ReduceProd::ReduceProd(const Output& arg, const Output& reduction_axes, bool keep_dims)
     : ArithmeticReductionKeepDims(arg, reduction_axes, keep_dims)
 {
     constructor_validate_and_infer_types();

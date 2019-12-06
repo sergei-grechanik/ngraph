@@ -58,8 +58,8 @@ namespace ngraph
 class Oracle : public op::Op
 {
 public:
-    Oracle(const Output<Node>& program,
-           const Output<Node>& data,
+    Oracle(const Output& program,
+           const Output& data,
            TuringModel turing_model,
            uint64_t model_version,
            uint8_t rev,

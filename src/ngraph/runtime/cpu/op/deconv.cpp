@@ -29,9 +29,9 @@ using namespace ngraph;
 constexpr NodeTypeInfo op::DeconvolutionBias::type_info;
 
 op::DeconvolutionBias::DeconvolutionBias(const Shape& data_batch_shape,
-                                         const Output<Node>& filters,
-                                         const Output<Node>& output_delta,
-                                         const Output<Node>& bias,
+                                         const Output& filters,
+                                         const Output& output_delta,
+                                         const Output& bias,
                                          const Strides& window_movement_strides_forward,
                                          const Strides& window_dilation_strides_forward,
                                          const CoordinateDiff& padding_below_forward,

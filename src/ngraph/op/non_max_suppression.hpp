@@ -48,11 +48,11 @@ namespace ngraph
                 /// \param score_threshold Auto broadcast specification
                 /// \param box_encoding Auto broadcast specification
                 /// \param sort_result_descending Auto broadcast specification
-                NonMaxSuppression(const Output<Node>& boxes,
-                                  const Output<Node>& scores,
-                                  const Output<Node>& max_output_boxes_per_class,
-                                  const Output<Node>& iou_threshold,
-                                  const Output<Node>& score_threshold,
+                NonMaxSuppression(const Output& boxes,
+                                  const Output& scores,
+                                  const Output& max_output_boxes_per_class,
+                                  const Output& iou_threshold,
+                                  const Output& score_threshold,
                                   const BoxEncodingType box_encoding = BoxEncodingType::CORNER,
                                   const bool sort_result_descending = true);
 
@@ -63,8 +63,8 @@ namespace ngraph
                 /// \param scores Output that produces ta tensor
                 /// \param box_encoding Auto broadcast specification
                 /// \param sort_result_descending Auto broadcast specification
-                NonMaxSuppression(const Output<Node>& boxes,
-                                  const Output<Node>& scores,
+                NonMaxSuppression(const Output& boxes,
+                                  const Output& scores,
                                   const BoxEncodingType box_encoding = BoxEncodingType::CORNER,
                                   const bool sort_result_descending = true);
 

@@ -52,10 +52,10 @@ namespace ngraph
             /// \param fixed_seed Fixed seed value to be supplied to the random number generator if
             ///                   `use_fixed_seed` is `true`. If `use_fixed_seed` is `false`, this
             ///                   value is ignored.
-            RandomUniform(const Output<Node>& min_value,
-                          const Output<Node>& max_value,
-                          const Output<Node>& result_shape,
-                          const Output<Node>& use_fixed_seed,
+            RandomUniform(const Output& min_value,
+                          const Output& max_value,
+                          const Output& result_shape,
+                          const Output& use_fixed_seed,
                           uint64_t fixed_seed);
 
             virtual std::shared_ptr<Node>

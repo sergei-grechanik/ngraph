@@ -24,15 +24,15 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::QuantizedConvolutionBias::type_info;
 
-op::QuantizedConvolutionBias::QuantizedConvolutionBias(const Output<Node>& data_batch,
-                                                       const Output<Node>& filters,
-                                                       const Output<Node>& bias,
+op::QuantizedConvolutionBias::QuantizedConvolutionBias(const Output& data_batch,
+                                                       const Output& filters,
+                                                       const Output& bias,
                                                        const Strides& window_movement_strides,
                                                        const Strides& window_dilation_strides,
                                                        const CoordinateDiff& padding_below,
                                                        const CoordinateDiff& padding_above,
                                                        const Strides& data_dilation_strides,
-                                                       const Output<Node>& scale,
+                                                       const Output& scale,
                                                        const bool with_relu)
     : Op({data_batch, filters, bias, scale})
     , m_window_movement_strides(window_movement_strides)
@@ -91,17 +91,17 @@ shared_ptr<Node> op::QuantizedConvolutionBias::copy_with_new_args(const NodeVect
 
 constexpr NodeTypeInfo op::QuantizedConvolutionBiasAdd::type_info;
 
-op::QuantizedConvolutionBiasAdd::QuantizedConvolutionBiasAdd(const Output<Node>& data_batch,
-                                                             const Output<Node>& filters,
-                                                             const Output<Node>& bias,
-                                                             const Output<Node>& sum_input,
+op::QuantizedConvolutionBiasAdd::QuantizedConvolutionBiasAdd(const Output& data_batch,
+                                                             const Output& filters,
+                                                             const Output& bias,
+                                                             const Output& sum_input,
                                                              const Strides& window_movement_strides,
                                                              const Strides& window_dilation_strides,
                                                              const CoordinateDiff& padding_below,
                                                              const CoordinateDiff& padding_above,
                                                              const Strides& data_dilation_strides,
-                                                             const Output<Node>& scale,
-                                                             const Output<Node>& sum_scale,
+                                                             const Output& scale,
+                                                             const Output& sum_scale,
                                                              const bool with_relu)
     : Op({data_batch, filters, bias, sum_input, scale, sum_scale})
     , m_window_movement_strides(window_movement_strides)
@@ -164,17 +164,17 @@ shared_ptr<Node>
 constexpr NodeTypeInfo op::QuantizedConvolutionBiasSignedAdd::type_info;
 
 op::QuantizedConvolutionBiasSignedAdd::QuantizedConvolutionBiasSignedAdd(
-    const Output<Node>& data_batch,
-    const Output<Node>& filters,
-    const Output<Node>& bias,
-    const Output<Node>& sum_input,
+    const Output& data_batch,
+    const Output& filters,
+    const Output& bias,
+    const Output& sum_input,
     const Strides& window_movement_strides,
     const Strides& window_dilation_strides,
     const CoordinateDiff& padding_below,
     const CoordinateDiff& padding_above,
     const Strides& data_dilation_strides,
-    const Output<Node>& scale,
-    const Output<Node>& sum_scale,
+    const Output& scale,
+    const Output& sum_scale,
     const bool with_relu)
     : Op({data_batch, filters, bias, sum_input, scale, sum_scale})
     , m_window_movement_strides(window_movement_strides)

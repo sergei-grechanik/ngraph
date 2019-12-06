@@ -24,10 +24,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::CumSum::type_info;
 
-op::CumSum::CumSum(const Output<Node>& arg,
-                   const Output<Node>& axis,
-                   const bool exclusive,
-                   const bool reverse)
+op::CumSum::CumSum(const Output& arg, const Output& axis, const bool exclusive, const bool reverse)
     : Op({arg, axis})
     , m_exclusive(exclusive)
     , m_reverse(reverse)

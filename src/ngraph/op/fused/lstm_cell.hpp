@@ -108,11 +108,11 @@ namespace ngraph
                 ///                                   input of activation functions.
                 /// \param[in]  input_forget          Controls coupling input and forget gates.
                 ///
-                LSTMCell(const Output<Node>& X,
-                         const Output<Node>& initial_hidden_state,
-                         const Output<Node>& initial_cell_state,
-                         const Output<Node>& W,
-                         const Output<Node>& R,
+                LSTMCell(const Output& X,
+                         const Output& initial_hidden_state,
+                         const Output& initial_cell_state,
+                         const Output& W,
+                         const Output& R,
                          std::size_t hidden_size,
                          LSTMWeightsFormat weights_format = LSTMWeightsFormat::IFCO,
                          const std::vector<std::string>& activations =
@@ -156,12 +156,12 @@ namespace ngraph
                 ///                                   input of activation functions.
                 /// \param[in]  input_forget          Controls coupling input and forget gates.
                 ///
-                LSTMCell(const Output<Node>& X,
-                         const Output<Node>& initial_hidden_state,
-                         const Output<Node>& initial_cell_state,
-                         const Output<Node>& W,
-                         const Output<Node>& R,
-                         const Output<Node>& B,
+                LSTMCell(const Output& X,
+                         const Output& initial_hidden_state,
+                         const Output& initial_cell_state,
+                         const Output& W,
+                         const Output& R,
+                         const Output& B,
                          std::size_t hidden_size,
                          LSTMWeightsFormat weights_format = LSTMWeightsFormat::IFCO,
                          const std::vector<std::string>& activations =
@@ -208,13 +208,13 @@ namespace ngraph
                 ///                                   input of activation functions.
                 /// \param[in]  input_forget          Controls coupling input and forget gates.
                 ///
-                LSTMCell(const Output<Node>& X,
-                         const Output<Node>& initial_hidden_state,
-                         const Output<Node>& initial_cell_state,
-                         const Output<Node>& W,
-                         const Output<Node>& R,
-                         const Output<Node>& B,
-                         const Output<Node>& P,
+                LSTMCell(const Output& X,
+                         const Output& initial_hidden_state,
+                         const Output& initial_cell_state,
+                         const Output& W,
+                         const Output& R,
+                         const Output& B,
+                         const Output& P,
                          std::size_t hidden_size,
                          LSTMWeightsFormat weights_format = LSTMWeightsFormat::IFCO,
                          const std::vector<std::string>& activations =
@@ -240,7 +240,7 @@ namespace ngraph
                 ///
                 /// \return     Node representing reshaped tensor according to IFCO weights format.
                 ///
-                std::shared_ptr<Node> convert_node_format(const Output<Node>& node) const;
+                std::shared_ptr<Node> convert_node_format(const Output& node) const;
 
             private:
                 ///
@@ -248,14 +248,14 @@ namespace ngraph
                 ///
                 /// \return     The object of Output class.
                 ///
-                Output<Node> get_default_bias_input() const;
+                Output get_default_bias_input() const;
 
                 ///
                 /// \brief      Creates the default peepholes input initialized with zeros.
                 ///
                 /// \return     The object of Output class.
                 ///
-                Output<Node> get_default_peepholes_input() const;
+                Output get_default_peepholes_input() const;
                 ///
                 /// \brief The Activation function f.
                 ///

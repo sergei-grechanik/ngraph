@@ -26,17 +26,17 @@ namespace ngraph
         namespace quantization
         {
             std::shared_ptr<Node>
-                QuantizedLinearConvolutionBias(const Output<Node>& input,
-                                               const Output<Node>& filter,
-                                               const Output<Node>& bias,
+                QuantizedLinearConvolutionBias(const Output& input,
+                                               const Output& filter,
+                                               const Output& bias,
                                                const Strides& window_movement_strides,
                                                const Strides& window_dilation_strides,
                                                const CoordinateDiff& padding_below,
                                                const CoordinateDiff& padding_above,
                                                const Strides& data_dilation_strides,
-                                               const Output<Node>& input_scale,
-                                               const Output<Node>& filter_scale,
-                                               const Output<Node>& output_scale);
+                                               const Output& input_scale,
+                                               const Output& filter_scale,
+                                               const Output& output_scale);
         }
     }
 }

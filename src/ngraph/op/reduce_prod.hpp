@@ -39,9 +39,7 @@ namespace ngraph
                 /// \param arg The tensor to be reduced.
                 /// \param reduction_axes The axis positions (0-based) to be eliminated.
                 /// \param keep_dims If set to true it holds axes that are used for reduction.
-                ReduceProd(const Output<Node>& arg,
-                           const Output<Node>& reduction_axes,
-                           bool keep_dims = false);
+                ReduceProd(const Output& arg, const Output& reduction_axes, bool keep_dims = false);
 
                 size_t get_version() const override { return 1; }
                 /// \return The default value for Product.

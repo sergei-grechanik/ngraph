@@ -47,10 +47,7 @@ namespace ngraph
                 /// calculated
                 ///                               before division
                 ///
-                NormalizeL2(const Output<Node>& data,
-                            const Output<Node>& axes,
-                            float eps,
-                            EpsMode eps_mode);
+                NormalizeL2(const Output& data, const Output& axes, float eps, EpsMode eps_mode);
 
                 float get_eps() const { return m_eps; }
                 EpsMode get_eps_mode() const { return m_eps_mode; }

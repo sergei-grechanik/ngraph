@@ -44,9 +44,7 @@ namespace ngraph
                 /// \param groups - number of groups the channel dimension specified by axis should
                 /// be
                 ///                 split into
-                ShuffleChannels(const Output<Node>& data,
-                                const int axis = 1,
-                                const size_t groups = 1UL);
+                ShuffleChannels(const Output& data, const int axis = 1, const size_t groups = 1UL);
 
                 size_t get_zero_based_axis() const;
 

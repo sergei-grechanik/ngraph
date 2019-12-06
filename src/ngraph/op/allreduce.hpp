@@ -31,8 +31,7 @@ namespace ngraph
                 static constexpr NodeTypeInfo type_info{"AllReduce", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 AllReduce() = default;
-                AllReduce(const Output<Node>& arg,
-                          reduction::Type reduce_type = reduction::Type::SUM);
+                AllReduce(const Output& arg, reduction::Type reduce_type = reduction::Type::SUM);
 
                 void validate_and_infer_types() override;
 

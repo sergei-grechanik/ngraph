@@ -39,7 +39,7 @@ namespace ngraph
 
                 /// \brief Constructs a GenerateMask node with a given shape, seed,
                 /// probability and training/inference mode
-                GenerateMask(const Output<Node>& training,
+                GenerateMask(const Output& training,
                              const Shape& shape,
                              const element::Type& element_type,
                              uint64_t seed,
@@ -97,8 +97,8 @@ namespace ngraph
 
                 /// \brief Constructs a GenerateMask node with a given shape, seed,
                 /// probability and training/inference mode
-                GenerateMask(const Output<Node>& training,
-                             const Output<Node>& shape,
+                GenerateMask(const Output& training,
+                             const Output& shape,
                              const element::Type& element_type,
                              uint64_t seed,
                              double prob,

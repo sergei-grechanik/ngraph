@@ -29,7 +29,7 @@ using namespace ngraph::fluid;
 
 constexpr NodeTypeInfo ReduceSum::type_info;
 
-ReduceSum::ReduceSum(const Output<Node>& x, const vector<int>& dim, bool reduce_all, bool keep_dim)
+ReduceSum::ReduceSum(const Output& x, const vector<int>& dim, bool reduce_all, bool keep_dim)
     : FusedOp({x})
     , m_dim(dim)
     , m_reduce_all(reduce_all)
@@ -92,11 +92,8 @@ shared_ptr<Node> ReduceSum::copy_with_new_args(const NodeVector& new_args) const
 
 constexpr NodeTypeInfo ReduceSumGrad::type_info;
 
-ReduceSumGrad::ReduceSumGrad(const Output<Node>& x,
-                             const Output<Node>& y,
-                             const vector<int>& dim,
-                             bool reduce_all,
-                             bool keep_dim)
+ReduceSumGrad::ReduceSumGrad(
+    const Output& x, const Output& y, const vector<int>& dim, bool reduce_all, bool keep_dim)
     : FusedOp({x, y})
     , m_dim(dim)
     , m_reduce_all(reduce_all)

@@ -40,7 +40,7 @@ namespace ngraph
                 ///
                 /// \param data Input tensor
                 /// \param slope Multipliers for negative values
-                PRelu(const Output<Node>& data, const Output<Node>& slope);
+                PRelu(const Output& data, const Output& slope);
 
                 virtual NodeVector decompose_op() const override;
 

@@ -45,13 +45,13 @@ namespace ngraph
 
         protected:
             /// \return Output representing the left operand.
-            virtual Output<Node> get_left();
+            virtual Output get_left();
 
             /// \return Output representing the right operand.
-            virtual Output<Node> get_right();
+            virtual Output get_right();
 
             /// \return Output representing the nGraph Dot operation used to construct MatMul.
-            virtual Output<Node> make_dot(const Output<Node>& left, const Output<Node>& right);
+            virtual Output make_dot(const Output& left, const Output& right);
 
             const OutputVector m_inputs;
         };
@@ -67,8 +67,8 @@ namespace ngraph
             }
 
         protected:
-            Output<Node> get_right() override;
-            Output<Node> make_dot(const Output<Node>& left, const Output<Node>& right) override;
+            Output get_right() override;
+            Output make_dot(const Output& left, const Output& right) override;
         };
 
         /// \brief  Factory class which generates an nGraph sub-graph based on an ONNX MatMulInteger
@@ -82,7 +82,7 @@ namespace ngraph
             }
 
         protected:
-            Output<Node> make_dot(const Output<Node>& left, const Output<Node>& right) override;
+            Output make_dot(const Output& left, const Output& right) override;
         };
     } // namespace builder
 } // namespace ngraph

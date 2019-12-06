@@ -34,7 +34,7 @@ namespace ngraph
             protected:
                 IndexReduction();
 
-                IndexReduction(const Output<Node>& arg,
+                IndexReduction(const Output& arg,
                                uint64_t axis,
                                const element::Type& index_element_type);
 

@@ -23,14 +23,14 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::QuantizedConvolutionRelu::type_info;
 
-op::QuantizedConvolutionRelu::QuantizedConvolutionRelu(const Output<Node>& data_batch,
-                                                       const Output<Node>& filters,
+op::QuantizedConvolutionRelu::QuantizedConvolutionRelu(const Output& data_batch,
+                                                       const Output& filters,
                                                        const Strides& window_movement_strides,
                                                        const Strides& window_dilation_strides,
                                                        const CoordinateDiff& padding_below,
                                                        const CoordinateDiff& padding_above,
                                                        const Strides& data_dilation_strides,
-                                                       const Output<Node>& scale)
+                                                       const Output& scale)
     : Op({data_batch, filters, scale})
     , m_window_movement_strides(window_movement_strides)
     , m_window_dilation_strides(window_dilation_strides)

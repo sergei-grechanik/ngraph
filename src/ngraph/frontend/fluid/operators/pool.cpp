@@ -28,7 +28,7 @@ static size_t calculate_adaptive(size_t input_dim, size_t window_dim)
 
 constexpr NodeTypeInfo Pool::type_info;
 
-Pool::Pool(const Output<Node>& x,
+Pool::Pool(const Output& x,
            const Shape& window_shape,
            const Strides& window_movement_strides,
            const Shape& padding,
@@ -140,9 +140,9 @@ void Pool::validate_and_infer_types()
 
 constexpr NodeTypeInfo PoolGrad::type_info;
 
-PoolGrad::PoolGrad(const Output<Node>& x,
-                   const Output<Node>& output,
-                   const Output<Node>& output_delta,
+PoolGrad::PoolGrad(const Output& x,
+                   const Output& output,
+                   const Output& output_delta,
                    const Shape& window_shape,
                    const Strides& window_movement_strides,
                    const Shape& padding,

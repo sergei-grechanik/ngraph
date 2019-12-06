@@ -35,9 +35,7 @@ namespace ngraph
                 /// \param arg The tensor to be summed.
                 /// \param reduction_axes The axis positions (0-based) to be eliminated.
                 /// \param keep_dims If set to 1 it holds axes that are used for reduction.
-                ReduceMean(const Output<Node>& arg,
-                           const Output<Node>& reduction_axes,
-                           bool keep_dims = false);
+                ReduceMean(const Output& arg, const Output& reduction_axes, bool keep_dims = false);
 
                 size_t get_version() const override { return 1; }
                 std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const override;
