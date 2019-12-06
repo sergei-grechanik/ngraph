@@ -388,7 +388,7 @@ pair<shared_ptr<op::Result>, shared_ptr<op::Parameter>>
     par_node->set_placement(dst_node->get_placement());
 
     // Fix input / output among src, dst and par
-    std::vector<Input<Node>> dst_inputs = get_inputs_from(*src_node, *dst_node);
+    std::vector<Input> dst_inputs = get_inputs_from(*src_node, *dst_node);
     NGRAPH_CHECK(dst_inputs.size() == 1,
                  "insert_result_parameter_split encountered more than "
                  "one input between the source and destination nodes");
@@ -459,7 +459,7 @@ void ngraph::insert_new_node_between(const shared_ptr<Node>& src_node,
                                      const shared_ptr<Node>& new_node)
 {
     // Fix input / output
-    std::vector<Input<Node>> dst_inputs = get_inputs_from(*src_node, *dst_node);
+    std::vector<Input> dst_inputs = get_inputs_from(*src_node, *dst_node);
     NGRAPH_CHECK(dst_inputs.size() == 1,
                  "insert_new_node_between encountered more than one "
                  "input between the source and destination nodes");
@@ -658,9 +658,9 @@ void ngraph::plot_graph(
     pass_manager.run_passes(f);
 }
 
-std::vector<Input<Node>> ngraph::get_inputs_from(Node& src, Node& dst)
+std::vector<Input> ngraph::get_inputs_from(Node& src, Node& dst)
 {
-    std::vector<Input<Node>> result;
+    std::vector<Input> result;
 
     for (auto& input : dst.inputs())
     {

@@ -137,7 +137,7 @@ shared_ptr<op::TensorIterator::OutputDescription>
     return make_shared<BodyOutputDescription>(m_body_value_index, m_output_index, m_iteration);
 }
 
-Input<Node> op::TensorIterator::input_for_value(const Output<Node>& value)
+Input op::TensorIterator::input_for_value(const Output<Node>& value)
 {
     for (auto input : inputs())
     {
@@ -148,7 +148,7 @@ Input<Node> op::TensorIterator::input_for_value(const Output<Node>& value)
     }
     auto input_index = get_input_size();
     set_argument(input_index, value);
-    return Input<Node>(this, input_index);
+    return Input(this, input_index);
 }
 
 void op::TensorIterator::set_sliced_input(const std::shared_ptr<op::Parameter>& body_parameter,

@@ -302,7 +302,7 @@ namespace ngraph
                 int64_t get_num_iterations() const { return m_num_iterations; }
             private:
                 // Find an input corresponding to value, adding one if necessary.
-                Input<Node> input_for_value(const Output<Node>& value);
+                Input input_for_value(const Output<Node>& value);
 
                 std::shared_ptr<BodyLambda> m_body;
                 std::vector<std::shared_ptr<InputDescription>> m_input_descriptions;
