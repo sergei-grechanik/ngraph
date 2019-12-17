@@ -141,7 +141,7 @@ bool pass::ZeroDimTensorElimination::run_on_function(shared_ptr<Function> f)
                 // Op is a noop
                 Output<Node> source_output = replace_slice->input(0).get_source_output();
                 Output<Node> output = replace_slice->output(0);
-                for (Input<Node> input : output.get_target_inputs())
+                for (auto input : output.get_target_inputs())
                 {
                     input.replace_source_output(source_output);
                 }

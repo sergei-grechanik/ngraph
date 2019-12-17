@@ -559,71 +559,6 @@ namespace ngraph
             : NodeInput(node, index)
         {
         }
-
-        //     /// \return A pointer to the node referenced by this input handle.
-        //     Node* get_node() const { return m_node; }
-        //     /// \return The index of the input referred to by this input handle.
-        //     size_t get_index() const { return m_index; }
-        //     /// \return The element type of the input referred to by this input handle.
-        //     const element::Type& get_element_type() const
-        //     {
-        //         return m_node->get_input_element_type(m_index);
-        //     }
-        //     /// \return The shape of the input referred to by this input handle.
-        //     const Shape& get_shape() const { return m_node->get_input_shape(m_index); }
-        //     /// \return The partial shape of the input referred to by this input handle.
-        //     const PartialShape& get_partial_shape() const
-        //     {
-        //         return m_node->get_input_partial_shape(m_index);
-        //     }
-        //     /// \return A handle to the output that is connected to this input.
-        //     Output<Node> get_source_output() const;
-        //     /// \return A reference to the tensor descriptor for this input.
-        //     descriptor::Tensor& get_tensor() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_output().get_tensor();
-        //     }
-        //     /// \return A shared pointer to the tensor descriptor for this input.
-        //     std::shared_ptr<descriptor::Tensor> get_tensor_ptr() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_output().get_tensor_ptr();
-        //     }
-        //     /// \return true if this input is relevant to its node's output shapes; else false.
-        //     bool get_is_relevant_to_shapes() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_is_relevant_to_shape();
-        //     }
-        //     /// \return true if this input is relevant to its node's output values; else false.
-        //     bool get_is_relevant_to_values() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_is_relevant_to_value();
-        //     }
-
-        //     /// \brief Replaces the source output of this input.
-        //     /// \param new_source_output A handle for the output that will replace this input's
-        //     source.
-        //     void replace_source_output(const Output<Node>& new_source_output) const;
-
-        //     bool operator==(const Input& other) const
-        //     {
-        //         return m_node == other.m_node && m_index == other.m_index;
-        //     }
-        //     bool operator!=(const Input& other) const { return !(*this == other); }
-        //     bool operator<(const Input& other) const
-        //     {
-        //         return m_node < other.m_node || (m_node == other.m_node && m_index <
-        //         other.m_index);
-        //     }
-        //     bool operator>(const Input& other) const
-        //     {
-        //         return m_node > other.m_node || (m_node == other.m_node && m_index >
-        //         other.m_index);
-        //     }
-        //     bool operator<=(const Input& other) const { return !(*this > other); }
-        //     bool operator>=(const Input& other) const { return !(*this < other); }
-        // private:
-        //     Node* const m_node;
-        //     const size_t m_index;
     };
 
     /// \brief A handle for one of a node's inputs.
@@ -638,66 +573,6 @@ namespace ngraph
             : NodeInput(node, index)
         {
         }
-
-        //     /// \return A pointer to the node referenced by this input handle.
-        //     const Node* get_node() const { return m_node; }
-        //     /// \return The index of the input referred to by this input handle.
-        //     size_t get_index() const { return m_index; }
-        //     /// \return The element type of the input referred to by this input handle.
-        //     const element::Type& get_element_type() const
-        //     {
-        //         return m_node->get_input_element_type(m_index);
-        //     }
-        //     /// \return The shape of the input referred to by this input handle.
-        //     const Shape& get_shape() const { return m_node->get_input_shape(m_index); }
-        //     /// \return The partial shape of the input referred to by this input handle.
-        //     const PartialShape& get_partial_shape() const
-        //     {
-        //         return m_node->get_input_partial_shape(m_index);
-        //     }
-        //     /// \return A handle to the output that is connected to this input.
-        //     Output<Node> get_source_output() const;
-        //     /// \return A reference to the tensor descriptor for this input.
-        //     descriptor::Tensor& get_tensor() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_output().get_tensor();
-        //     }
-        //     /// \return A shared pointer to the tensor descriptor for this input.
-        //     std::shared_ptr<descriptor::Tensor> get_tensor_ptr() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_output().get_tensor_ptr();
-        //     }
-        //     /// \return true if this input is relevant to its node's output shapes; else false.
-        //     bool get_is_relevant_to_shapes() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_is_relevant_to_shape();
-        //     }
-        //     /// \return true if this input is relevant to its node's output values; else false.
-        //     bool get_is_relevant_to_values() const
-        //     {
-        //         return m_node->m_inputs.at(m_index).get_is_relevant_to_value();
-        //     }
-
-        //     bool operator==(const Input& other) const
-        //     {
-        //         return m_node == other.m_node && m_index == other.m_index;
-        //     }
-        //     bool operator!=(const Input& other) const { return !(*this == other); }
-        //     bool operator<(const Input& other) const
-        //     {
-        //         return m_node < other.m_node || (m_node == other.m_node && m_index <
-        //         other.m_index);
-        //     }
-        //     bool operator>(const Input& other) const
-        //     {
-        //         return m_node > other.m_node || (m_node == other.m_node && m_index >
-        //         other.m_index);
-        //     }
-        //     bool operator<=(const Input& other) const { return !(*this > other); }
-        //     bool operator>=(const Input& other) const { return !(*this < other); }
-        // private:
-        //     const Node* const m_node;
-        //     const size_t m_index;
     };
 
     /// \brief A handle for one of a node's outputs.
@@ -739,80 +614,6 @@ namespace ngraph
             : NodeOutput(no)
         {
         }
-
-        //     /// This output position for a different node
-        //     Output<Node> for_node(const std::shared_ptr<Node>& node) { return Output(node,
-        //     m_index); }
-        //     /// \return A pointer to the node referred to by this output handle.
-        //     Node* get_node() const { return m_node.get(); }
-        //     /// \return A `shared_ptr` to the node referred to by this output handle.
-        //     ///
-        //     /// TODO: Make a plan to deprecate this.
-        //     std::shared_ptr<Node> get_node_shared_ptr() const { return m_node; }
-        //     /// \return A useable shared pointer to this output. If index 0, the node,
-        //     /// otherwise find or create a GOE.
-        //     std::shared_ptr<Node> as_single_output_node(bool for_get_output_element = true) const
-        //         NGRAPH_DEPRECATED("Transitional.")
-        //     {
-        //         return m_node->get_output_as_single_output_node(m_index, for_get_output_element);
-        //     }
-
-        //     /// \return The index of the output referred to by this output handle.
-        //     size_t get_index() const { return m_index; }
-        //     /// \return A reference to the tensor descriptor for this output.
-        //     descriptor::Tensor& get_tensor() const
-        //     {
-        //         return m_node->m_outputs.at(m_index).get_tensor();
-        //     }
-        //     /// \return A shared point to the tensor ptr for this output.
-        //     std::shared_ptr<descriptor::Tensor> get_tensor_ptr() const
-        //     {
-        //         return m_node->m_outputs.at(m_index).get_tensor_ptr();
-        //     }
-        //     /// \return The element type of the output referred to by this output handle.
-        //     const element::Type& get_element_type() const
-        //     {
-        //         return m_node->get_output_element_type(m_index);
-        //     }
-        //     /// \return The shape of the output referred to by this output handle.
-        //     const Shape& get_shape() const { return m_node->get_output_shape(m_index); }
-        //     /// \return The partial shape of the output referred to by this output handle.
-        //     const PartialShape& get_partial_shape() const
-        //     {
-        //         return m_node->get_output_partial_shape(m_index);
-        //     }
-
-        //     /// \return A set containing handles for all inputs targeted by the output referenced
-        //     by
-        //     ///        this output handle.
-        //     std::set<Input<Node>> get_target_inputs() const;
-
-        //     /// \brief Removes a target input from the output referenced by this output handle.
-        //     /// \param target_input The target input to remove.
-        //     ///
-        //     // TODO(amprocte): Investigate whether this really ought to be public.
-        //     void remove_target_input(const Input<Node>& target_input) const;
-
-        //     bool operator==(const Output& other) const
-        //     {
-        //         return m_node == other.m_node && m_index == other.m_index;
-        //     }
-        //     bool operator!=(const Output& other) const { return !(*this == other); }
-        //     bool operator<(const Output& other) const
-        //     {
-        //         return m_node < other.m_node || (m_node == other.m_node && m_index <
-        //         other.m_index);
-        //     }
-        //     bool operator>(const Output& other) const
-        //     {
-        //         return m_node > other.m_node || (m_node == other.m_node && m_index >
-        //         other.m_index);
-        //     }
-        //     bool operator<=(const Output& other) const { return !(*this > other); }
-        //     bool operator>=(const Output& other) const { return !(*this < other); }
-        // private:
-        //     std::shared_ptr<Node> m_node;
-        //     size_t m_index{0};
     };
 
     template <>
@@ -848,69 +649,6 @@ namespace ngraph
         /// A null output
         Output()
             : NodeOutput(){};
-
-        //     /// This output position for a different node
-        //     Output<const Node> for_node(const std::shared_ptr<const Node>& node)
-        //     {
-        //         return Output(node, m_index);
-        //     }
-
-        //     /// \return A pointer to the node referred to by this output handle.
-        //     const Node* get_node() const { return m_node.get(); }
-        //     /// \return A `shared_ptr` to the node referred to by this output handle.
-        //     ///
-        //     /// TODO: Make a plan to deprecate this.
-        //     std::shared_ptr<const Node> get_node_shared_ptr() const { return m_node; }
-        //     /// \return The index of the output referred to by this output handle.
-        //     size_t get_index() const { return m_index; }
-        //     /// \return A reference to the tensor descriptor for this output.
-        //     descriptor::Tensor& get_tensor() const
-        //     {
-        //         return m_node->m_outputs.at(m_index).get_tensor();
-        //     }
-        //     /// \return A shared point to the tensor ptr for this output.
-        //     std::shared_ptr<descriptor::Tensor> get_tensor_ptr() const
-        //     {
-        //         return m_node->m_outputs.at(m_index).get_tensor_ptr();
-        //     }
-        //     /// \return The element type of the output referred to by this output handle.
-        //     const element::Type& get_element_type() const
-        //     {
-        //         return m_node->get_output_element_type(m_index);
-        //     }
-        //     /// \return The shape of the output referred to by this output handle.
-        //     const Shape& get_shape() const { return m_node->get_output_shape(m_index); }
-        //     /// \return The partial shape of the output referred to by this output handle.
-        //     const PartialShape& get_partial_shape() const
-        //     {
-        //         return m_node->get_output_partial_shape(m_index);
-        //     }
-
-        //     /// \return A set containing handles for all inputs targeted by the output referenced
-        //     by
-        //     ///        this output handle.
-        //     std::set<Input<Node>> get_target_inputs() const;
-
-        //     bool operator==(const Output& other) const
-        //     {
-        //         return m_node == other.m_node && m_index == other.m_index;
-        //     }
-        //     bool operator!=(const Output& other) const { return !(*this == other); }
-        //     bool operator<(const Output& other) const
-        //     {
-        //         return m_node < other.m_node || (m_node == other.m_node && m_index <
-        //         other.m_index);
-        //     }
-        //     bool operator>(const Output& other) const
-        //     {
-        //         return m_node > other.m_node || (m_node == other.m_node && m_index >
-        //         other.m_index);
-        //     }
-        //     bool operator<=(const Output& other) const { return !(*this > other); }
-        //     bool operator>=(const Output& other) const { return !(*this < other); }
-        // private:
-        //     std::shared_ptr<const Node> m_node;
-        //     size_t m_index{0};
     };
 
     inline Input<Node> Node::input(size_t input_index)
@@ -957,54 +695,6 @@ namespace ngraph
 
         return Output<const Node>(this, output_index);
     }
-
-    // inline Output<Node> Input<Node>::get_source_output() const
-    // {
-    //     auto& output_descriptor = m_node->m_inputs.at(m_index).get_output();
-    //     return Output<Node>(output_descriptor.get_node(), output_descriptor.get_index());
-    // }
-
-    // inline Output<Node> Input<const Node>::get_source_output() const
-    // {
-    //     auto& output_descriptor = m_node->m_inputs.at(m_index).get_output();
-    //     return Output<Node>(output_descriptor.get_node(), output_descriptor.get_index());
-    // }
-
-    // inline void Input<Node>::replace_source_output(const Output<Node>& new_source_output) const
-    // {
-    //     m_node->m_inputs.at(m_index).replace_output(new_source_output.get_node_shared_ptr(),
-    //                                                 new_source_output.get_index());
-    // }
-
-    // inline std::set<Input<Node>> Output<Node>::get_target_inputs() const
-    // {
-    //     std::set<Input<Node>> result;
-
-    //     for (auto& input : m_node->m_outputs.at(m_index).get_inputs())
-    //     {
-    //         result.emplace(input->get_raw_pointer_node(), input->get_index());
-    //     }
-
-    //     return result;
-    // }
-
-    // inline std::set<Input<Node>> Output<const Node>::get_target_inputs() const
-    // {
-    //     std::set<Input<Node>> result;
-
-    //     for (auto& input : m_node->m_outputs.at(m_index).get_inputs())
-    //     {
-    //         result.emplace(input->get_raw_pointer_node(), input->get_index());
-    //     }
-
-    //     return result;
-    // }
-
-    // inline void Output<Node>::remove_target_input(const Input<Node>& target_input) const
-    // {
-    //     m_node->m_outputs.at(m_index).remove_input(
-    //         &(target_input.get_node()->m_inputs.at(target_input.get_index())));
-    // }
 
     inline std::vector<Input<Node>> Node::inputs()
     {
