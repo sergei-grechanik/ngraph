@@ -53,34 +53,34 @@ const PartialShape& NodeInput::get_partial_shape() const
 
 NodeOutput NodeInput::get_source_output() const
 {
-    auto& output_descriptor = m_node->get_inputs().at(m_index).get_output();
+    auto& output_descriptor = m_node->m_inputs.at(m_index).get_output();
     return NodeOutput(output_descriptor.get_node(), output_descriptor.get_index());
 }
 
 descriptor::Tensor& NodeInput::get_tensor() const
 {
-    return m_node->get_inputs().at(m_index).get_output().get_tensor();
+    return m_node->m_inputs.at(m_index).get_output().get_tensor();
 }
 
 shared_ptr<descriptor::Tensor> NodeInput::get_tensor_ptr() const
 {
-    return m_node->get_inputs().at(m_index).get_output().get_tensor_ptr();
+    return m_node->m_inputs.at(m_index).get_output().get_tensor_ptr();
 }
 
 bool NodeInput::get_is_relevant_to_shapes() const
 {
-    return m_node->get_inputs().at(m_index).get_is_relevant_to_shape();
+    return m_node->m_inputs.at(m_index).get_is_relevant_to_shape();
 }
 
 bool NodeInput::get_is_relevant_to_values() const
 {
-    return m_node->get_inputs().at(m_index).get_is_relevant_to_value();
+    return m_node->m_inputs.at(m_index).get_is_relevant_to_value();
 }
 
 void NodeInput::replace_source_output(const NodeOutput& new_source_output) const
 {
-    m_node->get_inputs().at(m_index).replace_output(new_source_output.get_node_shared_ptr(),
-                                                new_source_output.get_index());
+    descriptor::Input di = m_node->m_inputs.at(m_index);
+    di.replace_output(new_source_output.get_node_shared_ptr(), new_source_output.get_index());
 }
 
 bool NodeInput::operator==(const NodeInput& other) const
@@ -140,7 +140,7 @@ shared_ptr<Node> NodeOutput::get_node_shared_ptr() const
     return m_node;
 }
 
-shared_ptr<Node> NodeOutput::as_single_output_node(bool for_get_output_element = true) const
+shared_ptr<Node> NodeOutput::as_single_output_node(bool for_get_output_element) const
 {
     return m_node->get_output_as_single_output_node(m_index, for_get_output_element);
 }
@@ -175,9 +175,9 @@ const PartialShape& NodeOutput::get_partial_shape() const
     return m_node->get_output_partial_shape(m_index);
 }
 
-set<NodeInput> NodeOutput::get_target_inputs() const
+set<ngraph::NodeInput> NodeOutput::get_target_inputs() const
 {
-    set<Input<Node>> result;
+    set<NodeInput> result;
 
     for (auto& input : m_node->m_outputs.at(m_index).get_inputs())
     {

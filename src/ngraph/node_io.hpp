@@ -24,11 +24,11 @@
 #include <vector>
 
 #include "ngraph/deprecated.hpp"
-#include "ngraph_visibility.hpp"
-#include "ngraph/type/element_type.hpp"
-#include "ngraph/shape.hpp"
 #include "ngraph/descriptor/input.hpp"
 #include "ngraph/descriptor/output.hpp"
+#include "ngraph/shape.hpp"
+#include "ngraph/type/element_type.hpp"
+#include "ngraph_visibility.hpp"
 // #include "ngraph/descriptor/tensor.hpp"
 // #include "ngraph/op/util/attr_types.hpp"
 // #include "ngraph/op/util/op_annotations.hpp"
@@ -90,7 +90,7 @@ public:
     bool operator<=(const NodeInput& other) const;
     bool operator>=(const NodeInput& other) const;
 
-private:
+protected:
     const Node* m_node;
     const size_t m_index;
 };
@@ -170,7 +170,7 @@ public:
     bool operator<=(const NodeOutput& other) const;
     bool operator>=(const NodeOutput& other) const;
 
-private:
+protected:
     std::shared_ptr<Node> m_node;
     size_t m_index{0};
 };

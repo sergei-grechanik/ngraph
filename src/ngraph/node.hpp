@@ -114,6 +114,9 @@ namespace ngraph
         template <typename NodeType>
         friend class Output;
 
+        friend class NodeInput;
+        friend class NodeOutput;
+
     public:
         /// Throws if the node is invalid.
         virtual void validate_and_infer_types();
