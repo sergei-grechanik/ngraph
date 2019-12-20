@@ -93,15 +93,11 @@ namespace ngraph
             /// changed.
             void set_stale(bool val);
 
-            /// \brief Write bytes directly into the tensor
-            /// \param p Pointer to source of data
-            /// \param n Number of bytes to write, must be integral number of elements.
-            virtual void write(const void* p, size_t n) = 0;
+            /// \brief Indicate that the memory_pointer buffer contains new data
+            virtual void indicate_write_buffer_updated() = 0;
 
-            /// \brief Read bytes directly from the tensor
-            /// \param p Pointer to destination for data
-            /// \param n Number of bytes to read, must be integral number of elements.
-            virtual void read(void* p, size_t n) const = 0;
+            /// \brief Blocking call that waits for output data to be available
+            virtual void wait_for_read_data() const = 0;
 
             /// \brief copy bytes directly from source to this tensor
             /// \param source The source tensor
