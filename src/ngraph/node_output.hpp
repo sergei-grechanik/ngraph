@@ -45,14 +45,14 @@ public:
     /// \brief Constructs a NodeOutput.
     /// \param node A pointer to the node for the output handle.
     /// \param index The index of the output.
-    NodeOutput(const Node* node, size_t index);
+    NodeOutput(Node* node, size_t index);
 
     /// \brief Constructs a NodeOutput.
     /// \param node A `shared_ptr` to the node for the output handle.
     /// \param index The index of the output.
     ///
     /// TODO: Make a plan to deprecate this.
-    NodeOutput(const std::shared_ptr<const Node>& node, size_t index);
+    NodeOutput(const std::shared_ptr<Node>& node, size_t index);
 
     /// \brief Constructs a NodeOutput, referencing the zeroth output of the node.
     /// \param node A `shared_ptr` to the node for the output handle.
@@ -72,7 +72,7 @@ public:
     /// \return A `shared_ptr` to the node referred to by this output handle.
     ///
     /// TODO: Make a plan to deprecate this.
-    std::shared_ptr<Node> get_node_shared_ptr() const { return m_node; }
+    std::shared_ptr<Node> get_node_shared_ptr() const;
     /// \return A useable shared pointer to this output. If index 0, the node,
     /// otherwise find or create a GOE.
     std::shared_ptr<Node> as_single_output_node(bool for_get_output_element = true) const
@@ -108,6 +108,6 @@ public:
     bool operator<=(const NodeOutput& other) const { return !(*this > other); }
     bool operator>=(const NodeOutput& other) const { return !(*this < other); }
 private:
-    std::shared_ptr<Node> m_node;
+    Node* m_node;
     size_t m_index{0};
 };

@@ -18,7 +18,7 @@
 
 using namespace ngraph;
 
-NodeInput::NodeInput(const Node* node, size_t index)
+NodeInput::NodeInput(Node* node, size_t index)
     : m_node(node)
     , m_index(index)
 {

@@ -46,10 +46,10 @@ public:
     /// \brief Constructs a NodeInput.
     /// \param node Pointer to the node for the input handle.
     /// \param index The index of the input.
-    NodeInput(const Node* node, size_t index);
+    NodeInput(Node* node, size_t index);
 
     /// \return A pointer to the node referenced by this input handle.
-    Node* get_node() const { return const_cast<Node*>(m_node); }
+    Node* get_node() const { return m_node; }
     /// \return The index of the input referred to by this input handle.
     size_t get_index() const { return m_index; }
     /// \return The element type of the input referred to by this input handle.
@@ -80,6 +80,6 @@ public:
     bool operator<=(const NodeInput& other) const { return !(*this > other); }
     bool operator>=(const NodeInput& other) const { return !(*this < other); }
 private:
-    const Node* m_node;
+    Node* m_node;
     const size_t m_index;
 };

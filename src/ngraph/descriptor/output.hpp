@@ -21,6 +21,7 @@
 
 #include "ngraph/descriptor/input.hpp"
 #include "ngraph/descriptor/tensor.hpp"
+#include "ngraph/node_output.hpp"
 
 namespace ngraph
 {
@@ -42,8 +43,9 @@ namespace ngraph
             /// \param tensor The tensor where the value will be written
             Output(Node* node, size_t index, const std::shared_ptr<Tensor>& tensor);
 
-            std::shared_ptr<Node> get_node() const;
-            size_t get_index() const { return m_index; }
+            Node* get_node() const;
+            std::shared_ptr<Node> get_node_shared_ptr() const;
+            size_t get_index() const { return m_parent.get_index(); }
             std::shared_ptr<Tensor> get_tensor_ptr() const { return m_tensor; }
             void set_tensor_ptr(const std::shared_ptr<Tensor>& tensor) { m_tensor = tensor; }
             void add_input(Input* input);
@@ -64,9 +66,9 @@ namespace ngraph
             Output(Output&&) = default;
             Output& operator=(const Output&) = default;
 
+            NodeOutput get_node_output() const { return m_parent; }
         protected:
-            Node* m_node;
-            size_t m_index;
+            NodeOutput m_parent;
             std::shared_ptr<Tensor> m_tensor;
             std::vector<Input*> m_inputs;
         };

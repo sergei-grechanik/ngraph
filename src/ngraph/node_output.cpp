@@ -18,14 +18,14 @@
 
 using namespace ngraph;
 
-NodeOutput::NodeOutput(const Node* node, size_t index)
-    : m_node(const_cast<Node*>(node)->shared_from_this())
+NodeOutput::NodeOutput(Node* node, size_t index)
+    : m_node(node)
     , m_index(index)
 {
 }
 
-NodeOutput::NodeOutput(const std::shared_ptr<const Node>& node, size_t index)
-    : m_node(std::const_pointer_cast<Node>(node))
+NodeOutput::NodeOutput(const std::shared_ptr<Node>& node, size_t index)
+    : m_node(node.get())
     , m_index(index)
 {
 }
@@ -44,7 +44,12 @@ std::set<NodeInput> NodeOutput::get_target_inputs() const
 
 Node* NodeOutput::get_node() const
 {
-    return m_node.get();
+    return m_node;
+}
+
+std::shared_ptr<Node> NodeOutput::get_node_shared_ptr() const
+{
+    return m_node->shared_from_this();
 }
 
 void NodeOutput::remove_target_input(const NodeInput& target_input) const
