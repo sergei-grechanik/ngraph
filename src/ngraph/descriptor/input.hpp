@@ -19,7 +19,6 @@
 #include <memory>
 
 #include "ngraph/descriptor/tensor.hpp"
-#include "ngraph/node_input.hpp"
 
 namespace ngraph
 {
@@ -49,9 +48,9 @@ namespace ngraph
             std::shared_ptr<Node> get_node() const;
 
             /// \return the raw pointer to the node that this is an input of
-            Node* get_raw_pointer_node() const { return m_parent.get_node(); }
+            Node* get_raw_pointer_node() const { return m_node; }
             /// \return the position within all supplied tensors of this input
-            size_t get_index() const { return m_parent.get_index(); }
+            size_t get_index() const { return m_index; }
             /// \return the connected output
             const Output& get_output() const { return *m_output; }
             /// \return the connected output
@@ -104,11 +103,11 @@ namespace ngraph
             Input(Input&&) = default;
             Input& operator=(const Input&) = default;
 
-            NodeInput get_node_input() const { return m_parent; }
         protected:
             // owner of an argument node (in lieu of m_arguments)
-            NodeInput m_parent;
-            Node* m_src_node;
+            std::shared_ptr<Node> m_src_node;
+            Node* m_node;   // The node we are an input for
+            size_t m_index; // Index into all input tensors
             Output* m_output;
 
         private:

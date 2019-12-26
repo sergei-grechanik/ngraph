@@ -24,7 +24,8 @@ using namespace std;
 using namespace ngraph;
 
 descriptor::Output::Output(Node* node, size_t index, const shared_ptr<Tensor>& tensor)
-    : m_parent(node, index)
+    : m_node(node)
+    , m_index(index)
     , m_tensor(tensor)
 {
 }
@@ -48,14 +49,9 @@ void descriptor::Output::remove_input(Input* input)
     }
 }
 
-shared_ptr<Node> descriptor::Output::get_node_shared_ptr() const
+shared_ptr<Node> descriptor::Output::get_node() const
 {
-    return m_parent.get_node_shared_ptr();
-}
-
-Node* descriptor::Output::get_node() const
-{
-    return m_parent.get_node();
+    return m_node->shared_from_this();
 }
 
 descriptor::Tensor& descriptor::Output::get_tensor() const
