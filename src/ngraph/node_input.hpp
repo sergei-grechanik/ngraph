@@ -46,7 +46,7 @@ public:
     /// \brief Constructs a NodeInput.
     /// \param node Pointer to the node for the input handle.
     /// \param index The index of the input.
-    NodeInput(Node* node, size_t index);
+    NodeInput(const Node* node, size_t index);
 
     /// \return A pointer to the node referenced by this input handle.
     Node* get_node() const { return m_node; }

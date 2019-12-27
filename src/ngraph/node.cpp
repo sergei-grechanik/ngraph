@@ -69,10 +69,10 @@ Node::~Node()
         {
             // This test adds 1 to the actual count, so a count of 2 means this input is the only
             // reference to the node.
-            if (input.get_output().get_node_shared_ptr().use_count() == 2)
+            if (input.get_output().get_node().use_count() == 2)
             {
                 // Don't want to trigger a deep recursive delete
-                NodeVector nodes{input.get_output().get_node_shared_ptr()};
+                NodeVector nodes{input.get_output().get_node()};
                 input.remove_output();
                 safe_delete(nodes, true);
                 return;
@@ -157,7 +157,7 @@ void Node::safe_delete(NodeVector& nodes, bool recurse)
         {
             // This test adds 1 to the actual count, so a count of 2 means this input is the only
             // reference to the node.
-            auto node = input.get_output().get_node_shared_ptr();
+            auto node = input.get_output().get_node();
             if (node.use_count() == 2)
             {
                 // Move the node from the input to nodes so we don't trigger a deep recursive delete
@@ -487,7 +487,7 @@ std::shared_ptr<Node> Node::get_argument(size_t index) const
 {
     NGRAPH_CHECK(
         index < m_inputs.size(), "index '", index, "' out of range in get_argument(size_t index)");
-    return m_inputs[index].get_output().get_node_shared_ptr();
+    return m_inputs[index].get_output().get_node();
 }
 
 NodeVector Node::get_arguments() const
@@ -496,7 +496,7 @@ NodeVector Node::get_arguments() const
     for (auto& i : m_inputs)
     {
         {
-            result.push_back(i.get_output().get_node_shared_ptr());
+            result.push_back(i.get_output().get_node());
         }
     }
     return result;

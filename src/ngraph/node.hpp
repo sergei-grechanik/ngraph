@@ -524,7 +524,7 @@ namespace ngraph
             throw std::out_of_range("node input index is out of range");
         }
 
-        return m_inputs[input_index].get_node_input();
+        return NodeInput(this, input_index);
     }
 
     inline NodeOutput Node::input_value(size_t input_index) const
@@ -539,7 +539,7 @@ namespace ngraph
             throw std::out_of_range("node input index is out of range");
         }
 
-        return m_inputs[input_index].get_node_input();
+        return NodeInput(this, input_index);
     }
 
     inline NodeOutput Node::output(size_t output_index)
@@ -549,7 +549,7 @@ namespace ngraph
             throw std::out_of_range("node output index is out of range");
         }
 
-        return m_outputs[output_index].get_node_output();
+        return NodeOutput(this, output_index);
     }
 
     inline NodeOutput Node::output(size_t output_index) const
@@ -559,7 +559,7 @@ namespace ngraph
             throw std::out_of_range("node output index is out of range");
         }
 
-        return m_outputs[output_index].get_node_output();
+        return NodeOutput(this, output_index);
     }
 
     inline std::vector<NodeInput> Node::inputs()
@@ -592,7 +592,7 @@ namespace ngraph
 
         for (size_t i = 0; i < get_input_size(); i++)
         {
-            result.emplace_back(m_inputs[i].get_node_input());
+            result.emplace_back(this, i);
         }
 
         return result;
@@ -604,7 +604,7 @@ namespace ngraph
 
         for (size_t i = 0; i < get_output_size(); i++)
         {
-            result.emplace_back(m_outputs[i].get_node_output());
+            result.emplace_back(shared_from_this(), i);
         }
 
         return result;
@@ -616,7 +616,7 @@ namespace ngraph
 
         for (size_t i = 0; i < get_output_size(); i++)
         {
-            result.emplace_back(m_outputs[i].get_node_output());
+            result.emplace_back(shared_from_this(), i);
         }
 
         return result;

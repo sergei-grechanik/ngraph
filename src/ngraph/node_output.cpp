@@ -18,14 +18,14 @@
 
 using namespace ngraph;
 
-NodeOutput::NodeOutput(Node* node, size_t index)
-    : m_node(node)
+NodeOutput::NodeOutput(const Node* node, size_t index)
+    : m_node(const_cast<Node*>(node))
     , m_index(index)
 {
 }
 
-NodeOutput::NodeOutput(const std::shared_ptr<Node>& node, size_t index)
-    : m_node(node.get())
+NodeOutput::NodeOutput(const std::shared_ptr<const Node>& node, size_t index)
+    : m_node(const_cast<Node*>(node.get()))
     , m_index(index)
 {
 }

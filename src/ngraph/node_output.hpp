@@ -45,14 +45,14 @@ public:
     /// \brief Constructs a NodeOutput.
     /// \param node A pointer to the node for the output handle.
     /// \param index The index of the output.
-    NodeOutput(Node* node, size_t index);
+    NodeOutput(const Node* node, size_t index);
 
     /// \brief Constructs a NodeOutput.
     /// \param node A `shared_ptr` to the node for the output handle.
     /// \param index The index of the output.
     ///
     /// TODO: Make a plan to deprecate this.
-    NodeOutput(const std::shared_ptr<Node>& node, size_t index);
+    NodeOutput(const std::shared_ptr<const Node>& node, size_t index);
 
     /// \brief Constructs a NodeOutput, referencing the zeroth output of the node.
     /// \param node A `shared_ptr` to the node for the output handle.
