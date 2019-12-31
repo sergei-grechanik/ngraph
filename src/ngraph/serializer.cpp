@@ -127,8 +127,6 @@ protected:
     bool m_serialize_output_shapes{false};
     bool m_binary_constant_data{false};
     json m_json_nodes;
-    // set<const Node*> m_nodes_serialized;
-    // queue<const Node*> m_nodes_to_serialize;
 };
 
 class JSONDeserializer
@@ -353,7 +351,6 @@ static string serialize(shared_ptr<Function> func, size_t indent, bool binary_co
     j.push_back(serializer.serialize_function(*func));
 
     string rc;
-    indent = 2;
     if (indent == 0)
     {
         rc = j.dump();
@@ -3013,26 +3010,6 @@ shared_ptr<Node> JSONDeserializer::deserialize_node(json node_js)
 
 json JSONSerializer::serialize_node_reference(const Node& n)
 {
-    // if (m_nodes_serialized.count(&n) != 1)
-    // {
-    //     m_nodes_to_serialize.push(&n);
-    //     if (m_nodes_to_serialize.size() == 1)
-    //     {
-    //         // Nothing in the queue
-    //         stack<json> serialized_nodes;
-    //         while (!m_nodes_to_serialize.empty())
-    //         {
-    //             const Node* next_node = m_nodes_to_serialize.front();
-    //             m_nodes_to_serialize.pop();
-    //             serialized_nodes.push(serialize_node(*next_node));
-    //         }
-    //         while (serialized_nodes.size() > 0)
-    //         {
-    //             m_json_nodes.push_back(serialized_nodes.top());
-    //             serialized_nodes.pop();
-    //         }
-    //     }
-    // }
     return n.get_name();
 }
 
