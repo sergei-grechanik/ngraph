@@ -127,8 +127,8 @@ protected:
     bool m_serialize_output_shapes{false};
     bool m_binary_constant_data{false};
     json m_json_nodes;
-    set<const Node*> m_nodes_serialized;
-    queue<const Node*> m_nodes_to_serialize;
+    // set<const Node*> m_nodes_serialized;
+    // queue<const Node*> m_nodes_to_serialize;
 };
 
 class JSONDeserializer
@@ -353,6 +353,7 @@ static string serialize(shared_ptr<Function> func, size_t indent, bool binary_co
     j.push_back(serializer.serialize_function(*func));
 
     string rc;
+    indent = 2;
     if (indent == 0)
     {
         rc = j.dump();
@@ -453,14 +454,28 @@ json JSONSerializer::serialize_function(const Function& f)
 {
     json function;
     function["name"] = f.get_name();
-    function["parameters"] = serialize_parameter_vector(f.get_parameters());
+
+    vector<string> parameter_list;
+    for (auto param : f.get_parameters())
+    {
+        parameter_list.push_back(param->get_name());
+    }
+    function["parameters"] = parameter_list;
 
     // TODO Functions can return multiple results
     for (size_t i = 0; i < f.get_output_size(); ++i)
     {
-        function["result"].push_back(serialize_node_reference(*f.get_output_op(i)));
+        function["result"].push_back(f.get_output_op(i)->get_name());
     }
-    function["ops"] = m_json_nodes;
+
+    // Function* pf = const_cast<Function*>(&f);
+    json nodes;
+    for (shared_ptr<Node> node : f.get_ordered_ops(true))
+    {
+        nodes.push_back(serialize_node(*node));
+    }
+
+    function["ops"] = nodes;
     return function;
 }
 
@@ -2998,26 +3013,26 @@ shared_ptr<Node> JSONDeserializer::deserialize_node(json node_js)
 
 json JSONSerializer::serialize_node_reference(const Node& n)
 {
-    if (m_nodes_serialized.count(&n) != 1)
-    {
-        m_nodes_to_serialize.push(&n);
-        if (m_nodes_to_serialize.size() == 1)
-        {
-            // Nothing in the queue
-            stack<json> serialized_nodes;
-            while (!m_nodes_to_serialize.empty())
-            {
-                const Node* next_node = m_nodes_to_serialize.front();
-                m_nodes_to_serialize.pop();
-                serialized_nodes.push(serialize_node(*next_node));
-            }
-            while (serialized_nodes.size() > 0)
-            {
-                m_json_nodes.push_back(serialized_nodes.top());
-                serialized_nodes.pop();
-            }
-        }
-    }
+    // if (m_nodes_serialized.count(&n) != 1)
+    // {
+    //     m_nodes_to_serialize.push(&n);
+    //     if (m_nodes_to_serialize.size() == 1)
+    //     {
+    //         // Nothing in the queue
+    //         stack<json> serialized_nodes;
+    //         while (!m_nodes_to_serialize.empty())
+    //         {
+    //             const Node* next_node = m_nodes_to_serialize.front();
+    //             m_nodes_to_serialize.pop();
+    //             serialized_nodes.push(serialize_node(*next_node));
+    //         }
+    //         while (serialized_nodes.size() > 0)
+    //         {
+    //             m_json_nodes.push_back(serialized_nodes.top());
+    //             serialized_nodes.pop();
+    //         }
+    //     }
+    // }
     return n.get_name();
 }
 
@@ -3050,7 +3065,7 @@ json JSONSerializer::serialize_output_vector(const OutputVector& output_vector)
 
 json JSONSerializer::serialize_node(const Node& n)
 {
-    m_nodes_serialized.insert(&n);
+    // m_nodes_serialized.insert(&n);
     const NodeTypeInfo& type_info = n.get_type_info();
     json jtype_info;
     jtype_info["name"] = type_info.name;
