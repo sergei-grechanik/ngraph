@@ -465,7 +465,6 @@ json JSONSerializer::serialize_function(const Function& f)
         function["result"].push_back(f.get_output_op(i)->get_name());
     }
 
-    // Function* pf = const_cast<Function*>(&f);
     json nodes;
     for (shared_ptr<Node> node : f.get_ordered_ops(true))
     {
