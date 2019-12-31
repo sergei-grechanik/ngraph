@@ -47,6 +47,166 @@ string to_cpp_string(T value)
 
 constexpr NodeTypeInfo op::Constant::type_info;
 
+op::Constant::Constant(const element::Type& type, const Shape& shape, const void* data)
+    : m_element_type(type)
+    , m_shape(shape)
+    , m_data(nullptr)
+{
+    size_t size = std::ceil(shape_size(m_shape) * m_element_type.bitwidth() / 8.f);
+    m_data.reset(new runtime::AlignedBuffer(size, host_alignment()));
+    std::memcpy(m_data->get_ptr(), data, size);
+    constructor_validate_and_infer_types();
+    m_all_elements_bitwise_identical = are_all_data_elements_bitwise_identical();
+}
+
+op::Constant::Constant(const element::Type& type,
+                       Shape shape,
+                       const std::vector<std::string>& values)
+    : m_element_type(type)
+    , m_shape(shape)
+    , m_data(new runtime::AlignedBuffer(
+          std::ceil(shape_size(m_shape) * m_element_type.bitwidth() / 8.f), host_alignment()))
+{
+    NODE_VALIDATION_CHECK(this,
+                          values.size() == shape_size(m_shape) || values.size() == 1,
+                          "Did not get the expected number of literals for a constant of shape ",
+                          m_shape,
+                          " (got ",
+                          values.size(),
+                          ", expected ",
+                          shape_size(m_shape),
+                          ".");
+
+    if (values.size() == 1 && shape_size(m_shape) != 1)
+    {
+        // broadcast single value
+        switch (m_element_type)
+        {
+        case element::Type_t::boolean:
+        {
+            bool value = stoi(values[0]) != 0;
+            bool* target = m_data->get_ptr<bool>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::bf16:
+        {
+            bfloat16 value = parse_string<float>(values[0]);
+            bfloat16* target = m_data->get_ptr<bfloat16>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::f16:
+        {
+            float16 value = parse_string<float>(values[0]);
+            float16* target = m_data->get_ptr<float16>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::f32:
+        {
+            float value = parse_string<float>(values[0]);
+            float* target = m_data->get_ptr<float>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::f64:
+        {
+            double value = parse_string<double>(values[0]);
+            double* target = m_data->get_ptr<double>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::i8:
+        {
+            int8_t value = parse_string<int64_t>(values[0]);
+            int8_t* target = m_data->get_ptr<int8_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::i16:
+        {
+            int16_t value = parse_string<int64_t>(values[0]);
+            int16_t* target = m_data->get_ptr<int16_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::i32:
+        {
+            int32_t value = parse_string<int64_t>(values[0]);
+            int32_t* target = m_data->get_ptr<int32_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::i64:
+        {
+            int64_t value = parse_string<int64_t>(values[0]);
+            int64_t* target = m_data->get_ptr<int64_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::u8:
+        {
+            uint8_t value = parse_string<uint64_t>(values[0]);
+            uint8_t* target = m_data->get_ptr<uint8_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::u16:
+        {
+            uint16_t value = parse_string<uint64_t>(values[0]);
+            uint16_t* target = m_data->get_ptr<uint16_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::u32:
+        {
+            uint32_t value = parse_string<uint64_t>(values[0]);
+            uint32_t* target = m_data->get_ptr<uint32_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::u64:
+        {
+            uint64_t value = parse_string<uint64_t>(values[0]);
+            uint64_t* target = m_data->get_ptr<uint64_t>();
+            std::fill(target, target + shape_size(m_shape), value);
+            break;
+        }
+        case element::Type_t::undefined:
+        {
+            throw std::runtime_error("deserialize unsupported type undefined");
+        }
+        case element::Type_t::dynamic:
+        {
+            throw std::runtime_error("deserialize unsupported type dynamic");
+        }
+        case element::Type_t::u1: { throw std::runtime_error("deserialize unsupported type u1");
+        }
+        }
+    }
+    else if (type.is_integral())
+    {
+        if (type.is_signed())
+        {
+            std::vector<int64_t> dvalues = parse_string<int64_t>(values);
+            write_values(dvalues);
+        }
+        else
+        {
+            std::vector<uint64_t> dvalues = parse_string<uint64_t>(values);
+            write_values(dvalues);
+        }
+    }
+    else
+    {
+        std::vector<double> dvalues = parse_string<double>(values);
+        write_values(dvalues);
+    }
+    constructor_validate_and_infer_types();
+    m_all_elements_bitwise_identical = are_all_data_elements_bitwise_identical();
+}
+
 op::Constant::~Constant()
 {
 }
