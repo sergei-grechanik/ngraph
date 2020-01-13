@@ -1889,7 +1889,7 @@ protected:
         case OP_TYPEID::TensorIterator:
         case OP_TYPEID::UnknownOp:
             throw unsupported_op("Unsupported op '" + node.description() + "'");
-#pragma GCC diagnostic pop
         }
+#pragma GCC diagnostic pop
     }
 };
