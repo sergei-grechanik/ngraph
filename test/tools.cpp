@@ -21,6 +21,7 @@
 #include "ngraph/cpio.hpp"
 #include "ngraph/file_util.hpp"
 #include "ngraph/log.hpp"
+#include "ngraph/ngraph.hpp"
 
 using namespace ngraph;
 using namespace std;
@@ -53,4 +54,36 @@ TEST(tools, nbench_functional)
     {
         FAIL();
     }
+}
+
+TEST(test, output)
+{
+    class OutputTest
+    {
+    public:
+        OutputTest(const std::shared_ptr<Node>& node, size_t index)
+            : m_node(node)
+            , m_index(index)
+        {
+        }
+
+        // OutputTest(const std::shared_ptr<const Node>& node, size_t index)
+        //     : m_node(node)
+        //     , m_index(index)
+        // {
+        // }
+
+        const Node* get_node() const { return m_node.get(); }
+        Node* get_node() { return m_node.get(); }
+
+    private:
+        std::shared_ptr<Node> m_node;
+        size_t m_index{0};
+    };
+
+    Shape shape{2, 2};
+    auto A = make_shared<op::Parameter>(element::f32, shape);
+
+    const OutputTest cot(A, 0);
+    OutputTest ot = cot;
 }
