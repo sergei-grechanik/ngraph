@@ -111,6 +111,8 @@ namespace ngraph
                     plan.m_final_shape.insert(plan.m_final_shape.begin(), arg1_dim);
                     plan.m_arg1_shape_after_possible_reshaping.insert(
                         plan.m_arg1_shape_after_possible_reshaping.begin(), arg1_dim);
+                    plan.m_arg2_shape_after_possible_reshaping.insert(
+                        plan.m_arg2_shape_after_possible_reshaping.begin(), arg2_dim);
                     // add current axis to arg2 broadcast axes
                     plan.m_arg2_broadcast_axes.insert(plan.m_arg2_broadcast_axes.begin(), axis);
                 }
@@ -118,6 +120,8 @@ namespace ngraph
                 {
                     // add arg2 dimension to broadcast shape and arg2 reshape
                     plan.m_final_shape.insert(plan.m_final_shape.begin(), arg2_dim);
+                    plan.m_arg1_shape_after_possible_reshaping.insert(
+                        plan.m_arg1_shape_after_possible_reshaping.begin(), arg1_dim);
                     plan.m_arg2_shape_after_possible_reshaping.insert(
                         plan.m_arg2_shape_after_possible_reshaping.begin(), arg2_dim);
                     // add current axis to arg1 broadcast axes

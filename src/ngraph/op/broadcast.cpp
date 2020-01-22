@@ -55,28 +55,48 @@ void op::Broadcast::validate_and_infer_types()
                               ").");
     }
 
-    Shape required_input_shape = m_shape;
-    for (auto i = m_broadcast_axes.rbegin(); i != m_broadcast_axes.rend(); ++i)
+    if (get_input_partial_shape(0).is_static())
     {
-        required_input_shape.erase(required_input_shape.begin() + *i);
+        Shape required_input_shape = m_shape;
+        for (auto i = m_broadcast_axes.rbegin(); i != m_broadcast_axes.rend(); ++i)
+        {
+            required_input_shape.erase(required_input_shape.begin() + *i);
+        }
+
+        Shape reduced_required_input_shape;
+        for (auto len : required_input_shape)
+        {
+            if (len != 1)
+            {
+                reduced_required_input_shape.push_back(len);
+            }
+        }
+
+        Shape reduced_input_shape;
+        for (auto len : get_input_shape(0))
+        {
+            if (len != 1)
+            {
+                reduced_input_shape.push_back(len);
+            }
+        }
+
+        // TODO(amprocte): We can probably have a more helpful error message here.
+        // There are two things that can go wrong, which are being picked up in
+        // one fell swoop by this check: either the number of broadcast axes is not
+        // enough, or there is a mismatch with one of the pre-broadcast axis lengths.
+        NODE_VALIDATION_CHECK(
+            this,
+            reduced_input_shape == reduced_required_input_shape,
+            "Broadcast argument shape, specified output shape, and axes are incompatible ",
+            "(argument shape: ",
+            get_input_partial_shape(0),
+            ", output shape: ",
+            m_shape,
+            ", broadcast axes: ",
+            m_broadcast_axes,
+            ").");
     }
-
-    // TODO(amprocte): We can probably have a more helpful error message here.
-    // There are two things that can go wrong, which are being picked up in
-    // one fell swoop by this check: either the number of broadcast axes is not
-    // enough, or there is a mismatch with one of the pre-broadcast axis lengths.
-    NODE_VALIDATION_CHECK(
-        this,
-        get_input_partial_shape(0).compatible(required_input_shape),
-        "Broadcast argument shape, specified output shape, and axes are incompatible ",
-        "(argument shape: ",
-        get_input_partial_shape(0),
-        ", output shape: ",
-        m_shape,
-        ", broadcast axes: ",
-        m_broadcast_axes,
-        ").");
-
     set_output_type(0, get_input_element_type(0), m_shape);
 }
 

@@ -234,3 +234,16 @@ TEST(autobroadcast, make_node_3_args)
         ngraph::builder::make_with_numpy_broadcast<ngraph::op::Select>(predicates, lhs, rhs);
     EXPECT_NE(op, nullptr);
 }
+
+TEST(autobroadcast, make_add_no_reshape)
+{
+    Shape s0{1, 8000, 10, 16};
+    Shape s1{1, 8000, 1, 16};
+    auto p0 = make_shared<op::Parameter>(element::f32, s0);
+    auto p1 = make_shared<op::Parameter>(element::f32, s1);
+    auto add = builder::make_with_numpy_broadcast<ngraph::op::Add>(p0, p1);
+    for (auto op : topological_sort(NodeVector{add}, true))
+    {
+        cerr << *op << endl;
+    }
+}
