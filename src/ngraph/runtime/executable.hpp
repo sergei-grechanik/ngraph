@@ -75,11 +75,15 @@ public:
 
     /// \brief Set the input Parameters
     /// \param params ngraph::ParameterVector of all input parameters
-    void set_parameters(const ngraph::ParameterVector& params);
+    /// \deprecated
+    void set_parameters(const ngraph::ParameterVector& params)
+        NGRAPH_DEPRECATED("Moved to derived class");
 
     /// \brief Set the output Results
     /// \param results ngraph::ResultVector of all output results
-    void set_results(const ngraph::ResultVector& results);
+    /// \deprecated
+    void set_results(const ngraph::ResultVector& results)
+        NGRAPH_DEPRECATED("Moved to derived class");
 
     /// \brief Save this compiled Executable to an output stream.
     ///    Saved stream may be read with Backend::load
