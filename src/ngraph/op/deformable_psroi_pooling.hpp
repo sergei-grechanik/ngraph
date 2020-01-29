@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -56,6 +56,17 @@ namespace ngraph
                 DeformablePSROIPooling(const Output<Node>& input,
                                        const Output<Node>& coords,
                                        const Output<Node>& offsets,
+                                       const int64_t output_dim,
+                                       const float spatial_scale,
+                                       const int64_t group_size = 1,
+                                       const std::string mode = "bilinear_deformable",
+                                       int64_t spatial_bins_x = 1,
+                                       int64_t spatial_bins_y = 1,
+                                       float trans_std = 1,
+                                       int64_t part_size = 1);
+
+                DeformablePSROIPooling(const Output<Node>& input,
+                                       const Output<Node>& coords,
                                        const int64_t output_dim,
                                        const float spatial_scale,
                                        const int64_t group_size = 1,

@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +33,29 @@ op::v1::DeformablePSROIPooling::DeformablePSROIPooling(const Output<Node>& input
                                                        float trans_std,
                                                        int64_t part_size)
     : Op({input, coords, offsets})
+    , m_output_dim(output_dim)
+    , m_spatial_scale(spatial_scale)
+    , m_group_size(group_size)
+    , m_mode(mode)
+    , m_spatial_bins_x(spatial_bins_x)
+    , m_spatial_bins_y(spatial_bins_y)
+    , m_trans_std(trans_std)
+    , m_part_size(part_size)
+{
+    constructor_validate_and_infer_types();
+}
+
+op::v1::DeformablePSROIPooling::DeformablePSROIPooling(const Output<Node>& input,
+                                                       const Output<Node>& coords,
+                                                       const int64_t output_dim,
+                                                       const float spatial_scale,
+                                                       const int64_t group_size,
+                                                       const std::string mode,
+                                                       int64_t spatial_bins_x,
+                                                       int64_t spatial_bins_y,
+                                                       float trans_std,
+                                                       int64_t part_size)
+    : Op({input, coords})
     , m_output_dim(output_dim)
     , m_spatial_scale(spatial_scale)
     , m_group_size(group_size)
@@ -99,6 +122,19 @@ shared_ptr<Node>
         return make_shared<v1::DeformablePSROIPooling>(new_args.at(0),
                                                        new_args.at(1),
                                                        new_args.at(2),
+                                                       m_output_dim,
+                                                       m_spatial_scale,
+                                                       m_group_size,
+                                                       m_mode,
+                                                       m_spatial_bins_x,
+                                                       m_spatial_bins_y,
+                                                       m_trans_std,
+                                                       m_part_size);
+    }
+    else if (new_args.size() == 2)
+    {
+        return make_shared<v1::DeformablePSROIPooling>(new_args.at(0),
+                                                       new_args.at(1),
                                                        m_output_dim,
                                                        m_spatial_scale,
                                                        m_group_size,

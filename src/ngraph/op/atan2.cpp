@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ bool op::Atan2::visit_attributes(AttributeVisitor& visitor)
     return true;
 }
 
-void op::Atan2::generate_adjoints(autodiff::Adjoints& adjoints, const NodeVector& deltas)
+void op::Atan2::generate_adjoints(autodiff::Adjoints& adjoints, const OutputVector& deltas)
 {
     if (get_autob().m_type != op::AutoBroadcastType::NONE)
     {

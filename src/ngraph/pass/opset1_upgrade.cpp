@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -179,7 +179,10 @@ namespace
         auto replacement_node = make_shared<op::v1::ConvolutionBackpropData>(
             node->input_value(1), // data
             node->input_value(0), // filters
-            op::Constant::create(element::i64, Shape{data_batch_shape.size()}, data_batch_shape),
+            op::Constant::create(
+                element::i64,
+                Shape{data_batch_shape.size() - 2},
+                vector<size_t>(data_batch_shape.begin() + 2, data_batch_shape.end())),
             strides,
             pads_begin,
             pads_end,
@@ -324,6 +327,46 @@ namespace
         return true;
     }
 
+    bool op_cast(shared_ptr<op::v0::GroupConvolutionBackpropData> node)
+    {
+        auto strides = node->get_window_movement_strides();
+        auto dilations = node->get_window_dilation_strides();
+        auto pads_begin = node->get_padding_below();
+        auto pads_end = node->get_padding_above();
+        auto data_batch_pshape = node->get_input_partial_shape(0);
+
+        NGRAPH_CHECK(data_batch_pshape.is_static(),
+                     "Unable to convert GroupConvolution:0 to GroupConvolution:1"
+                     "with dynamic data_batch shape. Node: ",
+                     *node);
+
+        auto data_batch_shape = data_batch_pshape.to_shape();
+        data_batch_shape.erase(data_batch_shape.begin(), data_batch_shape.end());
+
+        NGRAPH_CHECK(node->get_input_partial_shape(1).is_static(),
+                     "Unable to convert GroupConvolution:0 to GroupConvolution:1"
+                     "with dynamic filters shape. Node: ",
+                     *node);
+
+        auto filters_shape = node->get_input_shape(1);
+        auto groups = node->get_groups();
+        filters_shape[0] /= groups;
+        filters_shape.insert(filters_shape.begin(), groups);
+
+        auto reshaped_filters = builder::reshape(node->input_value(1), filters_shape);
+
+        auto replacement_node = make_shared<op::v1::GroupConvolutionBackpropData>(
+            node->input_value(2),
+            reshaped_filters,
+            op::Constant::create(element::i64, Shape{data_batch_shape.size()}, data_batch_shape),
+            strides,
+            pads_begin,
+            pads_end,
+            dilations);
+        replace_node(node, replacement_node);
+        return true;
+    }
+
     bool op_cast(shared_ptr<op::Less> node)
     {
         op_cast_binary_elementwise_node<op::v0::Less, op::v1::Less>(node);
@@ -333,6 +376,15 @@ namespace
     bool op_cast(shared_ptr<op::LessEq> node)
     {
         op_cast_binary_elementwise_node<op::v0::LessEq, op::v1::LessEqual>(node);
+        return true;
+    }
+
+    bool op_cast(shared_ptr<op::Max> node)
+    {
+        bool keep_dims = false;
+        auto replacement_node =
+            make_shared<op::v1::ReduceMax>(node->input_value(0), node->input_value(1), keep_dims);
+        replace_node(node, replacement_node);
         return true;
     }
 
@@ -392,6 +444,15 @@ namespace
             replacement_node = make_shared<op::v1::MaxPoolBackprop>(
                 node->input_value(0), node->input_value(1), strides, pads_begin, pads_end, kernel);
         }
+        replace_node(node, replacement_node);
+        return true;
+    }
+
+    bool op_cast(shared_ptr<op::Min> node)
+    {
+        bool keep_dims = false;
+        auto replacement_node =
+            make_shared<op::v1::ReduceMin>(node->input_value(0), node->input_value(1), keep_dims);
         replace_node(node, replacement_node);
         return true;
     }
@@ -497,6 +558,16 @@ namespace
         return true;
     }
 
+    bool op_cast(shared_ptr<op::Select> node)
+    {
+        auto replacement_node = make_shared<op::v1::Select>(node->input_value(0),
+                                                            node->input_value(1),
+                                                            node->input_value(2),
+                                                            op::AutoBroadcastSpec());
+        replace_node(node, replacement_node);
+        return true;
+    }
+
     bool op_cast(shared_ptr<op::Softmax> node)
     {
         NGRAPH_CHECK(node->input_value(1).get_node_shared_ptr()->is_constant(),
@@ -532,6 +603,35 @@ namespace
                                                                   strides,
                                                                   vector<int64_t>(input_size, 0),
                                                                   vector<int64_t>(input_size, 0));
+
+        replace_node(node, replacement_node);
+        return true;
+    }
+
+    bool op_cast(shared_ptr<op::Split> node)
+    {
+        const auto& splits_vec = node->get_splits();
+        const auto first_elem = splits_vec.front();
+
+        const bool split_evenly =
+            std::all_of(splits_vec.begin(), splits_vec.end(), [first_elem](const size_t split) {
+                return split == first_elem;
+            });
+
+        std::shared_ptr<Node> replacement_node;
+        if (split_evenly)
+        {
+            replacement_node = make_shared<op::v1::Split>(
+                node->input_value(0), node->input_value(1), splits_vec.front());
+        }
+        else
+        {
+            const auto split_lengths =
+                ngraph::op::Constant::create(element::u64, Shape{splits_vec.size()}, splits_vec);
+
+            replacement_node = make_shared<op::v1::VariadicSplit>(
+                node->input_value(0), node->input_value(1), split_lengths);
+        }
 
         replace_node(node, replacement_node);
         return true;
@@ -615,7 +715,7 @@ namespace
         };
         return dispatch_map;
     }
-}
+} // namespace
 
 bool pass::Opset1Upgrade::run_on_node(shared_ptr<Node> node)
 {

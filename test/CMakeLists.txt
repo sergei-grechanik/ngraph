@@ -1,5 +1,5 @@
 # ******************************************************************************
-# Copyright 2017-2019 Intel Corporation
+# Copyright 2017-2020 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ set(SRC
     build_graph.cpp
     builder_autobroadcast.cpp
     check.cpp
+    constant.cpp
     constant_folding.cpp
     concat_fusion.cpp
     control_dependencies.cpp
@@ -71,6 +72,7 @@ set(SRC
     node_input_output.cpp
     nop_elimination.cpp
     op.cpp
+    op_is.cpp
     opset1.cpp
     opset_pass/binary_elementwise_opset_pass.cpp
     opset_pass/broadcast_opset_pass.cpp
@@ -85,12 +87,13 @@ set(SRC
     opset_pass/generate_mask_opset_pass.cpp
     opset_pass/pad_opset_pass.cpp
     opset_pass/poolings_opset_pass.cpp
-    opset_pass/product_opset_pass.cpp
+    opset_pass/reduction_opset_pass.cpp
     opset_pass/reverse_opset_pass.cpp
+    opset_pass/select_opset_pass.cpp
     opset_pass/slice_opset_pass.cpp
     opset_pass/softmax_opset_pass.cpp
-    opset_pass/sum_opset_pass.cpp
     opset_pass/topk_opset_pass.cpp
+    opset_pass/transpose_opset_pass.cpp
     partial_shape.cpp
     pass.cpp
     pass_liveness.cpp
@@ -114,6 +117,7 @@ set(SRC
     type_prop/binary_elementwise.cpp
     type_prop/broadcast.cpp
     type_prop/clamp.cpp
+    type_prop/compat.cpp
     type_prop/concat.cpp
     type_prop/constant.cpp
     type_prop/convert.cpp
@@ -145,7 +149,6 @@ set(SRC
     type_prop/hard_sigmoid.cpp
     type_prop/index_reduction.cpp
     type_prop/layer_norm.cpp
-    type_prop/log_softmax.cpp
     type_prop/lrn.cpp
     type_prop/lstm_cell.cpp
     type_prop/lstm_sequence.cpp
@@ -234,9 +237,6 @@ else()
         if (NOT NGRAPH_DEX_ONLY)
             list(APPEND SRC cpu_codegen.cpp)
         endif()
-        if (NGRAPH_HALIDE)
-            list(APPEND SRC halide.cpp)
-        endif()
         set(ACTIVE_BACKEND_LIST ${ACTIVE_BACKEND_LIST} CPU)
     endif()
 
@@ -319,6 +319,7 @@ set(MULTI_TEST_SRC
     backend/logical_or.in.cpp
     backend/logical_xor.in.cpp
     backend/lrn.in.cpp
+    backend/matmul.in.cpp
     backend/max.in.cpp
     backend/maximum.in.cpp
     backend/min.in.cpp
@@ -347,6 +348,7 @@ set(MULTI_TEST_SRC
     backend/reshape.in.cpp
     backend/reverse_sequence.in.cpp
     backend/reverse.in.cpp
+    backend/round.in.cpp
     backend/scatter.in.cpp
     backend/select.in.cpp
     backend/shape_of.in.cpp
@@ -495,12 +497,10 @@ if (NGRAPH_ONNX_IMPORT_ENABLE)
     list(APPEND MULTI_TEST_SRC
             onnx/onnx_import.in.cpp
             onnx/onnx_import_convpool.in.cpp
+            onnx/onnx_import_provenance.in.cpp
             onnx/onnx_import_reshape.in.cpp
             onnx/onnx_import_rnn.in.cpp
             onnx/onnx_import_quant.in.cpp)
-    if (NGRAPH_ONNXIFI_ENABLE)
-        list(APPEND SRC onnx/onnxifi.cpp onnx/onnxifi_span.cpp)
-    endif()
 endif()
 
 foreach(BACKEND_NAME ${ACTIVE_BACKEND_LIST})
@@ -584,10 +584,6 @@ if (NGRAPH_TBB_ENABLE)
     target_compile_definitions(unit-test PRIVATE "NGRAPH_TBB_ENABLE")
 endif()
 
-if (NGRAPH_HALIDE)
-    target_compile_definitions(unit-test PRIVATE "NGRAPH_HALIDE")
-endif()
-
 if (NGRAPH_INTERPRETER_ENABLE)
     target_compile_definitions(unit-test PRIVATE NGRAPH_INTERPRETER_ENABLE)
     target_link_libraries(unit-test PRIVATE interpreter_backend)
@@ -599,11 +595,6 @@ endif()
 
 if (NGRAPH_GPUH_ENABLE)
     target_link_libraries(unit-test PRIVATE gpuh_backend)
-endif()
-
-if (NGRAPH_ONNXIFI_ENABLE)
-    target_include_directories(unit-test SYSTEM PUBLIC ${ONNX_INCLUDE_DIR})
-    target_link_libraries(unit-test PRIVATE onnxifi-ngraph)
 endif()
 
 if (NGRAPH_MLIR_ENABLE)

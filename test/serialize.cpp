@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -94,6 +94,42 @@ TEST(serialize, main)
 
     handle->call_with_validate({result}, {x, z, y});
     EXPECT_EQ((vector<float>{50, 72, 98, 128}), read_vector<float>(result));
+}
+
+TEST(serialize, types)
+{
+    // First create "f(A,B,C) = (A+B)*C".
+    Shape shape{2, 2};
+    auto A = make_shared<op::Parameter>(element::f32, shape);
+    auto B = make_shared<op::Parameter>(element::f32, shape);
+    auto C = make_shared<op::Parameter>(element::f32, shape);
+    auto f = make_shared<Function>((A + B) * C, ParameterVector{A, B, C}, "f");
+
+    std::vector<std::pair<PartialShape, element::Type>> types;
+
+    auto results = f->get_results();
+    for (auto& n : results)
+        types.emplace_back(n->get_output_partial_shape(0), n->output(0).get_element_type());
+    auto s_types = serialize_types(types);
+    for (auto& attrs : deserialize_types(s_types))
+    {
+        EXPECT_EQ(size_t(attrs.first.rank()), shape.size());
+        EXPECT_EQ(size_t(attrs.first[0]), 2);
+        EXPECT_EQ(size_t(attrs.first[1]), 2);
+        EXPECT_EQ(element::f32, attrs.second);
+    }
+    auto params = f->get_parameters();
+    types.clear();
+    for (auto& n : params)
+        types.emplace_back(n->get_output_partial_shape(0), n->output(0).get_element_type());
+    s_types = serialize_types(types);
+    for (auto& attrs : deserialize_types(s_types))
+    {
+        EXPECT_EQ(size_t(attrs.first.rank()), shape.size());
+        EXPECT_EQ(size_t(attrs.first[0]), 2);
+        EXPECT_EQ(size_t(attrs.first[1]), 2);
+        EXPECT_EQ(element::f32, attrs.second);
+    }
 }
 
 TEST(serialize, friendly_name)

@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,6 +29,13 @@ namespace ngraph
     ///    most compact representation. If non-zero then the json string is formatted with the
     ///    indent level specified.
     std::string serialize(std::shared_ptr<ngraph::Function> func, size_t indent = 0);
+
+    /// \brief Serialize given vector of shapes/types
+    /// \param types The vector of shape/types to serialize
+    std::string serialize_types(const std::vector<std::pair<PartialShape, element::Type>>& types);
+    /// \brief Deerialize a string into vector of shapes/types
+    /// \param str The serialized string to deseriailze
+    std::vector<std::pair<PartialShape, element::Type>> deserialize_types(const std::string& str);
 
     /// \brief Serialize a Function to a json file
     /// \param path The path to the output file

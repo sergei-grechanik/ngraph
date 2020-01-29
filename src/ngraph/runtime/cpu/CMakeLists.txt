@@ -1,5 +1,5 @@
 # ******************************************************************************
-# Copyright 2017-2019 Intel Corporation
+# Copyright 2017-2020 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -110,7 +110,6 @@ set(SRC
     op/dropout.cpp
     op/gelu_backprop.cpp
     op/group_conv_bias.cpp
-    op/halide_op.cpp
     op/leaky_relu.cpp
     op/lstm.cpp
     op/matmul_bias.cpp
@@ -142,16 +141,6 @@ if (NOT NGRAPH_DEX_ONLY)
         )
 endif()
 
-if (NGRAPH_HALIDE)
-    set(SRC
-        ${SRC}
-        builder/compiled_kernel.cpp
-        builder/halide_op.cpp
-        builder/halide_generators.cpp
-        pass/halide_subgraph_extraction.cpp
-        )
-endif()
-
 if (NGRAPH_MLIR_ENABLE)
     set(SRC
         ${SRC}
@@ -180,8 +169,6 @@ set(NGRAPH_CPU_COMMON_DATATYPES
 
 
 if (NGRAPH_CPU_ENABLE)
-    set(NGRAPH_CPU_DEBUGINFO_ENABLE 0 CACHE STRING "Enable debuginfo in the CPU backend")
-
     set(NGRAPH_CPU_OPTIMIZED_DATATYPES "common"
         CACHE STRING "Semicolon-separated list of datatypes to optimize for, or \"common\" or \"all\".")
 
@@ -215,13 +202,6 @@ if (NGRAPH_CPU_ENABLE)
     endif()
     if (NGRAPH_TBB_ENABLE)
         target_compile_definitions(cpu_backend PRIVATE "NGRAPH_TBB_ENABLE")
-    endif()
-    if (NGRAPH_HALIDE)
-        target_compile_definitions(cpu_backend PRIVATE "NGRAPH_HALIDE")
-        ExternalProject_Get_Property(ext_halide BINARY_DIR)
-        target_include_directories(cpu_backend SYSTEM PRIVATE ${BINARY_DIR}/include)
-        target_link_libraries(cpu_backend PRIVATE ${BINARY_DIR}/lib/libHalide.a libhalidellvm)
-        add_dependencies(cpu_backend ext_halide)
     endif()
 
     if(NOT NGRAPH_FAST_MATH_ENABLE)

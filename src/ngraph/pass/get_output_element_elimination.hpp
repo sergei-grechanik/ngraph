@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ namespace ngraph
     }
 }
 
-class NGRAPH_API ngraph::pass::GetOutputElementElimination : public FunctionPass
+class NGRAPH_API ngraph::pass::GetOutputElementElimination : public NodePass
 {
 public:
-    bool run_on_function(std::shared_ptr<ngraph::Function> f) override;
+    bool run_on_node(std::shared_ptr<Node> node) override;
 };

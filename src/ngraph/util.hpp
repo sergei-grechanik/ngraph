@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@
 #include <typeinfo>
 #include <unordered_map>
 #include <vector>
+
 #include "ngraph/axis_vector.hpp"
 #include "ngraph/graph_util.hpp"
 #include "ngraph/node.hpp"
@@ -161,6 +162,14 @@ namespace ngraph
     float parse_string<float>(const std::string& s);
     template <>
     double parse_string<double>(const std::string& s);
+
+    /// template specializations for int8_t and uint8_t to handle the fact that default
+    /// implementation ends up treating values as characters so that the number "0" turns into
+    /// the parsed value 48, which is it's ASCII value
+    template <>
+    int8_t parse_string<int8_t>(const std::string& s);
+    template <>
+    uint8_t parse_string<uint8_t>(const std::string& s);
 
     /// Parses a list of strings containing literals of the underlying type.
     template <typename T>

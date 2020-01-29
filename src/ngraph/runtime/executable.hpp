@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,6 +72,14 @@ public:
     /// \brief Get the preferred pipeline_depth for this executable
     /// \returns  preferred pipeline_depth
     virtual size_t get_preferred_pipeline_depth() const;
+
+    /// \brief Set the input Parameters
+    /// \param params ngraph::ParameterVector of all input parameters
+    void set_parameters(const ngraph::ParameterVector& params);
+
+    /// \brief Set the output Results
+    /// \param results ngraph::ResultVector of all output results
+    void set_results(const ngraph::ResultVector& results);
 
     /// \brief Save this compiled Executable to an output stream.
     ///    Saved stream may be read with Backend::load

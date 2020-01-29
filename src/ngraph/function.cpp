@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ void Function::map_unordered_ops(std::function<void(Node*)> f) const
             f(op);
             for (size_t i = 0; i < op->get_input_size(); ++i)
             {
-                remaining_ops.push(op->input(i).get_source_output().get_node());
+                remaining_ops.push(op->get_input_node_ptr(i));
             }
             for (auto& cdep : op->get_control_dependencies())
             {

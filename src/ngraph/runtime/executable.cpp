@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -112,6 +112,16 @@ const ngraph::ResultVector& runtime::Executable::get_results() const
 size_t runtime::Executable::get_preferred_pipeline_depth() const
 {
     return 2;
+}
+
+void runtime::Executable::set_parameters(const ngraph::ParameterVector& params)
+{
+    m_parameters = params;
+}
+
+void runtime::Executable::set_results(const ngraph::ResultVector& results)
+{
+    m_results = results;
 }
 
 void runtime::Executable::set_parameters_and_results(const Function& func)

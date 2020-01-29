@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -124,7 +124,7 @@ TEST(opset, check_opset1)
     CHECK_OPSET(op::v1::Reverse, opset1::Reverse)
     CHECK_OPSET(op::v0::ReverseSequence, opset1::ReverseSequence)
     // CHECK_OPSET(op::v0::RNNCell, opset1::RNNCell)
-    CHECK_OPSET(op::v0::Select, opset1::Select)
+    CHECK_OPSET(op::v1::Select, opset1::Select)
     CHECK_OPSET(op::v0::Selu, opset1::Selu)
     CHECK_OPSET(op::v0::ShapeOf, opset1::ShapeOf)
     CHECK_OPSET(op::v0::ShuffleChannels, opset1::ShuffleChannels)
@@ -134,7 +134,7 @@ TEST(opset, check_opset1)
     CHECK_OPSET(op::v0::Sinh, opset1::Sinh)
     CHECK_OPSET(op::v1::Softmax, opset1::Softmax)
     CHECK_OPSET(op::v0::SpaceToDepth, opset1::SpaceToDepth)
-    CHECK_OPSET(op::v0::Split, opset1::Split)
+    CHECK_OPSET(op::v1::Split, opset1::Split)
     CHECK_OPSET(op::v0::Sqrt, opset1::Sqrt)
     CHECK_OPSET(op::v0::SquaredDifference, opset1::SquaredDifference)
     CHECK_OPSET(op::v0::Squeeze, opset1::Squeeze)
@@ -145,7 +145,7 @@ TEST(opset, check_opset1)
     CHECK_OPSET(op::v0::TensorIterator, opset1::TensorIterator)
     CHECK_OPSET(op::v0::Tile, opset1::Tile)
     CHECK_OPSET(op::v1::TopK, opset1::TopK)
-    CHECK_OPSET(op::v0::Transpose, opset1::Transpose)
+    CHECK_OPSET(op::v1::Transpose, opset1::Transpose)
     CHECK_OPSET(op::v0::Unsqueeze, opset1::Unsqueeze)
     CHECK_OPSET(op::v1::VariadicSplit, opset1::VariadicSplit)
     CHECK_OPSET(op::v0::Xor, opset1::Xor)

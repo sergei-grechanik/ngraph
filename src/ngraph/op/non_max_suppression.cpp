@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,6 +69,11 @@ void op::v1::NonMaxSuppression::validate_and_infer_types()
 {
     const auto boxes_ps = get_input_partial_shape(0);
     const auto scores_ps = get_input_partial_shape(1);
+    if (boxes_ps.is_dynamic() || scores_ps.is_dynamic())
+    {
+        set_output_type(0, get_input_element_type(0), PartialShape::dynamic(Rank::dynamic()));
+        return;
+    }
 
     NODE_VALIDATION_CHECK(this,
                           boxes_ps.rank().is_static() && static_cast<size_t>(boxes_ps.rank()) == 3,
@@ -126,9 +131,29 @@ void op::v1::NonMaxSuppression::validate_and_infer_types()
 
     // NonMaxSuppression produces triplets
     // that have the following format: [batch_index, class_index, box_index]
-    // The number of returned triplets depends entirely on the computation, thus one dynamic dim
-    const PartialShape out_shape = {Dimension::dynamic(), 3};
+    PartialShape out_shape = {Dimension::dynamic(), 3};
 
+    const auto max_output_boxes_per_class = input_value(2).get_node_shared_ptr();
+    if (num_boxes_boxes.is_static() && scores_ps[1].is_static() &&
+        max_output_boxes_per_class->is_constant())
+    {
+        const auto num_boxes = static_cast<int64_t>(num_boxes_boxes);
+        const auto max_output_boxes_per_class = max_boxes_output_from_input();
+        const auto num_classes = static_cast<int64_t>(scores_ps[1]);
+
+        out_shape[0] = std::min(num_boxes, max_output_boxes_per_class * num_classes);
+    }
     set_output_size(1);
     set_output_type(0, element::i64, out_shape);
+}
+
+int64_t op::v1::NonMaxSuppression::max_boxes_output_from_input() const
+{
+    int64_t max_output_boxes{0};
+
+    const auto max_output_boxes_input =
+        as_type_ptr<op::Constant>(input_value(2).get_node_shared_ptr());
+    max_output_boxes = max_output_boxes_input->cast_vector<int64_t>().at(0);
+
+    return max_output_boxes;
 }

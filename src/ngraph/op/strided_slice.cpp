@@ -1,5 +1,5 @@
 //*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
+// Copyright 2017-2020 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -71,12 +71,12 @@ void op::v1::StridedSlice::validate_and_infer_types()
     const auto& begin_mask_et = get_input_element_type(1);
     const auto& end_mask_et = get_input_element_type(2);
     NODE_VALIDATION_CHECK(this,
-                          begin_mask_et.compatible(element::Type_t::i64),
-                          "Begin mask must have element type i64, but has ",
+                          begin_mask_et.is_integral_number(),
+                          "Begin mask must be an integral number, but is: ",
                           begin_mask_et);
     NODE_VALIDATION_CHECK(this,
-                          end_mask_et.compatible(element::Type_t::i64),
-                          "End mask must have element type i64, but has ",
+                          end_mask_et.is_integral_number(),
+                          "End mask must be an integral number, but is: ",
                           end_mask_et);
 
     auto are_mask_elem_in_range = [](size_t e) { return e == 0 || e == 1; };
@@ -136,9 +136,9 @@ void op::v1::StridedSlice::validate_and_infer_types()
                         get_input_element_type(0),
                         infer_slice_shape(this,
                                           get_input_partial_shape(0),
-                                          begin_const->get_vector<int64_t>(),
-                                          end_const->get_vector<int64_t>(),
-                                          strides->get_vector<int64_t>(),
+                                          begin_const->cast_vector<int64_t>(),
+                                          end_const->cast_vector<int64_t>(),
+                                          strides->cast_vector<int64_t>(),
                                           convert_mask_to_axis_set(get_begin_mask()),
                                           convert_mask_to_axis_set(get_end_mask()),
                                           convert_mask_to_axis_set(get_new_axis_mask()),
@@ -179,7 +179,7 @@ shared_ptr<Node> op::v1::StridedSlice::copy_with_new_args(const NodeVector& new_
 }
 
 void op::v1::StridedSlice::generate_adjoints(autodiff::Adjoints& /* adjoints */,
-                                             const NodeVector& /* deltas */)
+                                             const OutputVector& /* deltas */)
 {
     throw ngraph_error("generate_adjoints not implemented for StridedSlice");
 }
