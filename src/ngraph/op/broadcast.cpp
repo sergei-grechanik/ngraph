@@ -52,7 +52,7 @@ bool op::v1::Broadcast::visit_attributes(AttributeVisitor& visitor)
     return true;
 }
 
-std::pair<bool, AxisSet> op::v1::Broadcast::get_broadcast_axes() const
+std::pair<bool, AxisSet> op::v1::Broadcast::get_broadcast_axes()
 {
     AxisSet broadcast_axes;
     bool axes_known = false;

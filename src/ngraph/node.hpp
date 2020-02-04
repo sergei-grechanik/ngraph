@@ -489,9 +489,6 @@ namespace ngraph
         // TODO: Rename to get_outputs()?
         std::vector<Output<Node>> outputs();
 
-        /// \return A vector containing a handle for each of this node's outputs, in order.
-        std::vector<Output<const Node>> outputs() const;
-
         /// \return A handle to the `input_index`th input of this node.
         /// \throw std::out_of_range if the node does not have at least `input_index+1` inputs.
         Input<Node> input(size_t input_index);
@@ -508,7 +505,7 @@ namespace ngraph
 
         /// \return A handle to the `output_index`th output of this node.
         /// \throw std::out_of_range if the node does not have at least `output_index+1` outputs.
-        Output<const Node> output(size_t output_index) const;
+        // Output<const Node> output(size_t output_index) const;
 
         void set_op_annotations(std::shared_ptr<ngraph::op::util::OpAnnotations> op_annotations)
         {

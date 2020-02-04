@@ -166,7 +166,7 @@ namespace ngraph
                 }
 
                 /// \return true and the AxisSet if broadcast axes can be fully determined.
-                std::pair<bool, AxisSet> get_broadcast_axes() const;
+                std::pair<bool, AxisSet> get_broadcast_axes();
 
             protected:
                 virtual void generate_adjoints(autodiff::Adjoints& adjoints,

@@ -92,7 +92,7 @@ vector<PerfShape> to_perf_shape(shared_ptr<Function> f,
             throw runtime_error(os.str());
         }
 
-        Shape shape = node->output(0).get_shape();
+        Shape shape = node->get_output_shape(0);
         result.push_back(PerfShape(p, shape));
     }
     return result;

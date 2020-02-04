@@ -1069,16 +1069,6 @@ Output<Node> Node::output(size_t output_index)
     return Output<Node>(this, output_index);
 }
 
-Output<const Node> Node::output(size_t output_index) const
-{
-    if (output_index >= m_outputs.size())
-    {
-        throw out_of_range("node output index is out of range");
-    }
-
-    return Output<const Node>(this, output_index);
-}
-
 vector<Input<Node>> Node::inputs()
 {
     vector<Input<Node>> result;
@@ -1118,18 +1108,6 @@ vector<Input<const Node>> Node::inputs() const
 vector<Output<Node>> Node::outputs()
 {
     vector<Output<Node>> result;
-
-    for (size_t i = 0; i < get_output_size(); i++)
-    {
-        result.emplace_back(shared_from_this(), i);
-    }
-
-    return result;
-}
-
-vector<Output<const Node>> Node::outputs() const
-{
-    vector<Output<const Node>> result;
 
     for (size_t i = 0; i < get_output_size(); i++)
     {

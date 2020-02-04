@@ -114,7 +114,7 @@ public:
     json serialize_output(const Output<Node>& output);
     json serialize_parameter_vector(const ParameterVector& parameters);
     json serialize_output_vector(const OutputVector& output_vector);
-    json serialize_node(const Node& node);
+    json serialize_node(Node& node);
     json serialize_axis_set(const AxisSet& axis_set);
     json serialize_tensor_iterator_input_description(
         const std::shared_ptr<op::TensorIterator::InputDescription>&);
@@ -3117,7 +3117,7 @@ json JSONSerializer::serialize_output_vector(const OutputVector& output_vector)
     return result;
 }
 
-json JSONSerializer::serialize_node(const Node& n)
+json JSONSerializer::serialize_node(Node& n)
 {
     const NodeTypeInfo& type_info = n.get_type_info();
     json jtype_info;
