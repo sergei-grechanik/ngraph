@@ -503,10 +503,6 @@ namespace ngraph
         /// \throw std::out_of_range if the node does not have at least `output_index+1` outputs.
         Output<Node> output(size_t output_index);
 
-        /// \return A handle to the `output_index`th output of this node.
-        /// \throw std::out_of_range if the node does not have at least `output_index+1` outputs.
-        // Output<const Node> output(size_t output_index) const;
-
         void set_op_annotations(std::shared_ptr<ngraph::op::util::OpAnnotations> op_annotations)
         {
             m_op_annotations = op_annotations;
