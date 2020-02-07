@@ -53,39 +53,36 @@ namespace ngraph
                     Shape lower_bounds(data_rank);
                     Shape upper_bounds = data_shape;
 
-                    for (size_t idx = 0; idx < axes.size(); ++idx)
-                    {
-                        size_t axis = axes.at(idx);
-                        lower_bounds.at(axis) =
-                            get_valid_array_idx(starts.at(idx), data_shape.at(axis));
-                        upper_bounds.at(axis) =
-                            get_valid_array_idx(ends.at(idx), data_shape.at(axis));
-                    }
+                    // for (size_t idx = 0; idx < axes.size(); ++idx)
+                    // {
+                    //     size_t axis = axes.at(idx);
+                    //     lower_bounds.at(axis) =
+                    //         get_valid_array_idx(starts.at(idx), data_shape.at(axis));
+                    //     upper_bounds.at(axis) =
+                    //         get_valid_array_idx(ends.at(idx), data_shape.at(axis));
+                    // }
 
                     // Check for cases when start is greater than end and change them to "empty"
                     // slice.
-                    for (size_t idx = 0; idx < lower_bounds.size(); ++idx)
-                    {
-                        if (lower_bounds.at(idx) > upper_bounds.at(idx))
-                        {
-                            upper_bounds.at(idx) = lower_bounds.at(idx);
-                        }
-                    }
+                    // for (size_t idx = 0; idx < lower_bounds.size(); ++idx)
+                    //{
+                    //    if (lower_bounds.at(idx) > upper_bounds.at(idx))
+                    //    {
+                    //        upper_bounds.at(idx) = lower_bounds.at(idx);
+                    //    }
+                    // }
 
-                    const auto begin = ngraph::op::Constant::create(
-                        element::i64, Shape{lower_bounds.size()}, lower_bounds);
-                    const auto end = ngraph::op::Constant::create(
-                        element::i64, Shape{upper_bounds.size()}, upper_bounds);
+                    const auto begin =
+                        ngraph::op::Constant::create(element::i64, Shape{starts.size()}, starts);
+                    const auto end =
+                        ngraph::op::Constant::create(element::i64, Shape{ends.size()}, ends);
                     const auto strides = ngraph::op::Constant::create(
                         element::i64, Shape{data_rank}, std::vector<int64_t>(data_rank, 1));
+                    const auto axess =
+                        ngraph::op::Constant::create(element::i64, Shape{axes.size()}, axes);
 
                     return {std::make_shared<default_opset::StridedSlice>(
-                        data,
-                        begin,
-                        end,
-                        strides,
-                        std::vector<int64_t>(data_rank, 0),
-                        std::vector<int64_t>(data_rank, 0))};
+                        data, begin, end, strides, axes, std::vector<int64_t>(data_rank, 0))};
                 }
 
             } // namespace set_1
