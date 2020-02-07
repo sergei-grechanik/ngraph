@@ -148,20 +148,32 @@ void op::v1::StridedSlice::validate_and_infer_types()
     if (begin_const && end_const && strides)
     {
         auto shapes = input_value(0);
-        set_output_type(
-            0,
-            get_input_element_type(0),
-            infer_slice_shape(
-                this,
-                get_input_partial_shape(0),
-                begin_const_converter(begin_const->cast_vector<int64_t>(), shapes.get_shape()),
-                begin_const_converter(end_const->cast_vector<int64_t>(), shapes.get_shape()),
-                strides->cast_vector<int64_t>(),
-                convert_mask_to_axis_set(get_begin_mask()),
-                convert_mask_to_axis_set(get_end_mask()),
-                convert_mask_to_axis_set(get_new_axis_mask()),
-                convert_mask_to_axis_set(get_shrink_axis_mask()),
-                convert_mask_to_axis_set(get_ellipsis_mask())));
+
+        auto lower_bounds =
+            begin_const_converter(begin_const->cast_vector<int64_t>(), shapes.get_shape());
+        auto upper_bounds =
+            begin_const_converter(end_const->cast_vector<int64_t>(), shapes.get_shape());
+
+        for (size_t idx = 0; idx < lower_bounds.size(); ++idx)
+        {
+            if (lower_bounds.at(idx) > upper_bounds.at(idx))
+            {
+                upper_bounds.at(idx) = lower_bounds.at(idx);
+            }
+        }
+
+        set_output_type(0,
+                        get_input_element_type(0),
+                        infer_slice_shape(this,
+                                          get_input_partial_shape(0),
+                                          lower_bounds,
+                                          upper_bounds,
+                                          strides->cast_vector<int64_t>(),
+                                          convert_mask_to_axis_set(get_begin_mask()),
+                                          convert_mask_to_axis_set(get_end_mask()),
+                                          convert_mask_to_axis_set(get_new_axis_mask()),
+                                          convert_mask_to_axis_set(get_shrink_axis_mask()),
+                                          convert_mask_to_axis_set(get_ellipsis_mask())));
     }
     else
     {
