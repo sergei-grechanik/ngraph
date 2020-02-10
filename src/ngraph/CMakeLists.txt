@@ -628,6 +628,12 @@ set (SRC
     validation_util.hpp
     variant.cpp
     variant.hpp
+    http/base64.cpp
+    http/base64.hpp
+    http/http_server.cpp
+    http/http_server.hpp
+    http/web_app.cpp
+    http/web_app.hpp
     )
 
 set(SRC ${SRC}

@@ -18,12 +18,12 @@
 #include <string>
 #include <cstdlib>
 
-namespace nervana
+namespace ngraph
 {
     class base64;
 }
 
-class nervana::base64
+class ngraph::base64
 {
 public:
     static std::vector<char> encode(const std::vector<char>& data);

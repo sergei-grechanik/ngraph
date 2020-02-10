@@ -17,13 +17,13 @@
 #include <sstream>
 #include <iomanip>
 
-#include "base64.hpp"
+#include "ngraph/http/base64.hpp"
 
 using namespace std;
 
-const uint8_t nervana::base64::character_codes[] =
+const uint8_t ngraph::base64::character_codes[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-const uint8_t nervana::base64::decode_codes[] = {
+const uint8_t ngraph::base64::decode_codes[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x00, 0x00, 0x3f,
@@ -33,11 +33,11 @@ const uint8_t nervana::base64::decode_codes[] = {
     0x00, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
     0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-vector<char> nervana::base64::encode(const vector<char>& data)
+vector<char> ngraph::base64::encode(const vector<char>& data)
 {
     return encode(data.data(), data.size());
 }
-vector<char> nervana::base64::encode(const char* data, size_t size)
+vector<char> ngraph::base64::encode(const char* data, size_t size)
 {
     vector<char> rc;
 
@@ -66,11 +66,11 @@ vector<char> nervana::base64::encode(const char* data, size_t size)
     return rc;
 }
 
-vector<char> nervana::base64::decode(const vector<char>& data)
+vector<char> ngraph::base64::decode(const vector<char>& data)
 {
     return decode(data.data(), data.size());
 }
-vector<char> nervana::base64::decode(const char* data, size_t size)
+vector<char> ngraph::base64::decode(const char* data, size_t size)
 {
     vector<char> rc;
 
@@ -93,7 +93,7 @@ vector<char> nervana::base64::decode(const char* data, size_t size)
     return rc;
 }
 
-string nervana::base64::gen_decode_table()
+string ngraph::base64::gen_decode_table()
 {
     string       codes = (const char*)character_codes;
     stringstream ss;

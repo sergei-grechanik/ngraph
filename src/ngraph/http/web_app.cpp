@@ -16,27 +16,27 @@
 
 #include <iostream>
 
-#include "web_app.hpp"
-#include "async_manager.hpp"
-#include "util.hpp"
-#include "base64.hpp"
-#include "loader.hpp"
+#include "ngraph/http/web_app.hpp"
+// #include "async_manager.hpp"
+// #include "util.hpp"
+// #include "base64.hpp"
+// #include "loader.hpp"
 
 using namespace std;
 
-void web_app::register_loader(nervana::loader* l)
-{
-    m_loader_list.push_back(l);
-}
+// void web_app::register_loader(ngraph::loader* l)
+// {
+//     m_loader_list.push_back(l);
+// }
 
-void web_app::deregister_loader(const nervana::loader* l)
-{
-    auto f = find(m_loader_list.begin(), m_loader_list.end(), l);
-    if (f != m_loader_list.end())
-    {
-        m_loader_list.erase(f);
-    }
-}
+// void web_app::deregister_loader(const ngraph::loader* l)
+// {
+//     auto f = find(m_loader_list.begin(), m_loader_list.end(), l);
+//     if (f != m_loader_list.end())
+//     {
+//         m_loader_list.erase(f);
+//     }
+// }
 
 static string master_page = R"(
     <html>
@@ -108,21 +108,21 @@ void web_app::home_page(web::page& p)
     out << "    <th>State</th>\n";
     out << "  </thead>\n";
     out << "  <tbody>\n";
-    for (auto info : nervana::async_manager_status)
-    {
-        out << "<tr>";
-        out << "<td> " << info->get_name() << "</td>";
-        out << "<td>";
-        switch (info->get_state())
-        {
-        case nervana::async_state::idle: out << "idle"; break;
-        case nervana::async_state::wait_for_buffer: out << "waiting for buffer"; break;
-        case nervana::async_state::fetching_data: out << "fetching data"; break;
-        case nervana::async_state::processing: out << "processing"; break;
-        }
-        out << "</td>";
-        out << "</tr>";
-    }
+    // for (auto info : ngraph::async_manager_status)
+    // {
+    //     out << "<tr>";
+    //     out << "<td> " << info->get_name() << "</td>";
+    //     out << "<td>";
+    //     switch (info->get_state())
+    //     {
+    //     case ngraph::async_state::idle: out << "idle"; break;
+    //     case ngraph::async_state::wait_for_buffer: out << "waiting for buffer"; break;
+    //     case ngraph::async_state::fetching_data: out << "fetching data"; break;
+    //     case ngraph::async_state::processing: out << "processing"; break;
+    //     }
+    //     out << "</td>";
+    //     out << "</tr>";
+    // }
     out << "  </tbody>\n";
     out << "</table>\n";
 }
@@ -135,37 +135,37 @@ void web_app::loader(web::page& p)
 {
     ostream& out = p.output_stream();
 
-    for (nervana::loader* current_loader : m_loader_list)
-    {
-        auto config = current_loader->get_current_config();
-        out << "<pre>";
-        out << config.dump(4);
-        out << "</pre>";
+    // for (ngraph::loader* current_loader : m_loader_list)
+    // {
+    //     auto config = current_loader->get_current_config();
+    //     out << "<pre>";
+    //     out << config.dump(4);
+    //     out << "</pre>";
 
-        // Fetch next output buffer
-        const nervana::fixed_buffer_map& fixed_buffer = *(current_loader->get_current_iter());
-        const nervana::buffer_fixed_size_elements* buffer_ptr = fixed_buffer["image"];
-        if (buffer_ptr)
-        {
-            // explicit copy the data
-            nervana::buffer_fixed_size_elements image_buffer{*buffer_ptr};
-            out << "<div class=\"container\">";
-            for (size_t i = 0; i < image_buffer.get_item_count(); i++)
-            {
-                cv::Mat         mat = image_buffer.get_item_as_mat(i);
-                vector<uint8_t> encoded;
-                imencode(".jpg", mat, encoded);
-                vector<char> b64 =
-                    nervana::base64::encode((const char*)encoded.data(), encoded.size());
-                out << "\n<img src=\"data:image/jpg;base64,";
-                p.raw_send(b64.data(), b64.size());
-                out << "\" style=\"padding-top:5px\"";
-                out << "class=\"image col-lg-3\" ";
-                out << "/>";
-            }
-            out << "</div>";
-        }
-    }
+    //     // Fetch next output buffer
+    //     const ngraph::fixed_buffer_map& fixed_buffer = *(current_loader->get_current_iter());
+    //     const ngraph::buffer_fixed_size_elements* buffer_ptr = fixed_buffer["image"];
+    //     if (buffer_ptr)
+    //     {
+    //         // explicit copy the data
+    //         ngraph::buffer_fixed_size_elements image_buffer{*buffer_ptr};
+    //         out << "<div class=\"container\">";
+    //         for (size_t i = 0; i < image_buffer.get_item_count(); i++)
+    //         {
+    //             cv::Mat         mat = image_buffer.get_item_as_mat(i);
+    //             vector<uint8_t> encoded;
+    //             imencode(".jpg", mat, encoded);
+    //             vector<char> b64 =
+    //                 ngraph::base64::encode((const char*)encoded.data(), encoded.size());
+    //             out << "\n<img src=\"data:image/jpg;base64,";
+    //             p.raw_send(b64.data(), b64.size());
+    //             out << "\" style=\"padding-top:5px\"";
+    //             out << "class=\"image col-lg-3\" ";
+    //             out << "/>";
+    //         }
+    //         out << "</div>";
+    //     }
+    // }
 }
 
 void web_app::page_404(web::page& p)

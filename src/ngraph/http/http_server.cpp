@@ -30,7 +30,7 @@
 #include <netinet/tcp.h>
 #include <sys/ioctl.h>
 
-#include "web_server.hpp"
+#include "ngraph/http/http_server.hpp"
 
 using namespace std;
 

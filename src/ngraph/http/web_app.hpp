@@ -16,9 +16,9 @@
 
 #pragma once
 
-#include "web_server.hpp"
+#include "ngraph/http/http_server.hpp"
 
-namespace nervana
+namespace ngraph
 {
     class loader;
 }
@@ -35,10 +35,10 @@ public:
     void page_404(web::page& p);
     void process_page_request(web::page& p, const std::string& url);
 
-    void register_loader(nervana::loader*);
-    void deregister_loader(const nervana::loader*);
+    // void register_loader(ngraph::loader*);
+    // void deregister_loader(const ngraph::loader*);
 
 private:
     web::server                   web_server;
-    std::vector<nervana::loader*> m_loader_list;
+    // std::vector<ngraph::loader*> m_loader_list;
 };
