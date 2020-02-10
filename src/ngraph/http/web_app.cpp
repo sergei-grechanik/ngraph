@@ -96,9 +96,9 @@ web_app::~web_app()
 
 void web_app::home_page(web::page& p)
 {
-    time_t     t   = time(0);
+    time_t t = time(0);
     struct tm* now = localtime(&t);
-    ostream&   out = p.output_stream();
+    ostream& out = p.output_stream();
 
     out << "<span>Current time: " << asctime(now) << "</span>\n";
 

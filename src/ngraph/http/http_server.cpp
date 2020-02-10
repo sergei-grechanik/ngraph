@@ -14,21 +14,21 @@
 // limitations under the License.
 //*****************************************************************************
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <iostream>
-#include <sstream>
-#include <fstream>
+#include <arpa/inet.h>
 #include <cstring>
 #include <fcntl.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
+#include <fstream>
+#include <iostream>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/ioctl.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #include "ngraph/http/http_server.hpp"
 
@@ -36,9 +36,9 @@ using namespace std;
 
 vector<string> web::server::split(const string& src, char delimiter)
 {
-    size_t         pos;
-    string         token;
-    size_t         start = 0;
+    size_t pos;
+    string token;
+    size_t start = 0;
     vector<string> rc;
     while ((pos = src.find(delimiter, start)) != std::string::npos)
     {
@@ -56,10 +56,12 @@ vector<string> web::server::split(const string& src, char delimiter)
 
 string web::server::to_lower(const string& s)
 {
-    std::locale  loc;
+    std::locale loc;
     stringstream ss;
     for (auto c : s)
+    {
         ss << char(tolower(c));
+    }
     return ss.str();
 }
 
@@ -89,10 +91,10 @@ web::server::~server()
 
 void web::server::start(uint16_t port)
 {
-    m_listen_connection      = std::make_shared<tcp::connection>(port);
-    m_active                 = true;
+    m_listen_connection = std::make_shared<tcp::connection>(port);
+    m_active = true;
     std::function<void()> fn = std::bind(&web::server::process_loop, this);
-    m_thread                 = std::thread(fn);
+    m_thread = std::thread(fn);
 }
 
 void web::server::stop()
@@ -125,12 +127,12 @@ void web::server::register_error_handler(error_message_handler handler)
 
 void web::server::page_request(web::page& current_page)
 {
-    string                                path;
-    std::string                           url = "";
-    string                                line;
-    vector<string>                        lines;
+    string path;
+    std::string url = "";
+    string line;
+    vector<string> lines;
     std::shared_ptr<web::tcp::connection> connection = current_page.m_connection;
-    istream&                              input      = connection->get_input_stream();
+    istream& input = connection->get_input_stream();
 
     current_page.m_http_header_sent = false;
 
@@ -139,13 +141,15 @@ void web::server::page_request(web::page& current_page)
         line = trim(line);
 
         if (line.empty())
+        {
             break;
+        }
         lines.push_back(line);
     }
 
     if (lines.size() > 0)
     {
-        line                  = lines[0];
+        line = lines[0];
         vector<string> tokens = split(line, ' ');
 
         if (tokens.size() > 1)
@@ -154,13 +158,13 @@ void web::server::page_request(web::page& current_page)
 
             for (int i = 1; i < lines.size(); i++) // skip first line
             {
-                line        = lines[i];
+                line = lines[i];
                 auto offset = line.find_first_of(':');
                 if (offset == string::npos)
                 {
                     continue;
                 }
-                string tag   = to_lower(line.substr(0, offset));
+                string tag = to_lower(line.substr(0, offset));
                 string value = line.substr(offset + 1);
 
                 if (tag == "authorization")
@@ -179,10 +183,10 @@ void web::server::page_request(web::page& current_page)
             if (path.empty() == false)
             {
                 vector<string> tok = split(path, '?');
-                url                = tok[0];
+                url = tok[0];
                 if (tok.size() > 1)
                 {
-                    auto           query = tok[1];
+                    auto query = tok[1];
                     vector<string> qlist = split(query, '&');
                     for (const string& arg : qlist)
                     {
@@ -223,7 +227,7 @@ void web::server::connection_handler_entry(std::shared_ptr<page> page)
 void web::server::process_loop()
 {
     std::shared_ptr<web::tcp::connection> connection;
-    std::shared_ptr<page>                 current_page;
+    std::shared_ptr<page> current_page;
 
     while (m_active)
     {
@@ -502,8 +506,8 @@ void web::page::master_page_file(const string& path, const string& marker, marke
     master_page_string(data, marker, content);
 }
 
-void web::page::master_page_string(const string&  source,
-                                   const string&  marker,
+void web::page::master_page_string(const string& source,
+                                   const string& marker,
                                    marker_content content)
 {
     int markerIndex = 0;
@@ -572,9 +576,9 @@ web::tcp::connection::connection(uint16_t port)
     setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
 
     bzero((char*)&serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family      = AF_INET;
+    serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port        = htons(port);
+    serv_addr.sin_port = htons(port);
     if (::bind(m_socket, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0)
     {
         stringstream ss;
@@ -620,7 +624,7 @@ std::streambuf::int_type web::tcp::connection::underflow()
     }
     else
     {
-        char* base  = &m_char_buffer.front();
+        char* base = &m_char_buffer.front();
         char* start = base;
 
         if (eback() == base) // true when this isn't the first fill
@@ -652,7 +656,7 @@ void web::tcp::connection::close()
 {
     if (m_is_server)
     {
-        int                sock = socket(AF_INET, SOCK_STREAM, 0);
+        int sock = socket(AF_INET, SOCK_STREAM, 0);
         struct sockaddr_in remote;
         remote.sin_family = AF_INET;
         inet_pton(AF_INET, "127.0.0.1", &remote.sin_addr);
@@ -668,7 +672,7 @@ void web::tcp::connection::close()
     else
     {
         struct linger ling;
-        ling.l_onoff  = 1;
+        ling.l_onoff = 1;
         ling.l_linger = 30;
         setsockopt(m_socket, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
 
@@ -681,9 +685,10 @@ void web::tcp::connection::close()
 
             //        int pending_data;
             //        fcntl(m_socket, TIOCOUTQ, &pending_data);
-            //        cout << __FILE__ << " " << __LINE__ << " pending_data " << pending_data << endl;
+            //        cout << __FILE__ << " " << __LINE__ << " pending_data " << pending_data <<
+            //        endl;
 
-            char   buffer[32];
+            char buffer[32];
             size_t rc = read(m_socket, buffer, sizeof(buffer));
             if (rc == 0)
             {
@@ -701,16 +706,16 @@ void web::tcp::connection::close()
 
 std::shared_ptr<web::tcp::connection> web::tcp::connection::listen()
 {
-    int                newsockfd;
+    int newsockfd;
     struct sockaddr_in cli_addr;
-    socklen_t          clilen;
-    clilen    = sizeof(cli_addr);
+    socklen_t clilen;
+    clilen = sizeof(cli_addr);
     newsockfd = ::accept(m_socket, (struct sockaddr*)&cli_addr, &clilen);
     if (newsockfd < 0)
     {
         throw std::runtime_error("ERROR on accept");
     }
-    auto rc      = std::shared_ptr<connection>(new connection());
+    auto rc = std::shared_ptr<connection>(new connection());
     rc->m_socket = newsockfd;
     return rc;
 }
@@ -718,8 +723,8 @@ std::shared_ptr<web::tcp::connection> web::tcp::connection::listen()
 void web::tcp::connection::write(const char* data, size_t size)
 {
     string s{data, size};
-    int    count = 0;
-    int    flags = 0;
+    int count = 0;
+    int flags = 0;
     while (count != size)
     {
         count = ::send(m_socket, data, size, flags);

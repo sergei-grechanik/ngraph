@@ -39,6 +39,6 @@ public:
     // void deregister_loader(const ngraph::loader*);
 
 private:
-    web::server                   web_server;
+    web::server web_server;
     // std::vector<ngraph::loader*> m_loader_list;
 };

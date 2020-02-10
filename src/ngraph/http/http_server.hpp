@@ -16,19 +16,19 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
 #include <functional>
-#include <thread>
-#include <strings.h>
-#include <memory.h>
-#include <streambuf>
 #include <iostream>
 #include <map>
+#include <memory.h>
+#include <streambuf>
+#include <string>
+#include <strings.h>
+#include <thread>
+#include <vector>
 
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <netinet/in.h>
 
 #define MAX_ACTIVE_CONNECTIONS 3
 #define HTTPD_PATH_LENGTH_MAX 256
@@ -54,7 +54,7 @@ class web::tcp::connection : public std::streambuf
 public:
     connection(uint16_t port);
     ~connection();
-    void                        close();
+    void close();
     std::shared_ptr<connection> listen();
 
     void write(const std::string& s);
@@ -71,13 +71,13 @@ private:
 
     connection();
 
-    int               m_socket;
-    std::ostream      m_ostream;
-    std::istream      m_istream;
+    int m_socket;
+    std::ostream m_ostream;
+    std::istream m_istream;
     const std::size_t m_put_back;
     std::vector<char> m_char_buffer;
-    bool              m_is_server;
-    uint16_t          m_listening_port;
+    bool m_is_server;
+    uint16_t m_listening_port;
 };
 
 class web::server
@@ -102,7 +102,7 @@ private:
     server(server&);
 
     static void connection_handler_entry(std::shared_ptr<page>);
-    void        connection_handler(void*);
+    void connection_handler(void*);
 
     void process_loop();
 
@@ -110,13 +110,13 @@ private:
     static std::string to_lower(const std::string& s);
     static std::string trim(const std::string& s);
 
-    std::thread                           m_thread;
+    std::thread m_thread;
     std::shared_ptr<web::tcp::connection> m_listen_connection;
     std::shared_ptr<web::tcp::connection> m_current_connection;
-    page_request_handler                  m_page_handler;
-    error_message_handler                 m_error_handler;
-    bool                                  m_active;
-    bool                                  m_single_thread = true;
+    page_request_handler m_page_handler;
+    error_message_handler m_error_handler;
+    bool m_active;
+    bool m_single_thread = true;
 };
 
 class web::page
@@ -154,8 +154,8 @@ public:
 
     const std::map<std::string, std::string>& args() const;
     const std::string& content_type() const;
-    size_t             content_length() const;
-    tcp::connection&   connection();
+    size_t content_length() const;
+    tcp::connection& connection();
 
     page();
 
@@ -165,15 +165,15 @@ public:
 private:
     page(page&);
 
-    void   close_pending_open();
+    void close_pending_open();
     size_t get_file_size(const std::string& filename);
 
     std::string m_url;
     std::string m_content_type;
-    int         m_content_length;
+    int m_content_length;
     std::map<std::string, std::string> m_args;
     std::shared_ptr<web::tcp::connection> m_connection;
-    std::thread                           m_thread;
-    server*                               m_server;
-    bool                                  m_http_header_sent;
+    std::thread m_thread;
+    server* m_server;
+    bool m_http_header_sent;
 };

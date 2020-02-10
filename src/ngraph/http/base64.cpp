@@ -14,8 +14,8 @@
 // limitations under the License.
 //*****************************************************************************
 
-#include <sstream>
 #include <iomanip>
+#include <sstream>
 
 #include "ngraph/http/base64.hpp"
 
@@ -95,7 +95,7 @@ vector<char> ngraph::base64::decode(const char* data, size_t size)
 
 string ngraph::base64::gen_decode_table()
 {
-    string       codes = (const char*)character_codes;
+    string codes = (const char*)character_codes;
     stringstream ss;
     for (int i = 0; i < 128; ++i)
     {
