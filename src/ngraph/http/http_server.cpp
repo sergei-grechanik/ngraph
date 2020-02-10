@@ -91,7 +91,7 @@ web::server::~server()
 
 void web::server::start(uint16_t port)
 {
-    m_listen_connection = std::make_shared<tcp::connection>(port);
+    m_listen_connection = std::make_shared<tcp::Connection>(port);
     m_active = true;
     std::function<void()> fn = std::bind(&web::server::process_loop, this);
     m_thread = std::thread(fn);
@@ -131,7 +131,7 @@ void web::server::page_request(web::page& current_page)
     std::string url = "";
     string line;
     vector<string> lines;
-    std::shared_ptr<web::tcp::connection> connection = current_page.m_connection;
+    std::shared_ptr<web::tcp::Connection> connection = current_page.m_connection;
     istream& input = connection->get_input_stream();
 
     current_page.m_http_header_sent = false;
@@ -226,7 +226,7 @@ void web::server::connection_handler_entry(std::shared_ptr<page> page)
 
 void web::server::process_loop()
 {
-    std::shared_ptr<web::tcp::connection> connection;
+    std::shared_ptr<web::tcp::Connection> connection;
     std::shared_ptr<page> current_page;
 
     while (m_active)
@@ -285,7 +285,7 @@ std::istream& web::page::input_stream()
     return m_connection->get_input_stream();
 }
 
-void web::page::initialize(std::shared_ptr<web::tcp::connection> connection)
+void web::page::initialize(std::shared_ptr<web::tcp::Connection> connection)
 {
     m_connection = connection;
 }
@@ -490,7 +490,7 @@ size_t web::page::content_length() const
     return m_content_length;
 }
 
-web::tcp::connection& web::page::connection()
+web::tcp::Connection& web::page::connection()
 {
     return *m_connection;
 }
@@ -543,7 +543,7 @@ void web::page::master_page_string(const string& source,
     }
 }
 
-web::tcp::connection::connection()
+web::tcp::Connection::Connection()
     : m_ostream{this}
     , m_istream{this}
     , m_put_back(5)
@@ -553,7 +553,7 @@ web::tcp::connection::connection()
 {
 }
 
-web::tcp::connection::connection(uint16_t port)
+web::tcp::Connection::Connection(uint16_t port)
     : m_ostream{this}
     , m_istream{this}
     , m_put_back(5)
@@ -588,34 +588,34 @@ web::tcp::connection::connection(uint16_t port)
     ::listen(m_socket, 5);
 }
 
-web::tcp::connection::~connection()
+web::tcp::Connection::~Connection()
 {
 }
 
-ostream& web::tcp::connection::get_output_stream()
+ostream& web::tcp::Connection::get_output_stream()
 {
     return m_ostream;
 }
 
-istream& web::tcp::connection::get_input_stream()
+istream& web::tcp::Connection::get_input_stream()
 {
     return m_istream;
 }
 
-streamsize web::tcp::connection::xsputn(const char* s, streamsize n)
+streamsize web::tcp::Connection::xsputn(const char* s, streamsize n)
 {
     write(s, n);
     return n;
 }
 
-int web::tcp::connection::overflow(int c)
+int web::tcp::Connection::overflow(int c)
 {
     char ch = c;
     write(&ch, 1);
     return c;
 }
 
-std::streambuf::int_type web::tcp::connection::underflow()
+std::streambuf::int_type web::tcp::Connection::underflow()
 {
     std::streambuf::int_type rc;
     if (gptr() < egptr()) // buffer not exhausted
@@ -652,7 +652,7 @@ std::streambuf::int_type web::tcp::connection::underflow()
     return rc;
 }
 
-void web::tcp::connection::close()
+void web::tcp::Connection::close()
 {
     if (m_is_server)
     {
@@ -704,7 +704,7 @@ void web::tcp::connection::close()
     }
 }
 
-std::shared_ptr<web::tcp::connection> web::tcp::connection::listen()
+std::shared_ptr<web::tcp::Connection> web::tcp::Connection::listen()
 {
     int newsockfd;
     struct sockaddr_in cli_addr;
@@ -715,12 +715,12 @@ std::shared_ptr<web::tcp::connection> web::tcp::connection::listen()
     {
         throw std::runtime_error("ERROR on accept");
     }
-    auto rc = std::shared_ptr<connection>(new connection());
+    auto rc = std::shared_ptr<Connection>(new Connection());
     rc->m_socket = newsockfd;
     return rc;
 }
 
-void web::tcp::connection::write(const char* data, size_t size)
+void web::tcp::Connection::write(const char* data, size_t size)
 {
     string s{data, size};
     int count = 0;
@@ -741,12 +741,12 @@ void web::tcp::connection::write(const char* data, size_t size)
     }
 }
 
-void web::tcp::connection::write(const std::string& s)
+void web::tcp::Connection::write(const std::string& s)
 {
     write(s.data(), s.size());
 }
 
-void web::tcp::connection::flush()
+void web::tcp::Connection::flush()
 {
     fsync(m_socket);
 }

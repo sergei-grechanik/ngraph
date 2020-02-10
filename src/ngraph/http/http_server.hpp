@@ -42,20 +42,20 @@ namespace web
     class page;
     namespace tcp
     {
-        class connection;
+        class Connection;
     }
 }
 
 typedef std::function<void(web::page& p, const std::string& url)> page_request_handler;
 typedef std::function<void(const std::string& message)> error_message_handler;
 
-class web::tcp::connection : public std::streambuf
+class web::tcp::Connection : public std::streambuf
 {
 public:
-    connection(uint16_t port);
-    ~connection();
+    Connection(uint16_t port);
+    ~Connection();
     void close();
-    std::shared_ptr<connection> listen();
+    std::shared_ptr<Connection> listen();
 
     void write(const std::string& s);
     void write(const char* data, size_t size);
@@ -69,7 +69,7 @@ private:
     std::streambuf::int_type overflow(std::streambuf::int_type c) override;
     std::streambuf::int_type underflow() override;
 
-    connection();
+    Connection();
 
     int m_socket;
     std::ostream m_ostream;
@@ -111,8 +111,8 @@ private:
     static std::string trim(const std::string& s);
 
     std::thread m_thread;
-    std::shared_ptr<web::tcp::connection> m_listen_connection;
-    std::shared_ptr<web::tcp::connection> m_current_connection;
+    std::shared_ptr<web::tcp::Connection> m_listen_connection;
+    std::shared_ptr<web::tcp::Connection> m_current_connection;
     page_request_handler m_page_handler;
     error_message_handler m_error_handler;
     bool m_active;
@@ -127,7 +127,7 @@ public:
     ~page();
     typedef std::function<void(web::page&)> marker_content;
 
-    void initialize(std::shared_ptr<web::tcp::connection>);
+    void initialize(std::shared_ptr<web::tcp::Connection>);
 
     static std::string html_encode(const std::string& s);
 
@@ -155,7 +155,7 @@ public:
     const std::map<std::string, std::string>& args() const;
     const std::string& content_type() const;
     size_t content_length() const;
-    tcp::connection& connection();
+    tcp::Connection& connection();
 
     page();
 
@@ -172,7 +172,7 @@ private:
     std::string m_content_type;
     int m_content_length;
     std::map<std::string, std::string> m_args;
-    std::shared_ptr<web::tcp::connection> m_connection;
+    std::shared_ptr<web::tcp::Connection> m_connection;
     std::thread m_thread;
     server* m_server;
     bool m_http_header_sent;
