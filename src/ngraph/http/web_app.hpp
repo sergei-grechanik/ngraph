@@ -29,11 +29,11 @@ public:
     web_app(uint16_t port);
     ~web_app();
 
-    void home_page(web::page& p);
-    void stopwatch(web::page& p);
-    void loader(web::page& p);
-    void page_404(web::page& p);
-    void process_page_request(web::page& p, const std::string& url);
+    void home_page(web::Page& p);
+    void stopwatch(web::Page& p);
+    void loader(web::Page& p);
+    void page_404(web::Page& p);
+    void process_page_request(web::Page& p, const std::string& url);
 
     // void register_loader(ngraph::loader*);
     // void deregister_loader(const ngraph::loader*);

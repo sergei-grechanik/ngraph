@@ -125,7 +125,7 @@ void web::Server::register_error_handler(error_message_handler handler)
     m_error_handler = handler;
 }
 
-void web::Server::page_request(web::page& current_page)
+void web::Server::page_request(web::Page& current_page)
 {
     string path;
     std::string url = "";
@@ -218,7 +218,7 @@ void web::Server::page_request(web::page& current_page)
     }
 }
 
-void web::Server::connection_handler_entry(std::shared_ptr<page> page)
+void web::Server::connection_handler_entry(std::shared_ptr<Page> page)
 {
     page->m_server->page_request(*page);
     //    page->m_thread.detach();
@@ -227,7 +227,7 @@ void web::Server::connection_handler_entry(std::shared_ptr<page> page)
 void web::Server::process_loop()
 {
     std::shared_ptr<web::tcp::Connection> connection;
-    std::shared_ptr<page> current_page;
+    std::shared_ptr<Page> current_page;
 
     while (m_active)
     {
@@ -241,7 +241,7 @@ void web::Server::process_loop()
         }
 
         // Spawn off a thread to handle this connection
-        current_page = std::shared_ptr<page>(new page());
+        current_page = std::shared_ptr<Page>(new Page());
         if (current_page)
         {
             current_page->initialize(connection);
@@ -263,11 +263,11 @@ void web::Server::process_loop()
     }
 }
 
-web::page::page()
+web::Page::Page()
 {
 }
 
-web::page::~page()
+web::Page::~Page()
 {
     if (m_thread.joinable())
     {
@@ -275,22 +275,22 @@ web::page::~page()
     }
 }
 
-std::ostream& web::page::output_stream()
+std::ostream& web::Page::output_stream()
 {
     return m_connection->get_output_stream();
 }
 
-std::istream& web::page::input_stream()
+std::istream& web::Page::input_stream()
 {
     return m_connection->get_input_stream();
 }
 
-void web::page::initialize(std::shared_ptr<web::tcp::Connection> connection)
+void web::Page::initialize(std::shared_ptr<web::tcp::Connection> connection)
 {
     m_connection = connection;
 }
 
-string web::page::html_encode(const string& s)
+string web::Page::html_encode(const string& s)
 {
     stringstream ss;
     for (char ch : s)
@@ -308,7 +308,7 @@ string web::page::html_encode(const string& s)
     return ss.str();
 }
 
-bool web::page::puts(const string& s)
+bool web::Page::puts(const string& s)
 {
     for (char c : s)
     {
@@ -323,12 +323,12 @@ bool web::page::puts(const string& s)
     return true;
 }
 
-bool web::page::send_string(const string& s)
+bool web::Page::send_string(const string& s)
 {
     return raw_send(s.data(), s.size());
 }
 
-bool web::page::raw_send(const void* p, size_t length)
+bool web::Page::raw_send(const void* p, size_t length)
 {
     if (!m_http_header_sent)
     {
@@ -339,7 +339,7 @@ bool web::page::raw_send(const void* p, size_t length)
     return true;
 }
 
-void web::page::send_ascii_string(const string& s)
+void web::Page::send_ascii_string(const string& s)
 {
     char buffer[4];
 
@@ -357,7 +357,7 @@ void web::page::send_ascii_string(const string& s)
     }
 }
 
-void web::page::dump_data(const char* buffer, size_t length)
+void web::Page::dump_data(const char* buffer, size_t length)
 {
     int i;
     int j;
@@ -408,13 +408,13 @@ void web::page::dump_data(const char* buffer, size_t length)
     send_string("</code>\n");
 }
 
-void web::page::page_not_found()
+void web::Page::page_not_found()
 {
     m_http_header_sent = true;
     send_string("HTTP/1.0 404 Not Found\r\n\r\n");
 }
 
-void web::page::page_ok(const char* mimeType)
+void web::Page::page_ok(const char* mimeType)
 {
     m_http_header_sent = true;
     send_string("HTTP/1.0 200 OK\r\nContent-type: ");
@@ -422,19 +422,19 @@ void web::page::page_ok(const char* mimeType)
     send_string("\r\n\r\n");
 }
 
-void web::page::page_no_content()
+void web::Page::page_no_content()
 {
     m_http_header_sent = true;
     send_string("HTTP/1.0 204 No Content\r\nContent-type: text/html\r\n\r\n");
 }
 
-void web::page::page_unauthorized()
+void web::Page::page_unauthorized()
 {
     m_http_header_sent = true;
     send_string("HTTP/1.0 401 Unauthorized\r\nContent-type: text/html\r\n\r\n");
 }
 
-bool web::page::send_file(const string& filename)
+bool web::Page::send_file(const string& filename)
 {
     bool rc = false;
 
@@ -457,7 +457,7 @@ bool web::page::send_file(const string& filename)
     return rc;
 }
 
-bool web::page::send_as_file(const char* buffer, size_t size)
+bool web::Page::send_as_file(const char* buffer, size_t size)
 {
     stringstream ss;
     ss << "HTTP/1.0 200 OK\r\nContent-Type: application/octet-stream\r\n";
@@ -470,32 +470,32 @@ bool web::page::send_as_file(const char* buffer, size_t size)
     return true;
 }
 
-void web::page::flush()
+void web::Page::flush()
 {
     m_connection->flush();
 }
 
-const std::map<std::string, std::string>& web::page::args() const
+const std::map<std::string, std::string>& web::Page::args() const
 {
     return m_args;
 }
 
-const std::string& web::page::content_type() const
+const std::string& web::Page::content_type() const
 {
     return m_content_type;
 }
 
-size_t web::page::content_length() const
+size_t web::Page::content_length() const
 {
     return m_content_length;
 }
 
-web::tcp::Connection& web::page::connection()
+web::tcp::Connection& web::Page::connection()
 {
     return *m_connection;
 }
 
-void web::page::master_page_file(const string& path, const string& marker, marker_content content)
+void web::Page::master_page_file(const string& path, const string& marker, marker_content content)
 {
     ifstream file(path);
     if (!file)
@@ -506,7 +506,7 @@ void web::page::master_page_file(const string& path, const string& marker, marke
     master_page_string(data, marker, content);
 }
 
-void web::page::master_page_string(const string& source,
+void web::Page::master_page_string(const string& source,
                                    const string& marker,
                                    marker_content content)
 {

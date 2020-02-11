@@ -17,26 +17,8 @@
 #include <iostream>
 
 #include "ngraph/http/web_app.hpp"
-// #include "async_manager.hpp"
-// #include "util.hpp"
-// #include "base64.hpp"
-// #include "loader.hpp"
 
 using namespace std;
-
-// void web_app::register_loader(ngraph::loader* l)
-// {
-//     m_loader_list.push_back(l);
-// }
-
-// void web_app::deregister_loader(const ngraph::loader* l)
-// {
-//     auto f = find(m_loader_list.begin(), m_loader_list.end(), l);
-//     if (f != m_loader_list.end())
-//     {
-//         m_loader_list.erase(f);
-//     }
-// }
 
 static string master_page = R"(
     <html>
@@ -94,7 +76,7 @@ web_app::~web_app()
     // web_server.stop();
 }
 
-void web_app::home_page(web::page& p)
+void web_app::home_page(web::Page& p)
 {
     time_t t = time(0);
     struct tm* now = localtime(&t);
@@ -127,11 +109,11 @@ void web_app::home_page(web::page& p)
     out << "</table>\n";
 }
 
-void web_app::stopwatch(web::page& p)
+void web_app::stopwatch(web::Page& p)
 {
 }
 
-void web_app::loader(web::page& p)
+void web_app::loader(web::Page& p)
 {
     ostream& out = p.output_stream();
 
@@ -168,7 +150,7 @@ void web_app::loader(web::page& p)
     // }
 }
 
-void web_app::page_404(web::page& p)
+void web_app::page_404(web::Page& p)
 {
     ostream& out = p.output_stream();
     out << "<div class=\"jumbotron>";
@@ -176,7 +158,7 @@ void web_app::page_404(web::page& p)
     out << "</div>";
 }
 
-void web_app::process_page_request(web::page& p, const string& url)
+void web_app::process_page_request(web::Page& p, const string& url)
 {
     ostream& out = p.output_stream();
     (void)out;

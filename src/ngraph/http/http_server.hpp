@@ -39,14 +39,14 @@ class ProtocolTCP;
 namespace web
 {
     class Server;
-    class page;
+    class Page;
     namespace tcp
     {
         class Connection;
     }
 }
 
-typedef std::function<void(web::page& p, const std::string& url)> page_request_handler;
+typedef std::function<void(web::Page& p, const std::string& url)> page_request_handler;
 typedef std::function<void(const std::string& message)> error_message_handler;
 
 class web::tcp::Connection : public std::streambuf
@@ -94,14 +94,14 @@ public:
     void register_page_handler(page_request_handler);
     void register_error_handler(error_message_handler);
 
-    void page_request(page& page);
+    void page_request(Page& page);
 
     void wait_for_exit();
 
 private:
     Server(Server&);
 
-    static void connection_handler_entry(std::shared_ptr<page>);
+    static void connection_handler_entry(std::shared_ptr<Page>);
     void connection_handler(void*);
 
     void process_loop();
@@ -119,13 +119,13 @@ private:
     bool m_single_thread = true;
 };
 
-class web::page
+class web::Page
 {
     friend class Server;
 
 public:
-    ~page();
-    typedef std::function<void(web::page&)> marker_content;
+    ~Page();
+    typedef std::function<void(web::Page&)> marker_content;
 
     void initialize(std::shared_ptr<web::tcp::Connection>);
 
@@ -157,13 +157,13 @@ public:
     size_t content_length() const;
     tcp::Connection& connection();
 
-    page();
+    Page();
 
     std::ostream& output_stream();
     std::istream& input_stream();
 
 private:
-    page(page&);
+    Page(Page&);
 
     void close_pending_open();
     size_t get_file_size(const std::string& filename);
