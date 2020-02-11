@@ -34,7 +34,7 @@
 
 using namespace std;
 
-vector<string> web::server::split(const string& src, char delimiter)
+vector<string> web::Server::split(const string& src, char delimiter)
 {
     size_t pos;
     string token;
@@ -54,7 +54,7 @@ vector<string> web::server::split(const string& src, char delimiter)
     return rc;
 }
 
-string web::server::to_lower(const string& s)
+string web::Server::to_lower(const string& s)
 {
     std::locale loc;
     stringstream ss;
@@ -65,7 +65,7 @@ string web::server::to_lower(const string& s)
     return ss.str();
 }
 
-string web::server::trim(const string& s)
+string web::Server::trim(const string& s)
 {
     string rc = s;
     while (!rc.empty() && (rc.back() == '\r' || rc.back() == '\n'))
@@ -75,7 +75,7 @@ string web::server::trim(const string& s)
     return rc;
 }
 
-web::server::server()
+web::Server::Server()
     : m_thread()
     , m_listen_connection(0)
     , m_current_connection(0)
@@ -84,20 +84,20 @@ web::server::server()
 {
 }
 
-web::server::~server()
+web::Server::~Server()
 {
     stop();
 }
 
-void web::server::start(uint16_t port)
+void web::Server::start(uint16_t port)
 {
     m_listen_connection = std::make_shared<tcp::Connection>(port);
     m_active = true;
-    std::function<void()> fn = std::bind(&web::server::process_loop, this);
+    std::function<void()> fn = std::bind(&web::Server::process_loop, this);
     m_thread = std::thread(fn);
 }
 
-void web::server::stop()
+void web::Server::stop()
 {
     m_active = false;
     m_listen_connection->close();
@@ -107,7 +107,7 @@ void web::server::stop()
     }
 }
 
-void web::server::wait_for_exit()
+void web::Server::wait_for_exit()
 {
     if (m_thread.joinable())
     {
@@ -115,17 +115,17 @@ void web::server::wait_for_exit()
     }
 }
 
-void web::server::register_page_handler(page_request_handler handler)
+void web::Server::register_page_handler(page_request_handler handler)
 {
     m_page_handler = handler;
 }
 
-void web::server::register_error_handler(error_message_handler handler)
+void web::Server::register_error_handler(error_message_handler handler)
 {
     m_error_handler = handler;
 }
 
-void web::server::page_request(web::page& current_page)
+void web::Server::page_request(web::page& current_page)
 {
     string path;
     std::string url = "";
@@ -218,13 +218,13 @@ void web::server::page_request(web::page& current_page)
     }
 }
 
-void web::server::connection_handler_entry(std::shared_ptr<page> page)
+void web::Server::connection_handler_entry(std::shared_ptr<page> page)
 {
     page->m_server->page_request(*page);
     //    page->m_thread.detach();
 }
 
-void web::server::process_loop()
+void web::Server::process_loop()
 {
     std::shared_ptr<web::tcp::Connection> connection;
     std::shared_ptr<page> current_page;
@@ -252,7 +252,7 @@ void web::server::process_loop()
             }
             else
             {
-                auto fn = std::bind(&web::server::connection_handler_entry, current_page);
+                auto fn = std::bind(&web::Server::connection_handler_entry, current_page);
                 current_page->m_thread = std::thread(fn);
             }
         }

@@ -38,7 +38,7 @@ class ProtocolTCP;
 
 namespace web
 {
-    class server;
+    class Server;
     class page;
     namespace tcp
     {
@@ -80,13 +80,13 @@ private:
     uint16_t m_listening_port;
 };
 
-class web::server
+class web::Server
 {
     friend class HTTPPage;
 
 public:
-    server();
-    ~server();
+    Server();
+    ~Server();
 
     void start(uint16_t port);
     void stop();
@@ -99,7 +99,7 @@ public:
     void wait_for_exit();
 
 private:
-    server(server&);
+    Server(Server&);
 
     static void connection_handler_entry(std::shared_ptr<page>);
     void connection_handler(void*);
@@ -121,7 +121,7 @@ private:
 
 class web::page
 {
-    friend class server;
+    friend class Server;
 
 public:
     ~page();
@@ -174,6 +174,6 @@ private:
     std::map<std::string, std::string> m_args;
     std::shared_ptr<web::tcp::Connection> m_connection;
     std::thread m_thread;
-    server* m_server;
+    Server* m_server;
     bool m_http_header_sent;
 };
