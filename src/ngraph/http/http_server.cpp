@@ -680,13 +680,13 @@ void web::tcp::Connection::close()
 
         while (!m_is_server)
         {
-            //        int flags = fcntl(m_socket, F_GETFL, 0);
-            //        fcntl(m_socket, F_SETFL, flags | O_NONBLOCK);
+            // int flags = fcntl(m_socket, F_GETFL, 0);
+            // fcntl(m_socket, F_SETFL, flags | O_NONBLOCK);
 
-            //        int pending_data;
-            //        fcntl(m_socket, TIOCOUTQ, &pending_data);
-            //        cout << __FILE__ << " " << __LINE__ << " pending_data " << pending_data <<
-            //        endl;
+            // int pending_data;
+            // fcntl(m_socket, TIOCOUTQ, &pending_data);
+            // cout << __FILE__ << " " << __LINE__ << " pending_data " << pending_data <<
+            // endl;
 
             char buffer[32];
             size_t rc = read(m_socket, buffer, sizeof(buffer));

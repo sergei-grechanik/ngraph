@@ -34,8 +34,6 @@
 #define HTTPD_PATH_LENGTH_MAX 256
 #define MAX_ARGV 10
 
-class ProtocolTCP;
-
 namespace web
 {
     class Server;
@@ -82,8 +80,6 @@ private:
 
 class web::Server
 {
-    friend class HTTPPage;
-
 public:
     Server();
     ~Server();

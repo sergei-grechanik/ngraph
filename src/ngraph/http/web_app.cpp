@@ -63,20 +63,20 @@ static string master_page = R"(
     </html>
 )";
 
-web_app::web_app(uint16_t port)
+WebApp::WebApp(uint16_t port)
 {
     page_request_handler fn =
-        bind(&web_app::process_page_request, this, placeholders::_1, placeholders::_2);
+        bind(&WebApp::process_page_request, this, placeholders::_1, placeholders::_2);
     web_server.register_page_handler(fn);
     web_server.start(port);
 }
 
-web_app::~web_app()
+WebApp::~WebApp()
 {
     // web_server.stop();
 }
 
-void web_app::home_page(web::Page& p)
+void WebApp::home_page(web::Page& p)
 {
     time_t t = time(0);
     struct tm* now = localtime(&t);
@@ -109,11 +109,11 @@ void web_app::home_page(web::Page& p)
     out << "</table>\n";
 }
 
-void web_app::stopwatch(web::Page& p)
+void WebApp::stopwatch(web::Page& p)
 {
 }
 
-void web_app::loader(web::Page& p)
+void WebApp::loader(web::Page& p)
 {
     ostream& out = p.output_stream();
 
@@ -150,7 +150,7 @@ void web_app::loader(web::Page& p)
     // }
 }
 
-void web_app::page_404(web::Page& p)
+void WebApp::page_404(web::Page& p)
 {
     ostream& out = p.output_stream();
     out << "<div class=\"jumbotron>";
@@ -158,23 +158,23 @@ void web_app::page_404(web::Page& p)
     out << "</div>";
 }
 
-void web_app::process_page_request(web::Page& p, const string& url)
+void WebApp::process_page_request(web::Page& p, const string& url)
 {
     ostream& out = p.output_stream();
     (void)out;
     if (url == "/")
     {
-        auto mc = bind(&web_app::home_page, this, placeholders::_1);
+        auto mc = bind(&WebApp::home_page, this, placeholders::_1);
         p.master_page_string(master_page, "$content", mc);
     }
     else if (url == "/stopwatch")
     {
-        auto mc = bind(&web_app::stopwatch, this, placeholders::_1);
+        auto mc = bind(&WebApp::stopwatch, this, placeholders::_1);
         p.master_page_string(master_page, "$content", mc);
     }
     else if (url == "/loader")
     {
-        auto mc = bind(&web_app::loader, this, placeholders::_1);
+        auto mc = bind(&WebApp::loader, this, placeholders::_1);
         p.master_page_string(master_page, "$content", mc);
     }
     else

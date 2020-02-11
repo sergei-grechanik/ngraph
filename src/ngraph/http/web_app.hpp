@@ -18,16 +18,11 @@
 
 #include "ngraph/http/http_server.hpp"
 
-namespace ngraph
-{
-    class loader;
-}
-
-class web_app
+class WebApp
 {
 public:
-    web_app(uint16_t port);
-    ~web_app();
+    WebApp(uint16_t port);
+    ~WebApp();
 
     void home_page(web::Page& p);
     void stopwatch(web::Page& p);
@@ -35,10 +30,6 @@ public:
     void page_404(web::Page& p);
     void process_page_request(web::Page& p, const std::string& url);
 
-    // void register_loader(ngraph::loader*);
-    // void deregister_loader(const ngraph::loader*);
-
 private:
     web::Server web_server;
-    // std::vector<ngraph::loader*> m_loader_list;
 };

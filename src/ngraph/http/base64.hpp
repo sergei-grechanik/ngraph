@@ -20,10 +20,10 @@
 
 namespace ngraph
 {
-    class base64;
+    class Base64;
 }
 
-class ngraph::base64
+class ngraph::Base64
 {
 public:
     static std::vector<char> encode(const std::vector<char>& data);
