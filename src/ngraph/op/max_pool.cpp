@@ -132,7 +132,7 @@ op::v0::MaxPool::MaxPool(const Output<Node>& arg, const Shape& window_shape)
 {
 }
 
-shared_ptr<Node> op::v0::MaxPool::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::v0::MaxPool::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return make_shared<v0::MaxPool>(new_args.at(0),
@@ -229,7 +229,7 @@ void op::v0::MaxPoolBackprop::validate_and_infer_types()
     set_output_type(0, get_input_element_type(0), forward_arg_shape);
 }
 
-shared_ptr<Node> op::v0::MaxPoolBackprop::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::v0::MaxPoolBackprop::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     if (this->get_input_size() == 3)
@@ -356,7 +356,7 @@ void op::v1::MaxPool::validate_and_infer_types()
                                                   m_rounding_type == op::RoundingType::CEIL));
 }
 
-shared_ptr<Node> op::v1::MaxPool::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::v1::MaxPool::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return make_shared<v1::MaxPool>(
@@ -441,7 +441,7 @@ void op::v1::MaxPoolBackprop::validate_and_infer_types()
     set_output_type(0, get_input_element_type(0), forward_arg_shape);
 }
 
-shared_ptr<Node> op::v1::MaxPoolBackprop::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::v1::MaxPoolBackprop::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     if (this->get_input_size() == 3)

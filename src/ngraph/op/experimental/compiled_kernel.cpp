@@ -24,7 +24,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::CompiledKernel::type_info;
 
-shared_ptr<Node> ngraph::op::CompiledKernel::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> ngraph::op::CompiledKernel::copy_with_new_args(const OutputVector& new_args) const
 {
     auto args = input_values();
     if (new_args.size() != args.size())

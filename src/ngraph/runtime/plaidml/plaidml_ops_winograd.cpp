@@ -46,7 +46,7 @@ void ngraph::runtime::plaidml::op::Winograd::validate_and_infer_types()
 }
 
 std::shared_ptr<ngraph::Node>
-    ngraph::runtime::plaidml::op::Winograd::copy_with_new_args(const NodeVector& new_args) const
+    ngraph::runtime::plaidml::op::Winograd::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 5)
     {

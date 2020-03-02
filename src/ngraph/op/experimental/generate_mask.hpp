@@ -47,7 +47,7 @@ namespace ngraph
                              bool use_seed = false);
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 const element::Type& get_element_type() const { return m_element_type; }
                 void set_element_type(const element::Type& element_type)
@@ -106,7 +106,7 @@ namespace ngraph
 
                 size_t get_version() const override { return 1; }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 const element::Type& get_element_type() const { return m_element_type; }
                 void set_element_type(const element::Type& element_type)

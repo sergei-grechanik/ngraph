@@ -64,7 +64,7 @@ void ngraph::runtime::plaidml::op::Convolution::validate_and_infer_types()
 }
 
 std::shared_ptr<ngraph::Node>
-    ngraph::runtime::plaidml::op::Convolution::copy_with_new_args(const NodeVector& new_args) const
+    ngraph::runtime::plaidml::op::Convolution::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 2)
     {

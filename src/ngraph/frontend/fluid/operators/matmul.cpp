@@ -213,7 +213,7 @@ NodeVector MatMul::decompose_op() const
     return {out_reshaped};
 }
 
-shared_ptr<Node> MatMul::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> MatMul::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return make_shared<MatMul>(new_args.at(0), new_args.at(1), m_transpose_a, m_transpose_b);
@@ -331,7 +331,7 @@ NodeVector MatMulGrad::decompose_op() const
     return NodeVector{dx_t, dy_t};
 }
 
-shared_ptr<Node> MatMulGrad::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> MatMulGrad::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return make_shared<MatMulGrad>(

@@ -50,7 +50,7 @@ namespace ngraph
             /// WARNING: copy_with_new_args() implicitly expects new args must match the original
             /// input function types.
             virtual std::shared_ptr<Node>
-                copy_with_new_args(const NodeVector& new_args) const override;
+                copy_with_new_args(const OutputVector& new_args) const override;
             virtual void generate_adjoints(autodiff::Adjoints& adjoints,
                                            const OutputVector& deltas) override;
             FunctionType get_input_func_type(const unsigned int index) const
@@ -85,7 +85,7 @@ namespace ngraph
                                     const Output<Node>& delta,
                                     const std::array<FunctionType, 2>& input_type);
             virtual std::shared_ptr<Node>
-                copy_with_new_args(const NodeVector& new_args) const override;
+                copy_with_new_args(const OutputVector& new_args) const override;
             FunctionType get_input_func_type(const unsigned int index) const
             {
                 return m_input_type[index];

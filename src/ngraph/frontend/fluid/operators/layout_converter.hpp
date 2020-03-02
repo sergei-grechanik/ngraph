@@ -45,7 +45,7 @@ namespace ngraph
             virtual void pre_validate_and_infer_types() override;
 
             virtual std::shared_ptr<Node>
-                copy_with_new_args(const NodeVector& new_args) const override;
+                copy_with_new_args(const OutputVector& new_args) const override;
 
             int get_mode() const { return m_mode; }
         protected:

@@ -144,7 +144,7 @@ NodeVector op::DepthToSpace::decompose_op() const
     return NodeVector{flat_node};
 }
 
-shared_ptr<Node> op::DepthToSpace::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::DepthToSpace::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 1)
     {

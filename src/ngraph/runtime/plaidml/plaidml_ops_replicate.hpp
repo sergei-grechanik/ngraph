@@ -47,7 +47,7 @@ public:
 
     void validate_and_infer_types() final;
 
-    std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const final;
+    std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const final;
 
     /// \return The replication axes: axis index -> the replication count along that axis.
     const std::vector<std::size_t>& get_replication_axes() const { return m_replication_axes; }

@@ -52,7 +52,7 @@ namespace ngraph
             virtual void pre_validate_and_infer_types() override;
 
             virtual std::shared_ptr<Node>
-                copy_with_new_args(const NodeVector& new_args) const override;
+                copy_with_new_args(const OutputVector& new_args) const override;
 
             const Shape& get_window_shape() const { return m_window_shape; }
             void set_window_shape(const Shape& window_shape) { m_window_shape = window_shape; }
@@ -106,7 +106,7 @@ namespace ngraph
             virtual void pre_validate_and_infer_types() override;
 
             virtual std::shared_ptr<Node>
-                copy_with_new_args(const NodeVector& new_args) const override;
+                copy_with_new_args(const OutputVector& new_args) const override;
 
             const Shape& get_window_shape() const { return m_window_shape; }
             void set_window_shape(const Shape& window_shape) { m_window_shape = window_shape; }

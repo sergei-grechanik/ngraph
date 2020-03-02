@@ -50,7 +50,7 @@ namespace ngraph
                     virtual void validate_and_infer_types() override;
 
                     virtual std::shared_ptr<Node>
-                        copy_with_new_args(const NodeVector& new_args) const override;
+                        copy_with_new_args(const OutputVector& new_args) const override;
 
                 protected:
                     size_t arg_output_index;

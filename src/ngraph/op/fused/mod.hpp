@@ -46,7 +46,7 @@ namespace ngraph
                 virtual NodeVector decompose_op() const override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 const AutoBroadcastSpec& get_auto_broadcast() const { return m_auto_broadcast; }
             private:

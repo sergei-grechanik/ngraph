@@ -43,7 +43,7 @@ namespace ngraph
                        const element::Type& index_element_type);
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
                 bool visit_attributes(AttributeVisitor& visitor) override;
                 virtual std::shared_ptr<Node> get_default_value() const override;
             };

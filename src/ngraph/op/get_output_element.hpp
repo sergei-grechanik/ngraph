@@ -47,7 +47,7 @@ namespace ngraph
                 Output<const Node> get_as_output() const override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
                 void validate_and_infer_types() override;
 
                 /// \return The index of the tuple element to get.

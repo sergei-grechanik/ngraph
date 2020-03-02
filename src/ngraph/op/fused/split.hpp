@@ -63,7 +63,7 @@ namespace ngraph
                 virtual NodeVector decompose_op() const override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 size_t get_axis() const { return m_axis; }
                 const std::vector<size_t>& get_splits() const { return m_splits; }
@@ -97,7 +97,7 @@ namespace ngraph
 
                 void validate_and_infer_types() override;
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 size_t get_num_splits() const { return m_num_splits; }
                 void set_num_splits(const size_t num_splits) { m_num_splits = num_splits; }

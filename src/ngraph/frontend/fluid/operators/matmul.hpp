@@ -49,7 +49,7 @@ namespace ngraph
 
             void pre_validate_and_infer_types() override;
 
-            virtual shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const override;
+            virtual shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const override;
 
             bool get_transpose_a() const { return m_transpose_a; }
             bool get_transpose_b() const { return m_transpose_b; }
@@ -80,7 +80,7 @@ namespace ngraph
 
             void pre_validate_and_infer_types() override;
 
-            virtual shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const override;
+            virtual shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const override;
 
             bool get_transpose_a() const { return m_transpose_a; }
             bool get_transpose_b() const { return m_transpose_b; }

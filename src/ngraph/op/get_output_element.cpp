@@ -43,7 +43,7 @@ void op::GetOutputElement::validate_and_infer_types()
     set_output_type(0, input(0).get_element_type(), input(0).get_partial_shape());
 }
 
-shared_ptr<Node> op::GetOutputElement::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::GetOutputElement::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return shared_ptr<GetOutputElement>(new GetOutputElement(new_args.at(0), m_n));

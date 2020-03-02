@@ -58,7 +58,7 @@ namespace ngraph
                 void validate_and_infer_types() override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 size_t get_num_coords() const { return m_num_coords; }
                 size_t get_num_classes() const { return m_num_classes; }

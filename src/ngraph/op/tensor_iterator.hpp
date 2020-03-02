@@ -262,7 +262,7 @@ namespace ngraph
                                                      int64_t end,
                                                      int64_t axis);
 
-                std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const override;
+                std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const override;
                 NodeVector decompose_op() const override;
                 /// \return the body of the iteration
                 std::shared_ptr<BodyLambda> get_body() const { return m_body; }

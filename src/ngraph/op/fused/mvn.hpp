@@ -68,7 +68,7 @@ namespace ngraph
                 virtual void validate_and_infer_types() override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 double get_eps() const { return m_eps; }
                 bool get_normalize_variance() const { return m_normalize_variance; }

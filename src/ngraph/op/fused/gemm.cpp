@@ -84,7 +84,7 @@ NodeVector op::Gemm::decompose_op() const
     return {std::make_shared<ngraph::op::Add>(a_dot_b, broadcasted_nodes.at(1))};
 }
 
-shared_ptr<Node> op::Gemm::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::Gemm::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 3)
     {

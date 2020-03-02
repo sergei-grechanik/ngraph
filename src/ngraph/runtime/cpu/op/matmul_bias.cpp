@@ -23,7 +23,7 @@ using namespace ngraph;
 
 constexpr NodeTypeInfo op::MatmulBias::type_info;
 
-shared_ptr<Node> op::MatmulBias::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::MatmulBias::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 2 && new_args.size() != 3)
     {

@@ -99,7 +99,7 @@ namespace ngraph
                 void validate_and_infer_types() override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 const ngraph::AxisSet& get_axes() const { return m_axes; }
                 RoundMode get_round_mode() const { return m_round_mode; }

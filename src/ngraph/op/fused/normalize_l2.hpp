@@ -59,7 +59,7 @@ namespace ngraph
                 AxisSet get_reduction_axes() const;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
             protected:
                 float m_eps;

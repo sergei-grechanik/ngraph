@@ -67,7 +67,7 @@ NodeVector LookupTable2::decompose_op() const
     return {out};
 }
 
-shared_ptr<Node> LookupTable2::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> LookupTable2::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
 
@@ -104,7 +104,7 @@ void LookupTable2Grad::pre_validate_and_infer_types()
     }
 }
 
-shared_ptr<Node> LookupTable2Grad::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> LookupTable2Grad::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return make_shared<LookupTable2Grad>(new_args.at(0), new_args.at(1), new_args.at(2));

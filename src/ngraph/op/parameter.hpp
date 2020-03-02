@@ -57,7 +57,7 @@ namespace ngraph
 
                 bool get_cacheable() const { return m_cacheable; }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 bool is_relevant_to_shapes() const;
                 void set_is_relevant_to_shapes(bool is_relevant);

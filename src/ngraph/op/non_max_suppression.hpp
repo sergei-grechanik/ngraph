@@ -70,7 +70,7 @@ namespace ngraph
 
                 void validate_and_infer_types() override;
 
-                std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const override;
+                std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const override;
 
                 BoxEncodingType get_box_encoding() const { return m_box_encoding; }
                 void set_box_encoding(const BoxEncodingType box_encoding)

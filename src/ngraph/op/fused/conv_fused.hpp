@@ -67,7 +67,7 @@ namespace ngraph
                 Output<Node> get_data_batch() { return input_value(0); }
                 bool with_relu() const { return m_with_relu; }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 virtual NodeVector decompose_op() const override;
 
@@ -104,7 +104,7 @@ namespace ngraph
                                                    const Strides& data_dilation_strides_forward);
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 /// \return The filters tensor shape.
                 const Shape& get_filters_shape() const { return m_filters_shape; }
@@ -216,7 +216,7 @@ namespace ngraph
                 Output<Node> get_data_batch() { return input_value(0); }
                 bool with_relu() const { return m_with_relu; }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 virtual NodeVector decompose_op() const override;
 

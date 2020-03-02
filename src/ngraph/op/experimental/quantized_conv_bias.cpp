@@ -70,7 +70,7 @@ op::QuantizedConvolutionBias::QuantizedConvolutionBias(const Output<Node>& data_
                                                          ));
 }
 
-shared_ptr<Node> op::QuantizedConvolutionBias::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::QuantizedConvolutionBias::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 4)
     {
@@ -140,7 +140,7 @@ op::QuantizedConvolutionBiasAdd::QuantizedConvolutionBiasAdd(const Output<Node>&
 }
 
 shared_ptr<Node>
-    op::QuantizedConvolutionBiasAdd::copy_with_new_args(const NodeVector& new_args) const
+    op::QuantizedConvolutionBiasAdd::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 6)
     {
@@ -214,7 +214,7 @@ op::QuantizedConvolutionBiasSignedAdd::QuantizedConvolutionBiasSignedAdd(
 }
 
 shared_ptr<Node>
-    op::QuantizedConvolutionBiasSignedAdd::copy_with_new_args(const NodeVector& new_args) const
+    op::QuantizedConvolutionBiasSignedAdd::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 6)
     {

@@ -34,7 +34,7 @@ bool op::ArgMax::visit_attributes(AttributeVisitor& visitor)
     return true;
 }
 
-shared_ptr<Node> op::ArgMax::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::ArgMax::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     check_new_args_count(this, new_args);

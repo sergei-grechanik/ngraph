@@ -89,7 +89,7 @@ namespace ngraph
                 void validate_and_infer_types() override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 /// \return The order in which to iterate over input axes.
                 const AxisVector& get_input_order() const { return m_input_order; }
@@ -141,7 +141,7 @@ namespace ngraph
 
                 size_t get_version() const override { return 1; }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 bool get_special_zero() const { return m_special_zero; }
                 void set_special_zero(bool special_zero) { m_special_zero = special_zero; }

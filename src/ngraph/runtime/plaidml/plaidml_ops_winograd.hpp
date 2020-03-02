@@ -44,7 +44,7 @@ public:
 
     void validate_and_infer_types() final;
 
-    std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const final;
+    std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const final;
 
     const std::shared_ptr<Convolution> get_conv() const { return m_conv; }
 private:

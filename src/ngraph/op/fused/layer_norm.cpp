@@ -149,7 +149,7 @@ NodeVector op::LayerNorm::decompose_op() const
     return retval;
 }
 
-shared_ptr<Node> op::LayerNorm::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::LayerNorm::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() != 1 && new_args.size() != 3)
     {
@@ -472,7 +472,7 @@ NodeVector op::LayerNormBackprop::decompose_op() const
     return retval;
 }
 
-shared_ptr<Node> op::LayerNormBackprop::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::LayerNormBackprop::copy_with_new_args(const OutputVector& new_args) const
 {
     if (new_args.size() < 2 || new_args.size() > 5)
     {

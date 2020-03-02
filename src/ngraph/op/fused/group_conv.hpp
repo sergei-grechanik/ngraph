@@ -67,7 +67,7 @@ namespace ngraph
                 void validate_and_infer_types() override;
 
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
                 void generate_adjoints(autodiff::Adjoints& adjoints,
                                        const OutputVector& deltas) override;
 
@@ -157,7 +157,7 @@ namespace ngraph
                 void generate_adjoints(autodiff::Adjoints& adjoints,
                                        const OutputVector& deltas) override;
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 /// \return The data batch shape.
                 const PartialShape get_output_shape() const;
@@ -239,7 +239,7 @@ namespace ngraph
                 size_t get_groups() const { return m_groups; };
                 const PadType& get_pad_type() const { return m_pad_type; }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 virtual NodeVector decompose_op() const override;
 
@@ -291,7 +291,7 @@ namespace ngraph
                 const CoordinateDiff& get_padding_above() const { return m_padding_above; }
                 size_t get_groups() const { return m_groups; };
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 virtual NodeVector decompose_op() const override;
 
@@ -333,7 +333,7 @@ namespace ngraph
                 const CoordinateDiff& get_padding_above() const { return m_padding_above; }
                 size_t get_groups() const { return m_groups; }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override;
+                    copy_with_new_args(const OutputVector& new_args) const override;
 
                 virtual NodeVector decompose_op() const override;
 

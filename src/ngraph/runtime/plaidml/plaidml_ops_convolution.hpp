@@ -49,7 +49,7 @@ public:
 
     void validate_and_infer_types() final;
 
-    std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const final;
+    std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const final;
 
     const std::shared_ptr<ngraph::op::Convolution>& get_src() const { return m_src; }
     const AxisVector& get_data_axes() const { return m_data_axes; }
@@ -75,7 +75,7 @@ public:
 
     void validate_and_infer_types() final;
 
-    std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const final;
+    std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const final;
 
     const std::shared_ptr<ngraph::op::ConvolutionBackpropData>& get_src() const { return m_src; }
     const AxisVector& get_filters_axes() const { return m_filters_axes; }
@@ -101,7 +101,7 @@ public:
 
     void validate_and_infer_types() final;
 
-    std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const final;
+    std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const final;
 
     const std::shared_ptr<ngraph::op::ConvolutionBackpropFilters>& get_src() const { return m_src; }
     const AxisVector& get_data_axes() const { return m_data_axes; }

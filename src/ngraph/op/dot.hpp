@@ -79,7 +79,7 @@ namespace ngraph
                     m_has_reduction_axes_count = has_reduction_axes_count;
                 }
                 virtual std::shared_ptr<Node>
-                    copy_with_new_args(const NodeVector& new_args) const override
+                    copy_with_new_args(const OutputVector& new_args) const override
                 {
                     check_new_args_count(this, new_args);
                     return std::make_shared<Dot>(

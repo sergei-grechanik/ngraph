@@ -93,7 +93,7 @@ void op::v0::OneHot::validate_and_infer_types()
     set_output_type(0, arg_et, result_shape);
 }
 
-shared_ptr<Node> op::v0::OneHot::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> op::v0::OneHot::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return make_shared<v0::OneHot>(new_args.at(0), m_shape, m_one_hot_axis);

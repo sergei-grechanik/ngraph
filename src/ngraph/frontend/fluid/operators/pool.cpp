@@ -110,7 +110,7 @@ NodeVector Pool::decompose_op() const
     return {pool};
 }
 
-shared_ptr<Node> Pool::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> Pool::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
 
@@ -168,7 +168,7 @@ void PoolGrad::pre_validate_and_infer_types()
     }
 }
 
-shared_ptr<Node> PoolGrad::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> PoolGrad::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
     return make_shared<PoolGrad>(new_args.at(0),

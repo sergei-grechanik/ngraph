@@ -56,7 +56,7 @@ NodeVector LayoutConverter::decompose_op() const
     return {make_shared<op::Reshape>(x, axis_vec, out_shape)};
 }
 
-shared_ptr<Node> LayoutConverter::copy_with_new_args(const NodeVector& new_args) const
+shared_ptr<Node> LayoutConverter::copy_with_new_args(const OutputVector& new_args) const
 {
     check_new_args_count(this, new_args);
 
