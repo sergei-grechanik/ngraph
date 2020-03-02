@@ -547,25 +547,26 @@ namespace
     shared_ptr<Node> op_cast(shared_ptr<op::v1::OneHot> node)
     {
         const auto indices = node->input_value(0);
-        const auto depth = node->input_value(1).get_node_shared_ptr();
-        auto on_value = node->input_value(2).get_node_shared_ptr();
-        auto off_value = node->input_value(3).get_node_shared_ptr();
+        const auto depth = node->input_value(1);
+        auto on_value = node->input_value(2);
+        auto off_value = node->input_value(3);
         const auto axis = node->get_axis();
 
-        NGRAPH_CHECK(depth->is_constant(), "depth input must be constant", *node);
+        NGRAPH_CHECK(depth.get_node()->is_constant(), "depth input must be constant", *node);
         const auto output_pshape = node->get_output_partial_shape(0);
         NGRAPH_CHECK(output_pshape.is_static(), "output shape must be static", *node);
         const auto output_shape = output_pshape.to_shape();
 
         auto one_hot = std::make_shared<ngraph::op::Convert>(
             std::make_shared<ngraph::op::OneHot>(indices, output_shape, axis),
-            on_value->get_element_type());
+            on_value.get_node()->get_element_type());
 
-        auto broadcasted_values = op::numpy_style_broadcast({one_hot, on_value, off_value});
+        auto broadcasted_values =
+            op::numpy_style_broadcast_values({one_hot->output(0), on_value, off_value});
         on_value = broadcasted_values[1];
         off_value = broadcasted_values[2];
 
-        auto replacement_node = one_hot * (on_value - off_value) + off_value;
+        auto replacement_node = one_hot->output(0) * (on_value - off_value) + off_value;
 
         replace_node(node, replacement_node);
         return replacement_node;
