@@ -120,5 +120,5 @@ namespace ngraph
         using v0::Divide;
     } // namespace op
 
-    std::shared_ptr<Node> operator/(const Output<Node>& arg0, const Output<Node>& arg1);
+    Output<Node> operator/(const Output<Node>& arg0, const Output<Node>& arg1);
 } // namespace ngraph

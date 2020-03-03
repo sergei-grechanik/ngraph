@@ -54,7 +54,7 @@ void op::Subtract::generate_adjoints(autodiff::Adjoints& adjoints, const OutputV
     adjoints.add_delta(y, -delta);
 }
 
-shared_ptr<ngraph::Node> ngraph::operator-(const Output<Node> arg0, const Output<Node> arg1)
+Output<Node> ngraph::operator-(const Output<Node> arg0, const Output<Node> arg1)
 {
     return make_shared<op::v0::Subtract>(arg0, arg1);
 }

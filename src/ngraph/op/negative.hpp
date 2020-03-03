@@ -48,5 +48,5 @@ namespace ngraph
         using v0::Negative;
     }
     NGRAPH_API
-    std::shared_ptr<Node> operator-(const Output<Node>& arg0);
+    Output<Node> operator-(const Output<Node>& arg0);
 }

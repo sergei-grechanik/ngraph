@@ -42,7 +42,7 @@ void op::Negative::generate_adjoints(autodiff::Adjoints& adjoints, const OutputV
     adjoints.add_delta(x, -delta);
 }
 
-shared_ptr<Node> ngraph::operator-(const Output<Node>& arg0)
+Output<Node> ngraph::operator-(const Output<Node>& arg0)
 {
     return make_shared<op::Negative>(arg0);
 }

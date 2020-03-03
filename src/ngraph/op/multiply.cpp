@@ -89,7 +89,7 @@ void op::v1::Multiply::generate_adjoints(autodiff::Adjoints& adjoints, const Out
 
 // -----------------------------------------------------------------------------
 
-shared_ptr<Node> ngraph::operator*(const Output<Node>& arg0, const Output<Node>& arg1)
+Output<Node> ngraph::operator*(const Output<Node>& arg0, const Output<Node>& arg1)
 {
     return make_shared<op::Multiply>(arg0, arg1);
 }
