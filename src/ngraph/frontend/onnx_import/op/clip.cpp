@@ -49,11 +49,11 @@ namespace ngraph
                 NodeVector clip(const Node& node)
                 {
                     const NodeVector inputs{node.get_ng_inputs()};
-                    const std::shared_ptr<ngraph::Node> data = inputs.at(0);
+                    const Output<ngraph::Node> data = inputs.at(0);
                     const element::Type data_type = data->get_element_type();
                     const Shape data_shape = data->get_shape();
-                    std::shared_ptr<ngraph::Node> min;
-                    std::shared_ptr<ngraph::Node> max;
+                    Output<ngraph::Node> min;
+                    Output<ngraph::Node> max;
 
                     // If second input is provided, assign to min input, otherwise set lowest
                     // numeric limit of double as min input.

@@ -58,7 +58,7 @@ namespace ngraph
 
                 struct LSTMNgInputMap
                 {
-                    using container_type = std::map<LSTMInput, std::shared_ptr<ngraph::Node>>;
+                    using container_type = std::map<LSTMInput, Output<ngraph::Node>>;
                     using iterator = typename container_type::iterator;
 
                     explicit LSTMNgInputMap(const Node& node)
@@ -158,7 +158,7 @@ namespace ngraph
                         }
                     }
 
-                    std::shared_ptr<ngraph::Node>& at(const LSTMInput& key)
+                    Output<ngraph::Node>& at(const LSTMInput& key)
                     {
                         return m_map.at(key);
                     }

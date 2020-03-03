@@ -37,18 +37,18 @@ namespace ngraph
 
                 /// \brief      Creates ArgMax ONNX operation.
                 /// \return     Sub-graph representing ArgMax op.
-                std::shared_ptr<ngraph::Node> make_arg_max() const;
+                Output<ngraph::Node> make_arg_max() const;
 
                 /// \brief      Creates ArgMin ONNX operation.
                 /// \return     Sub-graph representing ArgMin op.
-                std::shared_ptr<ngraph::Node> make_arg_min() const;
+                Output<ngraph::Node> make_arg_min() const;
 
             private:
-                std::shared_ptr<ngraph::Node>
+                Output<ngraph::Node>
                     make_topk_subgraph(default_opset::TopK::Mode mode) const;
 
                 const std::int64_t m_keep_dims;
-                std::shared_ptr<ngraph::Node> m_input_node;
+                Output<ngraph::Node> m_input_node;
                 std::int64_t m_normalized_axis;
             };
 

@@ -33,7 +33,7 @@ namespace ngraph
             {
                 NodeVector atanh(const Node& node)
                 {
-                    std::shared_ptr<ngraph::Node> data{node.get_ng_inputs().at(0)};
+                    Output<ngraph::Node> data{node.get_ng_inputs().at(0)};
 
                     // Define inverse hyperbolic tangent in terms of natural logarithm:
                     //
@@ -41,12 +41,12 @@ namespace ngraph
                     //          = 0.5 * (ln(1 + x) - ln(1 - x))
                     //
 
-                    std::shared_ptr<ngraph::Node> one_node{default_opset::Constant::create(
+                    Output<ngraph::Node> one_node{default_opset::Constant::create(
                         data->get_element_type(),
                         data->get_shape(),
                         std::vector<float>(ngraph::shape_size(data->get_shape()), 1.f))};
 
-                    std::shared_ptr<ngraph::Node> half_node{default_opset::Constant::create(
+                    Output<ngraph::Node> half_node{default_opset::Constant::create(
                         data->get_element_type(),
                         data->get_shape(),
                         std::vector<float>(ngraph::shape_size(data->get_shape()), 0.5f))};

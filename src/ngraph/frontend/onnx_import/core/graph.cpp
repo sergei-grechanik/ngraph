@@ -214,7 +214,7 @@ namespace ngraph
         }
 
         void Graph::add_provenance_tag_to_input(const ValueInfo& input,
-                                                std::shared_ptr<ngraph::Node> node) const
+                                                Output<ngraph::Node> node) const
         {
             const std::string tag =
                 detail::build_input_provenance_tag(input.get_name(), input.get_shape());
@@ -230,7 +230,7 @@ namespace ngraph
 
             ngraph::traverse_nodes(
                 ngraph::as_node_vector(ng_node_vector),
-                [&tag](std::shared_ptr<ngraph::Node> ng_node) { ng_node->add_provenance_tag(tag); },
+                [&tag](Output<ngraph::Node> ng_node) { ng_node->add_provenance_tag(tag); },
                 false,
                 ngraph::as_node_vector(ng_inputs));
         }

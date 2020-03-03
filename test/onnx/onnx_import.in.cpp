@@ -299,9 +299,9 @@ NGRAPH_TEST(onnx_${BACKEND_NAME}, model_missing_input)
     onnx_import::register_operator(
         "TestMissingInOut", 1, "com.intel.ai", [](const onnx_import::Node& node) -> NodeVector {
             NodeVector ng_inputs{node.get_ng_inputs()};
-            std::shared_ptr<ngraph::Node> A = ng_inputs.at(0);
-            std::shared_ptr<ngraph::Node> B = ng_inputs.at(1);
-            std::shared_ptr<ngraph::Node> C = ng_inputs.at(2);
+            Output<ngraph::Node> A = ng_inputs.at(0);
+            Output<ngraph::Node> B = ng_inputs.at(1);
+            Output<ngraph::Node> C = ng_inputs.at(2);
 
             A = A * C;
             if (!B->is_null())
@@ -316,7 +316,7 @@ NGRAPH_TEST(onnx_${BACKEND_NAME}, model_missing_input)
     onnx_import::register_operator(
         "TestMissingIn", 1, "com.intel.ai", [](const onnx_import::Node& node) -> NodeVector {
             NodeVector ng_inputs{node.get_ng_inputs()};
-            std::shared_ptr<ngraph::Node> result = std::make_shared<ngraph::op::Constant>(
+            Output<ngraph::Node> result = std::make_shared<ngraph::op::Constant>(
                 element::f32, ngraph::Shape{2, 2}, std::vector<float>{1, 1, 1, 1});
 
             for (const auto& ng_input : ng_inputs)

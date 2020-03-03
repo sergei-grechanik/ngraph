@@ -40,8 +40,8 @@ namespace ngraph
                 namespace
                 {
                     std::shared_ptr<ngraph::op::Op>
-                        make_ng_convolution(const std::shared_ptr<ngraph::Node>& data,
-                                            const std::shared_ptr<ngraph::Node>& filters,
+                        make_ng_convolution(const Output<ngraph::Node>& data,
+                                            const Output<ngraph::Node>& filters,
                                             const ngraph::Strides& strides,
                                             const ngraph::Strides& dilations,
                                             const ngraph::CoordinateDiff& padding_below,

@@ -39,10 +39,10 @@ namespace ngraph
                     auto depth = reshape::interpret_as_scalar(inputs.at(1));
 
                     auto values = inputs.at(2);
-                    std::shared_ptr<ngraph::Node> off_value =
+                    Output<ngraph::Node> off_value =
                         reshape::interpret_as_scalar(std::make_shared<ngraph::opset0::Slice>(
                             values, Coordinate{0}, Coordinate{1}));
-                    std::shared_ptr<ngraph::Node> on_value =
+                    Output<ngraph::Node> on_value =
                         reshape::interpret_as_scalar(std::make_shared<ngraph::opset0::Slice>(
                             values, Coordinate{1}, Coordinate{2}));
 

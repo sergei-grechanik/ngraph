@@ -33,9 +33,9 @@ namespace ngraph
                 NodeVector quantize_linear(const Node& node)
                 {
                     NodeVector inputs{node.get_ng_inputs()};
-                    std::shared_ptr<ngraph::Node> x = inputs.at(0);
-                    std::shared_ptr<ngraph::Node> y_scale = inputs.at(1);
-                    std::shared_ptr<ngraph::Node> y_zero_point = inputs.at(2);
+                    Output<ngraph::Node> x = inputs.at(0);
+                    Output<ngraph::Node> y_scale = inputs.at(1);
+                    Output<ngraph::Node> y_zero_point = inputs.at(2);
 
                     // get axis twice with two default values to see if it is set
                     int64_t axis_0{node.get_attribute_value<int64_t>("axis", 0)};

@@ -37,8 +37,8 @@ namespace ngraph
                     auto x = inputs.at(0);
                     auto scale = inputs.at(1);
                     auto bias = inputs.at(2);
-                    std::shared_ptr<ngraph::Node> mean{nullptr};
-                    std::shared_ptr<ngraph::Node> var{nullptr};
+                    Output<ngraph::Node> mean{nullptr};
+                    Output<ngraph::Node> var{nullptr};
 
                     std::int64_t is_test{node.get_attribute_value<std::int64_t>("is_test", 1)};
                     double epsilon{node.get_attribute_value<double>("epsilon", 1e-5)};

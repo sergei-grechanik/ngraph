@@ -37,7 +37,7 @@ namespace ngraph
             {
                 NodeVector global_lp_pool(const Node& node)
                 {
-                    const std::shared_ptr<ngraph::Node> data{node.get_ng_inputs().at(0)};
+                    const Output<ngraph::Node> data{node.get_ng_inputs().at(0)};
                     const std::size_t channel_axis{1};
                     const std::size_t channels_count = data->get_shape().at(channel_axis);
                     const std::int64_t p_norm{node.get_attribute_value<std::int64_t>("p", 2)};

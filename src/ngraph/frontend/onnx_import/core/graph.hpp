@@ -51,7 +51,7 @@ namespace ngraph
                 const Tensor& initializer, std::shared_ptr<default_opset::Constant> node) const;
 
             void add_provenance_tag_to_input(const ValueInfo& input,
-                                             std::shared_ptr<ngraph::Node> node) const;
+                                             Output<ngraph::Node> node) const;
 
             void add_provenance_tags(const Node& onnx_node, const OutputVector& ng_node_vector) const;
 

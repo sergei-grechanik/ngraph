@@ -94,9 +94,9 @@ namespace ngraph
                 {
                     auto data = node.get_ng_inputs().at(0);
                     auto pads = node.get_ng_inputs().at(1);
-                    std::shared_ptr<ngraph::Node> values;
-                    std::shared_ptr<ngraph::Node> padding_begin;
-                    std::shared_ptr<ngraph::Node> padding_end;
+                    Output<ngraph::Node> values;
+                    Output<ngraph::Node> padding_begin;
+                    Output<ngraph::Node> padding_end;
 
                     if (node.get_ng_inputs().size() == 3)
                     {

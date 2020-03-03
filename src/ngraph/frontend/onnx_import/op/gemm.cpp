@@ -35,9 +35,9 @@ namespace ngraph
                 NodeVector gemm(const Node& node)
                 {
                     NodeVector inputs{node.get_ng_inputs()};
-                    std::shared_ptr<ngraph::Node> input_a = inputs.at(0);
-                    std::shared_ptr<ngraph::Node> input_b = inputs.at(1);
-                    std::shared_ptr<ngraph::Node> input_c;
+                    Output<ngraph::Node> input_a = inputs.at(0);
+                    Output<ngraph::Node> input_b = inputs.at(1);
+                    Output<ngraph::Node> input_c;
 
                     if (inputs.size() == 3)
                     {
@@ -91,9 +91,9 @@ namespace ngraph
                 NodeVector gemm(const Node& node)
                 {
                     NodeVector inputs{node.get_ng_inputs()};
-                    std::shared_ptr<ngraph::Node> input_a = inputs.at(0);
-                    std::shared_ptr<ngraph::Node> input_b = inputs.at(1);
-                    std::shared_ptr<ngraph::Node> input_c;
+                    Output<ngraph::Node> input_a = inputs.at(0);
+                    Output<ngraph::Node> input_b = inputs.at(1);
+                    Output<ngraph::Node> input_c;
 
                     if (inputs.size() == 3)
                     {

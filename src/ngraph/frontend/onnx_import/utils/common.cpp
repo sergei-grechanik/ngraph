@@ -51,7 +51,7 @@ namespace ngraph
                                        static_cast<onnx::TensorProto_DataType>(onnx_type)));
             }
 
-            ngraph::NodeVector get_outputs(const std::shared_ptr<ngraph::Node>& node)
+            ngraph::NodeVector get_outputs(const Output<ngraph::Node>& node)
             {
                 const auto outputs_number = node->get_output_size();
                 ngraph::NodeVector outputs(outputs_number);

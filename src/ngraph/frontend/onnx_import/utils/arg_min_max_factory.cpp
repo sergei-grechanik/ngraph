@@ -37,17 +37,17 @@ namespace ngraph
                     node.get_description(), axis, m_input_node->get_shape().size());
             }
 
-            std::shared_ptr<ngraph::Node> ArgMinMaxFactory::make_arg_max() const
+            Output<ngraph::Node> ArgMinMaxFactory::make_arg_max() const
             {
                 return make_topk_subgraph(default_opset::TopK::Mode::MAX);
             }
 
-            std::shared_ptr<ngraph::Node> ArgMinMaxFactory::make_arg_min() const
+            Output<ngraph::Node> ArgMinMaxFactory::make_arg_min() const
             {
                 return make_topk_subgraph(default_opset::TopK::Mode::MIN);
             }
 
-            std::shared_ptr<ngraph::Node>
+            Output<ngraph::Node>
                 ArgMinMaxFactory::make_topk_subgraph(default_opset::TopK::Mode mode) const
             {
                 const auto k_node =

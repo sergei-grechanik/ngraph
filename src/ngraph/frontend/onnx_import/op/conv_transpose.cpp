@@ -82,7 +82,7 @@ namespace ngraph
                         << "provided group attribute value must be a multiple of filter channels "
                            "count.";
 
-                    std::shared_ptr<ngraph::Node> conv_node;
+                    Output<ngraph::Node> conv_node;
                     if (!output_shape.empty())
                     {
                         conv_node = std::make_shared<ngraph::opset0::GroupConvolutionTranspose>(

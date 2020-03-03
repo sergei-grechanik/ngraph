@@ -37,9 +37,9 @@ namespace ngraph
                 NodeVector dequantize_linear(const Node& node)
                 {
                     NodeVector inputs{node.get_ng_inputs()};
-                    std::shared_ptr<ngraph::Node> x = inputs.at(0);
-                    std::shared_ptr<ngraph::Node> x_scale = inputs.at(1);
-                    std::shared_ptr<ngraph::Node> zero_point;
+                    Output<ngraph::Node> x = inputs.at(0);
+                    Output<ngraph::Node> x_scale = inputs.at(1);
+                    Output<ngraph::Node> zero_point;
                     if (inputs.size() == 3 && !inputs.at(2)->is_null())
                     {
                         zero_point = inputs.at(2);

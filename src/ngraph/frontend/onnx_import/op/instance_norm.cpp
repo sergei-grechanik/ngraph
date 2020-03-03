@@ -41,9 +41,9 @@ namespace ngraph
             {
                 NodeVector instance_norm(const Node& node)
                 {
-                    const std::shared_ptr<ngraph::Node> data{node.get_ng_inputs().at(0)};
-                    std::shared_ptr<ngraph::Node> scale{node.get_ng_inputs().at(1)};
-                    std::shared_ptr<ngraph::Node> bias{node.get_ng_inputs().at(2)};
+                    const Output<ngraph::Node> data{node.get_ng_inputs().at(0)};
+                    Output<ngraph::Node> scale{node.get_ng_inputs().at(1)};
+                    Output<ngraph::Node> bias{node.get_ng_inputs().at(2)};
                     const float epsilon{node.get_attribute_value<float>("epsilon", 1e-5f)};
 
                     CHECK_VALID_NODE(node,
@@ -62,7 +62,7 @@ namespace ngraph
                     const AxisSet reduction_axes{
                         common::get_monotonic_range<std::size_t>(data->get_shape().size(), 2)};
 
-                    const std::shared_ptr<ngraph::Node> eps_node =
+                    const Output<ngraph::Node> eps_node =
                         std::make_shared<default_opset::Constant>(data->get_element_type(),
                                                                   data->get_shape(),
                                                                   std::vector<float>{epsilon});
@@ -72,10 +72,10 @@ namespace ngraph
                     bias = ngraph::op::legacy_style_broadcast_for_binary_operation(data, bias, 1)
                                .at(1);
 
-                    std::shared_ptr<ngraph::Node> mean = builder::mean(data, reduction_axes);
+                    Output<ngraph::Node> mean = builder::mean(data, reduction_axes);
                     mean = std::make_shared<ngraph::opset0::Broadcast>(
                         mean, data->get_shape(), reduction_axes);
-                    std::shared_ptr<ngraph::Node> variance =
+                    Output<ngraph::Node> variance =
                         builder::variance(data, reduction_axes);
                     variance = std::make_shared<ngraph::opset0::Broadcast>(
                         variance, data->get_shape(), reduction_axes);

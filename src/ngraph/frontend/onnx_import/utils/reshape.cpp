@@ -85,8 +85,8 @@ namespace ngraph
                 return inferred_dims;
             }
 
-            std::shared_ptr<ngraph::Node>
-                interpret_as_scalar(const std::shared_ptr<ngraph::Node>& node)
+            Output<ngraph::Node>
+                interpret_as_scalar(const Output<ngraph::Node>& node)
             {
                 Shape node_shape = node->get_shape();
 

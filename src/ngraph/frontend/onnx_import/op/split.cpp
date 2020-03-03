@@ -36,7 +36,7 @@ namespace ngraph
                     const auto axis_node =
                         default_opset::Constant::create(element::i64, Shape{}, {axis});
 
-                    std::shared_ptr<ngraph::Node> split;
+                    Output<ngraph::Node> split;
                     if (node.has_attribute("split"))
                     {
                         const auto splits =

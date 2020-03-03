@@ -38,7 +38,7 @@ namespace ngraph
             {
                 NodeVector lp_norm(const Node& node)
                 {
-                    const std::shared_ptr<ngraph::Node> data{node.get_ng_inputs().at(0)};
+                    const Output<ngraph::Node> data{node.get_ng_inputs().at(0)};
                     const std::int64_t p_norm{node.get_attribute_value<std::int64_t>("p", 2)};
 
                     const std::int64_t axis{node.get_attribute_value<std::int64_t>("axis", -1)};
@@ -49,7 +49,7 @@ namespace ngraph
                         << "Invalid `p` attribute value: " << p_norm
                         << "Only normalization of 1st or 2nd order is supported.";
 
-                    std::shared_ptr<ngraph::Node> norm = ngraph::builder::lp_norm(
+                    Output<ngraph::Node> norm = ngraph::builder::lp_norm(
                         data, AxisSet{normalize_axis}, static_cast<std::size_t>(p_norm));
 
                     const auto target_shape = default_opset::Constant::create(

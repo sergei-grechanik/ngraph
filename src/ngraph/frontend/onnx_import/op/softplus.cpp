@@ -32,15 +32,15 @@ namespace ngraph
                 {
                     const auto data = node.get_ng_inputs().at(0);
 
-                    const std::shared_ptr<ngraph::Node> zero_node =
+                    const Output<ngraph::Node> zero_node =
                         std::make_shared<default_opset::Constant>(
                             data->get_element_type(), data->get_shape(), std::vector<float>{0.f});
-                    const std::shared_ptr<ngraph::Node> one_node =
+                    const Output<ngraph::Node> one_node =
                         std::make_shared<default_opset::Constant>(
                             data->get_element_type(), data->get_shape(), std::vector<float>{1.f});
 
                     // data + log(exp(-data) + 1)
-                    const std::shared_ptr<ngraph::Node> positive_val_node =
+                    const Output<ngraph::Node> positive_val_node =
                         std::make_shared<default_opset::Add>(
                             data,
                             std::make_shared<default_opset::Log>(
@@ -50,11 +50,11 @@ namespace ngraph
                                     one_node)));
 
                     // log(exp(data) + 1)
-                    const std::shared_ptr<ngraph::Node> negative_val_node =
+                    const Output<ngraph::Node> negative_val_node =
                         std::make_shared<default_opset::Log>(std::make_shared<default_opset::Add>(
                             std::make_shared<default_opset::Exp>(data), one_node));
 
-                    const std::shared_ptr<ngraph::Node> condition_node =
+                    const Output<ngraph::Node> condition_node =
                         std::make_shared<default_opset::Greater>(data, zero_node);
 
                     // This equation represents:

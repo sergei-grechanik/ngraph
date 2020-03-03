@@ -47,12 +47,12 @@ namespace ngraph
                 ///
                 inline NodeVector reduce_log_sum(const Node& node)
                 {
-                    std::shared_ptr<ngraph::Node> sum_node{reduction::make_ng_reduction_op(
+                    Output<ngraph::Node> sum_node{reduction::make_ng_reduction_op(
                         node,
                         node.get_ng_inputs().at(0),
                         std::make_shared<default_opset::ReduceSum,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
                     return {std::make_shared<default_opset::Log>(sum_node)};
                 }
@@ -73,12 +73,12 @@ namespace ngraph
                 {
                     auto exp_node =
                         std::make_shared<default_opset::Exp>(node.get_ng_inputs().at(0));
-                    std::shared_ptr<ngraph::Node> sum_node{reduction::make_ng_reduction_op(
+                    Output<ngraph::Node> sum_node{reduction::make_ng_reduction_op(
                         node,
                         exp_node,
                         std::make_shared<default_opset::ReduceSum,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
                     return {std::make_shared<default_opset::Log>(sum_node)};
                 }
@@ -147,8 +147,8 @@ namespace ngraph
                         node,
                         node.get_ng_inputs().at(0),
                         std::make_shared<default_opset::ReduceMax,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
                 }
 
@@ -184,8 +184,8 @@ namespace ngraph
                         node,
                         node.get_ng_inputs().at(0),
                         std::make_shared<default_opset::ReduceMin,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
                 }
 
@@ -207,8 +207,8 @@ namespace ngraph
                         node,
                         node.get_ng_inputs().at(0),
                         std::make_shared<default_opset::ReduceProd,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
                 }
 
@@ -230,8 +230,8 @@ namespace ngraph
                         node,
                         node.get_ng_inputs().at(0),
                         std::make_shared<default_opset::ReduceSum,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
                 }
 
@@ -249,14 +249,14 @@ namespace ngraph
                 ///
                 inline NodeVector reduce_sum_square(const Node& node)
                 {
-                    auto input = std::shared_ptr<ngraph::Node>{node.get_ng_inputs().at(0)};
+                    auto input = Output<ngraph::Node>{node.get_ng_inputs().at(0)};
                     auto square_node = std::make_shared<default_opset::Multiply>(input, input);
                     return {reduction::make_ng_reduction_op(
                         node,
                         square_node,
                         std::make_shared<default_opset::ReduceSum,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
                 }
 

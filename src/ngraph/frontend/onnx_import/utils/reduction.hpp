@@ -42,11 +42,11 @@ namespace ngraph
 
             } // namespace  detail
 
-            using RuntimeReductionFunction = std::function<std::shared_ptr<ngraph::Node>(
-                const std::shared_ptr<ngraph::Node>&, const std::shared_ptr<ngraph::Node>&, bool)>;
+            using RuntimeReductionFunction = std::function<Output<ngraph::Node>(
+                const Output<ngraph::Node>&, const Output<ngraph::Node>&, bool)>;
 
-            using ReductionFunction = std::function<std::shared_ptr<ngraph::Node>(
-                const std::shared_ptr<ngraph::Node>&, const ngraph::AxisSet&)>;
+            using ReductionFunction = std::function<Output<ngraph::Node>(
+                const Output<ngraph::Node>&, const ngraph::AxisSet&)>;
 
             ///
             /// \brief      Create an nGraph version of an ONNX reduction operation.
@@ -58,9 +58,9 @@ namespace ngraph
             ///
             /// \return     nGraph node equivalent of the ONNX operation.
             ///
-            std::shared_ptr<ngraph::Node>
+            Output<ngraph::Node>
                 make_ng_reduction_op(const Node& node,
-                                     const std::shared_ptr<ngraph::Node>& ng_input,
+                                     const Output<ngraph::Node>& ng_input,
                                      ReductionFunction reduction_function);
 
             ///
@@ -73,9 +73,9 @@ namespace ngraph
             ///
             /// \return     nGraph node equivalent of the ONNX operation.
             ///
-            std::shared_ptr<ngraph::Node>
+            Output<ngraph::Node>
                 make_ng_reduction_op(const Node& node,
-                                     const std::shared_ptr<ngraph::Node>& ng_input,
+                                     const Output<ngraph::Node>& ng_input,
                                      RuntimeReductionFunction reduction_function);
 
         } // namespace  reduction

@@ -42,12 +42,12 @@ namespace ngraph
                                             return a * input_shape.at(b);
                                         });
 
-                    auto sum_node = std::shared_ptr<ngraph::Node>{reduction::make_ng_reduction_op(
+                    auto sum_node = Output<ngraph::Node>{reduction::make_ng_reduction_op(
                         node,
                         node.get_ng_inputs().at(0),
                         std::make_shared<default_opset::ReduceSum,
-                                         const std::shared_ptr<ngraph::Node>&,
-                                         const std::shared_ptr<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
+                                         const Output<ngraph::Node>&,
                                          bool>)};
 
                     auto const_node = default_opset::Constant::create(

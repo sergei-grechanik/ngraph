@@ -40,21 +40,21 @@ namespace ngraph
                 {
                     struct OpScale
                     {
-                        std::shared_ptr<ngraph::Node> data_scale;
-                        std::shared_ptr<ngraph::Node> filter_scale;
-                        std::shared_ptr<ngraph::Node> output_scale;
+                        Output<ngraph::Node> data_scale;
+                        Output<ngraph::Node> filter_scale;
+                        Output<ngraph::Node> output_scale;
                     };
 
                     struct OpZeroPoint
                     {
-                        std::shared_ptr<ngraph::Node> data_zero_point;
-                        std::shared_ptr<ngraph::Node> filter_zero_point;
-                        std::shared_ptr<ngraph::Node> output_zero_point;
+                        Output<ngraph::Node> data_zero_point;
+                        Output<ngraph::Node> filter_zero_point;
+                        Output<ngraph::Node> output_zero_point;
                     };
 
-                    std::shared_ptr<ngraph::Node>
-                        make_ng_quant_conv(const std::shared_ptr<ngraph::Node>& data,
-                                           const std::shared_ptr<ngraph::Node>& filters,
+                    Output<ngraph::Node>
+                        make_ng_quant_conv(const Output<ngraph::Node>& data,
+                                           const Output<ngraph::Node>& filters,
                                            const Strides& strides,
                                            const Strides& filter_dilations,
                                            const CoordinateDiff& padding_below,
@@ -63,7 +63,7 @@ namespace ngraph
                                            int groups,
                                            const OpScale& op_scale,
                                            const OpZeroPoint& op_zero_point,
-                                           const std::shared_ptr<ngraph::Node>& bias = nullptr)
+                                           const Output<ngraph::Node>& bias = nullptr)
                     {
                         ngraph::element::Type output_type;
                         if (data->get_element_type() == ngraph::element::u8 &&
@@ -232,7 +232,7 @@ namespace ngraph
                                                   padding_below,
                                                   padding_above);
 
-                    std::shared_ptr<ngraph::Node> conv_node = nullptr;
+                    Output<ngraph::Node> conv_node = nullptr;
 
                     // no bias param
                     if (inputs.size() == 9 && !inputs.at(8)->is_null())

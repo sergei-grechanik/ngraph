@@ -61,9 +61,9 @@ namespace ngraph
                     // Create a mask indicating locations of values that need to be adjusted
                     // by adding and subtracting bias
                     // All other values indicated by 'false' in the masks need to be zeroed out
-                    std::shared_ptr<ngraph::Node> values_below_neg_lambd =
+                    Output<ngraph::Node> values_below_neg_lambd =
                         std::make_shared<default_opset::Less>(input, negative_lambd);
-                    std::shared_ptr<ngraph::Node> values_above_pos_lambd =
+                    Output<ngraph::Node> values_above_pos_lambd =
                         std::make_shared<default_opset::Greater>(input, positive_lambd);
 
                     // Convert from bool to the input type to be able to multiply adjusted inputs
@@ -73,9 +73,9 @@ namespace ngraph
                     values_above_pos_lambd = std::make_shared<default_opset::Convert>(
                         values_above_pos_lambd, input_element_type);
 
-                    std::shared_ptr<ngraph::Node> input_minus_bias =
+                    Output<ngraph::Node> input_minus_bias =
                         std::make_shared<default_opset::Subtract>(input, bias_tensor);
-                    std::shared_ptr<ngraph::Node> input_plus_bias =
+                    Output<ngraph::Node> input_plus_bias =
                         std::make_shared<default_opset::Add>(input, bias_tensor);
 
                     // multiply by the corresponding mask to zero-out the values within

@@ -40,7 +40,7 @@ namespace ngraph
             {
                 NodeVector slice(const Node& node)
                 {
-                    std::shared_ptr<ngraph::Node> data = node.get_ng_inputs().at(0);
+                    Output<ngraph::Node> data = node.get_ng_inputs().at(0);
                     Shape data_shape = data->get_shape();
                     const auto data_rank = data_shape.size();
 

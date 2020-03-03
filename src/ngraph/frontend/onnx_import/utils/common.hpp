@@ -74,7 +74,7 @@ namespace ngraph
             /// \param[in] node            Node with multiple outputs.
             ///
             /// \return                    Vector of outputs of input node.
-            ngraph::NodeVector get_outputs(const std::shared_ptr<ngraph::Node>& node);
+            ngraph::NodeVector get_outputs(const Output<ngraph::Node>& node);
 
             /// \brief Creates a shifted square identity matrix.
             /// \note Shifting in the context of this operator means that

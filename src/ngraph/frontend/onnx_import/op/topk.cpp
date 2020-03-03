@@ -41,7 +41,7 @@ namespace
     }
 
     /// \return Return the second input to the TopK node reshaped to a scalar.
-    std::shared_ptr<ngraph::Node> get_k(const ngraph::onnx_import::Node& node)
+    Output<ngraph::Node> get_k(const ngraph::onnx_import::Node& node)
     {
         auto k_node = node.get_ng_inputs().at(1);
         NGRAPH_CHECK(shape_size(k_node->get_shape()) == 1,
@@ -52,11 +52,11 @@ namespace
     }
 
     /// \return Return the outputs of the TopK node.
-    ngraph::NodeVector get_outputs(const std::shared_ptr<ngraph::Node>& node)
+    ngraph::NodeVector get_outputs(const Output<ngraph::Node>& node)
     {
-        std::shared_ptr<ngraph::Node> values =
+        Output<ngraph::Node> values =
             std::make_shared<ngraph::opset0::GetOutputElement>(node, 0);
-        std::shared_ptr<ngraph::Node> indices =
+        Output<ngraph::Node> indices =
             std::make_shared<ngraph::opset0::GetOutputElement>(node, 1);
 
         return {values, indices};
@@ -78,7 +78,7 @@ namespace ngraph
                     auto k_node = default_opset::Constant::create(element::i64, Shape{}, {k});
                     auto axis = get_axis(node);
 
-                    std::shared_ptr<ngraph::Node> top_k = std::make_shared<default_opset::TopK>(
+                    Output<ngraph::Node> top_k = std::make_shared<default_opset::TopK>(
                         data,
                         k_node,
                         axis,
@@ -98,7 +98,7 @@ namespace ngraph
                     auto k = get_k(node);
                     auto axis = get_axis(node);
 
-                    std::shared_ptr<ngraph::Node> top_k = std::make_shared<default_opset::TopK>(
+                    Output<ngraph::Node> top_k = std::make_shared<default_opset::TopK>(
                         data,
                         k,
                         axis,
@@ -131,7 +131,7 @@ namespace ngraph
                     const auto mode = compute_max ? default_opset::TopK::Mode::MAX
                                                   : default_opset::TopK::Mode::MIN;
 
-                    std::shared_ptr<ngraph::Node> top_k = std::make_shared<default_opset::TopK>(
+                    Output<ngraph::Node> top_k = std::make_shared<default_opset::TopK>(
                         data, k, axis, mode, sort_type, element::i64);
 
                     return get_outputs(top_k);

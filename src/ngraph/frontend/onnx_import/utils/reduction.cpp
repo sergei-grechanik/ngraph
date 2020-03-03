@@ -48,9 +48,9 @@ namespace ngraph
                 }
             } // namespace  detail
 
-            std::shared_ptr<ngraph::Node>
+            Output<ngraph::Node>
                 make_ng_reduction_op(const Node& node,
-                                     const std::shared_ptr<ngraph::Node>& ng_input,
+                                     const Output<ngraph::Node>& ng_input,
                                      ReductionFunction reduction_function)
             {
                 auto data_shape = ng_input->get_shape();
@@ -61,7 +61,7 @@ namespace ngraph
                     << "provided reduction axes count (" << reduction_axes.size()
                     << ") is larger than input tensor rank (" << data_shape.size() << ")";
 
-                std::shared_ptr<ngraph::Node> op_node =
+                Output<ngraph::Node> op_node =
                     reduction_function(ng_input, reduction_axes);
 
                 std::int64_t keepdims = node.get_attribute_value<std::int64_t>("keepdims", 1);
@@ -79,9 +79,9 @@ namespace ngraph
                 return builder::opset1::reshape(op_node, output_shape);
             }
 
-            std::shared_ptr<ngraph::Node>
+            Output<ngraph::Node>
                 make_ng_reduction_op(const Node& node,
-                                     const std::shared_ptr<ngraph::Node>& ng_input,
+                                     const Output<ngraph::Node>& ng_input,
                                      RuntimeReductionFunction reduction_function)
             {
                 auto data_shape = ng_input->get_shape();
@@ -94,7 +94,7 @@ namespace ngraph
 
                 std::int64_t keepdims = node.get_attribute_value<std::int64_t>("keepdims", 1);
 
-                std::shared_ptr<ngraph::Node> op_node = reduction_function(
+                Output<ngraph::Node> op_node = reduction_function(
                     ng_input,
                     std::make_shared<ngraph::op::Constant>(element::i64,
                                                            ngraph::Shape{reduction_axes.size()},

@@ -39,8 +39,8 @@ namespace ngraph
             {
                 NodeVector expand(const Node& node)
                 {
-                    const std::shared_ptr<ngraph::Node> data{node.get_ng_inputs().at(0)};
-                    const std::shared_ptr<ngraph::Node> shape{node.get_ng_inputs().at(1)};
+                    const Output<ngraph::Node> data{node.get_ng_inputs().at(0)};
+                    const Output<ngraph::Node> shape{node.get_ng_inputs().at(1)};
 
                     NGRAPH_CHECK(shape->is_constant(),
                                  "Ngraph does not support dynamic braodcasting for Expand op.");

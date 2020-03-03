@@ -38,7 +38,7 @@ namespace ngraph
                     NodeVector ng_inputs{node.get_ng_inputs()};
                     const auto data = ng_inputs.at(0);
 
-                    std::shared_ptr<ngraph::Node> pattern;
+                    Output<ngraph::Node> pattern;
 
                     // Since opset 5 the target shape is provided as input
                     if (ng_inputs.size() == 2)
