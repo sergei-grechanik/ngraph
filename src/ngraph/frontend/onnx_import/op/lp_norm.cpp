@@ -36,7 +36,7 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector lp_norm(const Node& node)
+                OutputVector lp_norm(const Node& node)
                 {
                     const Output<ngraph::Node> data{node.get_ng_inputs().at(0)};
                     const std::int64_t p_norm{node.get_attribute_value<std::int64_t>("p", 2)};

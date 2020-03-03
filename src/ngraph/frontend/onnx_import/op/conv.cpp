@@ -81,9 +81,9 @@ namespace ngraph
 
                 } // namespace
 
-                NodeVector conv(const Node& node)
+                OutputVector conv(const Node& node)
                 {
-                    const NodeVector& inputs = node.get_ng_inputs();
+                    const OutputVector& inputs = node.get_ng_inputs();
                     auto data = inputs.at(0);
                     auto filters = inputs.at(1);
 

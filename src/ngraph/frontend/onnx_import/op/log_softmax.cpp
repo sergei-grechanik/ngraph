@@ -28,9 +28,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector log_softmax(const Node& node)
+                OutputVector log_softmax(const Node& node)
                 {
-                    NodeVector inputs{node.get_ng_inputs()};
+                    OutputVector inputs{node.get_ng_inputs()};
                     const auto data = inputs.at(0);
                     const auto data_shape = data->get_shape();
 

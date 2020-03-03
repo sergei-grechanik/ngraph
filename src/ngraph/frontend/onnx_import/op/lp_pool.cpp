@@ -35,7 +35,7 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector global_lp_pool(const Node& node)
+                OutputVector global_lp_pool(const Node& node)
                 {
                     const Output<ngraph::Node> data{node.get_ng_inputs().at(0)};
                     const std::size_t channel_axis{1};
@@ -45,7 +45,7 @@ namespace ngraph
                     ASSERT_VALID_ARGUMENT(node, p_norm >= 0)
                         << "Only positive (including zero) values are supported for 'p' attribute.";
 
-                    NodeVector slices = ngraph::builder::split(data, channels_count, channel_axis);
+                    OutputVector slices = ngraph::builder::split(data, channels_count, channel_axis);
 
                     for (auto& slice : slices)
                     {

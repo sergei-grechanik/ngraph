@@ -30,7 +30,7 @@ namespace ngraph
         {
             namespace set_1
             {
-                inline NodeVector cosh(const Node& node)
+                inline OutputVector cosh(const Node& node)
                 {
                     return {std::make_shared<ngraph::op::Cosh>(node.get_ng_inputs().at(0))};
                 }

@@ -29,13 +29,13 @@ namespace ngraph
         {
             namespace set_1
             {
-                inline NodeVector sub(const Node& node)
+                inline OutputVector sub(const Node& node)
                 {
                     auto left_rank = node.get_ng_inputs().at(0)->get_shape().size();
                     auto right_rank = node.get_ng_inputs().at(1)->get_shape().size();
                     auto axis =
                         node.get_attribute_value<std::int64_t>("axis", left_rank - right_rank);
-                    NodeVector ng_inputs{ngraph::op::legacy_style_broadcast_for_binary_operation(
+                    OutputVector ng_inputs{ngraph::op::legacy_style_broadcast_for_binary_operation(
                         node.get_ng_inputs().at(0), node.get_ng_inputs().at(1), axis)};
 
                     return {std::make_shared<default_opset::Subtract>(
@@ -46,7 +46,7 @@ namespace ngraph
 
             namespace set_7
             {
-                inline NodeVector sub(const Node& node)
+                inline OutputVector sub(const Node& node)
                 {
                     return {std::make_shared<default_opset::Subtract>(node.get_ng_inputs().at(0),
                                                                       node.get_ng_inputs().at(1))};

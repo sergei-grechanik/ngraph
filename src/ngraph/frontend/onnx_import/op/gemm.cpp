@@ -32,9 +32,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector gemm(const Node& node)
+                OutputVector gemm(const Node& node)
                 {
-                    NodeVector inputs{node.get_ng_inputs()};
+                    OutputVector inputs{node.get_ng_inputs()};
                     Output<ngraph::Node> input_a = inputs.at(0);
                     Output<ngraph::Node> input_b = inputs.at(1);
                     Output<ngraph::Node> input_c;
@@ -80,7 +80,7 @@ namespace ngraph
                     auto beta_times_input_c =
                         std::make_shared<default_opset::Multiply>(beta_node, input_c);
 
-                    return NodeVector{std::make_shared<default_opset::Add>(alpha_times_product,
+                    return OutputVector{std::make_shared<default_opset::Add>(alpha_times_product,
                                                                            beta_times_input_c)};
                 }
 
@@ -88,9 +88,9 @@ namespace ngraph
 
             namespace set_6
             {
-                NodeVector gemm(const Node& node)
+                OutputVector gemm(const Node& node)
                 {
-                    NodeVector inputs{node.get_ng_inputs()};
+                    OutputVector inputs{node.get_ng_inputs()};
                     Output<ngraph::Node> input_a = inputs.at(0);
                     Output<ngraph::Node> input_b = inputs.at(1);
                     Output<ngraph::Node> input_c;
@@ -124,7 +124,7 @@ namespace ngraph
                     auto beta_times_input_c =
                         std::make_shared<default_opset::Multiply>(beta_node, input_c);
 
-                    return NodeVector{std::make_shared<default_opset::Add>(alpha_times_product,
+                    return OutputVector{std::make_shared<default_opset::Add>(alpha_times_product,
                                                                            beta_times_input_c)};
                 }
 

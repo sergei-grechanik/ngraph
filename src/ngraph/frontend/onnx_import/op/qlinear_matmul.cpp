@@ -25,7 +25,7 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector qlinear_matmul(const Node& node)
+                OutputVector qlinear_matmul(const Node& node)
                 {
                     auto ng_inputs = node.get_ng_inputs();
                     auto factory = builder::QLinearMatmulFactory(

@@ -55,17 +55,17 @@ namespace ngraph
                 /// \brief      Creates average pooling ONNX operation.
                 /// \return     Vector of output nodes.
                 ///
-                NodeVector make_avg_pool() const;
+                OutputVector make_avg_pool() const;
 
                 ///
                 /// \brief      Creates max pooling ONNX operation.
                 /// \return     Vector of output nodes.
                 ///
-                NodeVector make_max_pool() const;
+                OutputVector make_max_pool() const;
 
             protected:
                 Node m_onnx_node;
-                const NodeVector m_inputs;
+                const OutputVector m_inputs;
                 Shape m_kernel_shape;
                 Strides m_strides;
                 Strides m_dilations;

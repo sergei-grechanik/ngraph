@@ -62,7 +62,7 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector pad(const Node& node)
+                OutputVector pad(const Node& node)
                 {
                     auto data = node.get_ng_inputs().at(0);
                     const Shape& data_shape = data->get_shape();
@@ -90,7 +90,7 @@ namespace ngraph
             } // namespace set_1
             namespace set_11
             {
-                NodeVector pad(const Node& node)
+                OutputVector pad(const Node& node)
                 {
                     auto data = node.get_ng_inputs().at(0);
                     auto pads = node.get_ng_inputs().at(1);
@@ -129,7 +129,7 @@ namespace ngraph
                     {
                         auto axis =
                             default_opset::Constant::create(element::i64, ngraph::Shape{}, {0});
-                        NodeVector padding = builder::split(pads, 2, 0);
+                        OutputVector padding = builder::split(pads, 2, 0);
 
                         padding_begin =
                             std::make_shared<default_opset::Convert>(padding.at(0), element::i64);

@@ -39,9 +39,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector conv_transpose(const Node& node)
+                OutputVector conv_transpose(const Node& node)
                 {
-                    const NodeVector& inputs = node.get_ng_inputs();
+                    const OutputVector& inputs = node.get_ng_inputs();
                     auto data = inputs.at(0);
                     auto filters = inputs.at(1);
 

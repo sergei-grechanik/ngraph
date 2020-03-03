@@ -31,9 +31,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector conv_integer(const Node& node)
+                OutputVector conv_integer(const Node& node)
                 {
-                    const NodeVector& inputs = node.get_ng_inputs();
+                    const OutputVector& inputs = node.get_ng_inputs();
                     auto num_inputs = inputs.size();
                     auto input = inputs.at(0);
                     auto filters = inputs.at(1);

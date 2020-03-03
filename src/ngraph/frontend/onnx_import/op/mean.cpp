@@ -26,7 +26,7 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector mean(const Node& node)
+                OutputVector mean(const Node& node)
                 {
                     auto sum = variadic::make_ng_variadic_op<default_opset::Add>(node).front();
                     auto shape = sum->get_shape();

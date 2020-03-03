@@ -30,9 +30,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector quantize_linear(const Node& node)
+                OutputVector quantize_linear(const Node& node)
                 {
-                    NodeVector inputs{node.get_ng_inputs()};
+                    OutputVector inputs{node.get_ng_inputs()};
                     Output<ngraph::Node> x = inputs.at(0);
                     Output<ngraph::Node> y_scale = inputs.at(1);
                     Output<ngraph::Node> y_zero_point = inputs.at(2);

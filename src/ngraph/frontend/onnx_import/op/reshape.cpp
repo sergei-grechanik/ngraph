@@ -33,9 +33,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector reshape(const Node& node)
+                OutputVector reshape(const Node& node)
                 {
-                    NodeVector ng_inputs{node.get_ng_inputs()};
+                    OutputVector ng_inputs{node.get_ng_inputs()};
                     const auto data = ng_inputs.at(0);
 
                     Output<ngraph::Node> pattern;

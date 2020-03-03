@@ -34,9 +34,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector dequantize_linear(const Node& node)
+                OutputVector dequantize_linear(const Node& node)
                 {
-                    NodeVector inputs{node.get_ng_inputs()};
+                    OutputVector inputs{node.get_ng_inputs()};
                     Output<ngraph::Node> x = inputs.at(0);
                     Output<ngraph::Node> x_scale = inputs.at(1);
                     Output<ngraph::Node> zero_point;

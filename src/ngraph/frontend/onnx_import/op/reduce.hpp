@@ -45,7 +45,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_log_sum(const Node& node)
+                inline OutputVector reduce_log_sum(const Node& node)
                 {
                     Output<ngraph::Node> sum_node{reduction::make_ng_reduction_op(
                         node,
@@ -69,7 +69,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_log_sum_exp(const Node& node)
+                inline OutputVector reduce_log_sum_exp(const Node& node)
                 {
                     auto exp_node =
                         std::make_shared<default_opset::Exp>(node.get_ng_inputs().at(0));
@@ -95,7 +95,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_l1(const Node& node)
+                inline OutputVector reduce_l1(const Node& node)
                 {
                     auto l1_norm_reduction = std::bind(ngraph::builder::l1_norm,
                                                        std::placeholders::_1,
@@ -117,7 +117,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_l2(const Node& node)
+                inline OutputVector reduce_l2(const Node& node)
                 {
                     auto l2_norm_reduction = std::bind(ngraph::builder::l2_norm,
                                                        std::placeholders::_1,
@@ -141,7 +141,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_max(const Node& node)
+                inline OutputVector reduce_max(const Node& node)
                 {
                     return {reduction::make_ng_reduction_op(
                         node,
@@ -164,7 +164,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                NodeVector reduce_mean(const Node& node);
+                OutputVector reduce_mean(const Node& node);
 
                 /// \brief      Compute the minimum value of the input tensor's elements along the
                 ///             provided axes.
@@ -178,7 +178,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_min(const Node& node)
+                inline OutputVector reduce_min(const Node& node)
                 {
                     return {reduction::make_ng_reduction_op(
                         node,
@@ -201,7 +201,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_prod(const Node& node)
+                inline OutputVector reduce_prod(const Node& node)
                 {
                     return {reduction::make_ng_reduction_op(
                         node,
@@ -224,7 +224,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_sum(const Node& node)
+                inline OutputVector reduce_sum(const Node& node)
                 {
                     return {reduction::make_ng_reduction_op(
                         node,
@@ -247,7 +247,7 @@ namespace ngraph
                 ///
                 /// \return     The nGraph node equivalent of the ONNX operation.
                 ///
-                inline NodeVector reduce_sum_square(const Node& node)
+                inline OutputVector reduce_sum_square(const Node& node)
                 {
                     auto input = Output<ngraph::Node>{node.get_ng_inputs().at(0)};
                     auto square_node = std::make_shared<default_opset::Multiply>(input, input);

@@ -40,12 +40,12 @@ namespace ngraph
             ///
             /// \return nGraph node equivalent of the ONNX operation
             template <class T>
-            inline NodeVector
+            inline OutputVector
                 make_ng_variadic_op(const Node& node,
                                     const ngraph::op::AutoBroadcastSpec& auto_broadcast =
                                         ngraph::op::AutoBroadcastSpec::NUMPY)
             {
-                const NodeVector ng_inputs{node.get_ng_inputs()};
+                const OutputVector ng_inputs{node.get_ng_inputs()};
 
                 // Templated binary operation - Creates Add, Minimum, Maximum, etc.
                 const auto binary_operation =

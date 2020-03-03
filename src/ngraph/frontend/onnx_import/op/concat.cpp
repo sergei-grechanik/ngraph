@@ -30,9 +30,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                NodeVector concat(const Node& node)
+                OutputVector concat(const Node& node)
                 {
-                    NodeVector inputs{node.get_ng_inputs()};
+                    OutputVector inputs{node.get_ng_inputs()};
                     std::int64_t axis = node.get_attribute_value<std::int64_t>("axis");
                     const auto normalized_axis = ngraph::normalize_axis(
                         node.get_description(), axis, inputs.at(0)->get_shape().size());

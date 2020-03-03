@@ -27,7 +27,7 @@ namespace ngraph
         {
             namespace set_1
             {
-                inline NodeVector identity(const Node& node)
+                inline OutputVector identity(const Node& node)
                 {
                     return {node.get_ng_inputs().at(0)};
                 }

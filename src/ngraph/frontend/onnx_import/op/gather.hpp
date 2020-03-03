@@ -31,9 +31,9 @@ namespace ngraph
         {
             namespace set_1
             {
-                inline NodeVector gather(const Node& node)
+                inline OutputVector gather(const Node& node)
                 {
-                    NodeVector ng_inputs{node.get_ng_inputs()};
+                    OutputVector ng_inputs{node.get_ng_inputs()};
                     auto data = ng_inputs.at(0);
                     auto indices = ng_inputs.at(1);
                     auto axis = node.get_attribute_value<int64_t>("axis", 0);
