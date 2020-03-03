@@ -37,6 +37,7 @@ namespace ngraph
         {
         public:
             static constexpr NodeTypeInfo type_info{"NullNode", 0};
+            static constexpr bool is_always_single_output = true;
             const NodeTypeInfo& get_type_info() const override { return type_info; }
             NullNode() = default;
 

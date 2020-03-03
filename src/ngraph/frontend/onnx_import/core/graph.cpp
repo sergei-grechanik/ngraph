@@ -124,7 +124,7 @@ namespace ngraph
 
                 const auto value_info = m_inputs.back();
                 auto ng_node = value_info.get_ng_node(m_parameters, m_initializers);
-                add_provenance_tag_to_input(value_info, ng_node);
+                add_provenance_tag_to_input(value_info, ng_node.get_node_shared_ptr());
                 m_ng_node_cache[input.name()] = std::move(ng_node);
             }
 
@@ -172,7 +172,7 @@ namespace ngraph
                 m_nodes.emplace_back(node_proto, *this);
                 const Node& node{m_nodes.back()};
 
-                NodeVector ng_nodes{node.get_ng_nodes()};
+                OutputVector ng_nodes{node.get_ng_nodes()};
                 // Iterate over the number of outputs for given node in graph.
                 // Some of them may be optional and trimmed. See:
                 // https://github.com/onnx/onnx/blob/master/docs/IR.md#optional-inputs-and-outputs
@@ -183,9 +183,9 @@ namespace ngraph
             }
         }
 
-        NodeVector Graph::get_ng_outputs() const
+        OutputVector Graph::get_ng_outputs() const
         {
-            NodeVector results;
+            OutputVector results;
             for (const auto& output : m_graph_proto->output())
             {
                 results.emplace_back(get_ng_node_from_cache(output.name()));
@@ -193,7 +193,7 @@ namespace ngraph
             return results;
         }
 
-        NodeVector Graph::make_ng_nodes(const Node& onnx_node) const
+        OutputVector Graph::make_ng_nodes(const Node& onnx_node) const
         {
             const auto ng_node_factory =
                 m_model->get_operator(onnx_node.op_type(), onnx_node.domain());
@@ -223,16 +223,16 @@ namespace ngraph
         }
 
         void Graph::add_provenance_tags(const Node& onnx_node,
-                                        const NodeVector& ng_node_vector) const
+                                        const OutputVector& ng_node_vector) const
         {
             const auto tag = detail::build_op_provenance_tag(onnx_node);
             const auto ng_inputs = onnx_node.get_ng_inputs();
 
             ngraph::traverse_nodes(
-                ng_node_vector,
+                ngraph::as_node_vector(ng_node_vector),
                 [&tag](std::shared_ptr<ngraph::Node> ng_node) { ng_node->add_provenance_tag(tag); },
                 false,
-                ng_inputs);
+                ngraph::as_node_vector(ng_inputs));
         }
     } // namespace onnx_import
 

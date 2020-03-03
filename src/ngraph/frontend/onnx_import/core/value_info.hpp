@@ -83,7 +83,7 @@ namespace ngraph
                     m_value_info_proto->type().tensor_type().elem_type());
             }
 
-            std::shared_ptr<ngraph::Node>
+            Output<ngraph::Node>
                 get_ng_node(ParameterVector& parameters,
                             const std::map<std::string, Tensor>& initializers) const
             {

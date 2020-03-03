@@ -27,7 +27,7 @@ namespace ngraph
 {
     namespace onnx_import
     {
-        using Operator = std::function<NodeVector(const Node&)>;
+        using Operator = std::function<OutputVector(const Node&)>;
         using OperatorSet = std::unordered_map<std::string, std::reference_wrapper<const Operator>>;
 
     } // namespace onnx_import
