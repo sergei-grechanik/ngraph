@@ -24,6 +24,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <type_traits>
 #include <typeindex>
 #include <unordered_map>
 #include <unordered_set>
@@ -197,6 +198,10 @@ namespace ngraph
 
         /// Sets the number of outputs
         void set_output_size(size_t output_size);
+
+        /// \brief Whether this op always has exactly one output (and can be implicitly cast to
+        //         `Output`). This constant should be overridden in subclasses.
+        static constexpr bool is_always_single_output = false;
 
         void revalidate_and_infer_types() { validate_and_infer_types(); }
         // Called after transition
@@ -409,7 +414,7 @@ namespace ngraph
 
     protected:
         // Will be replaced with an OutputVector version
-        virtual std::shared_ptr<Node> copy_with_new_args(const NodeVector& new_args) const = 0;
+        virtual std::shared_ptr<Node> copy_with_new_args(const OutputVector& new_args) const = 0;
 
     public:
         std::shared_ptr<Node> copy_with_new_inputs(const OutputVector& new_args) const;
@@ -748,11 +753,16 @@ namespace ngraph
 
         /// \brief Constructs a Output, referencing the zeroth output of the node.
         /// \param node A `shared_ptr` to the node for the output handle.
-        template <typename T>
+        template <typename T,
+                  typename = typename std::enable_if<T::is_always_single_output>::type>
         Output(const std::shared_ptr<T>& node)
             : m_node(node)
             , m_index(0)
         {
+            NGRAPH_CHECK(node->get_output_size() == 1,
+                         "This node is marked as single-output in compile time ",
+                         "but it isn't single-output in run time: ",
+                         node);
             eliminate_goe();
         }
 
@@ -870,10 +880,15 @@ namespace ngraph
 
         /// \brief Constructs a Output, referencing the zeroth output of the node.
         /// \param node A `shared_ptr` to the node for the output handle.
-        template <typename T>
-        Output(const std::shared_ptr<T>& node)
+        template <typename T,
+                  typename = typename std::enable_if<T::is_always_single_output>::type>
+        explicit Output(const std::shared_ptr<T>& node)
             : Output(node, 0)
         {
+            NGRAPH_CHECK(node->get_output_size() == 1,
+                         "This node is marked as single-output in compile time ",
+                         "but it isn't single-output in run time: ",
+                         node);
             eliminate_goe();
         }
 
@@ -1047,6 +1062,18 @@ namespace ngraph
 }
 #define NODE_VALIDATION_CHECK(node, ...)                                                           \
     NGRAPH_CHECK_HELPER(::ngraph::NodeValidationFailure, (node), __VA_ARGS__)
+
+#define NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT()                                                         \
+            static constexpr bool is_always_single_output = true;                                  \
+            void set_output_size(size_t output_size) {                                             \
+                NGRAPH_CHECK(output_size == 1,                                                     \
+                             "The operation was declared as single output, ",                      \
+                             "but now its output size is getting set to ",                         \
+                             output_size,                                                          \
+                             ", the node is ",                                                     \
+                             this);                                                                \
+                Node::set_output_size(output_size);                                                \
+            }
 
 namespace ngraph
 {
