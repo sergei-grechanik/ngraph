@@ -15,6 +15,7 @@
 //*****************************************************************************
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 #include "default_opset.hpp"
@@ -36,7 +37,7 @@ namespace ngraph
                     const auto axis_node =
                         default_opset::Constant::create(element::i64, Shape{}, {axis});
 
-                    Output<ngraph::Node> split;
+                    std::shared_ptr<ngraph::Node> split;
                     if (node.has_attribute("split"))
                     {
                         const auto splits =
@@ -54,7 +55,7 @@ namespace ngraph
                         split = std::make_shared<default_opset::Split>(
                             input, axis_node, outputs_number);
                     }
-                    return common::get_outputs(split);
+                    return split->outputs();
                 }
 
             } // namespace set_1
