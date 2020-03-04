@@ -33,8 +33,8 @@ namespace ngraph
             {
                 inline OutputVector div(const Node& node)
                 {
-                    auto left_rank = node.get_ng_inputs().at(0)->get_shape().size();
-                    auto right_rank = node.get_ng_inputs().at(1)->get_shape().size();
+                    auto left_rank = node.get_ng_inputs().at(0).get_shape().size();
+                    auto right_rank = node.get_ng_inputs().at(1).get_shape().size();
                     auto axis =
                         node.get_attribute_value<std::int64_t>("axis", left_rank - right_rank);
                     OutputVector ng_inputs{ngraph::op::legacy_style_broadcast_for_binary_operation(

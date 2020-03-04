@@ -71,7 +71,7 @@ namespace ngraph
                 : PoolingFactory(node)
             {
                 // Correct the kernel shape.
-                const Shape& data_shape{m_inputs.at(0)->get_shape()};
+                const Shape& data_shape{m_inputs.at(0).get_shape()};
                 // Set shape to all but {N,C} axes.
                 m_kernel_shape = Shape{std::next(std::begin(data_shape), 2), std::end(data_shape)};
             }

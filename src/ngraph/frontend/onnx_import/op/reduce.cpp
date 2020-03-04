@@ -32,7 +32,7 @@ namespace ngraph
             {
                 OutputVector reduce_mean(const Node& node)
                 {
-                    auto input_shape = node.get_ng_inputs().at(0)->get_shape();
+                    auto input_shape = node.get_ng_inputs().at(0).get_shape();
                     auto reduction_axes = reduction::detail::get_reduction_axes(node);
                     std::size_t elem_count_product =
                         std::accumulate(std::begin(reduction_axes),

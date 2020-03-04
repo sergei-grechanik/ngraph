@@ -37,12 +37,12 @@ namespace ngraph
                     std::vector<std::size_t> normalized_axes =
                         ngraph::normalize_axes(node.get_description(),
                                                reduction_axes,
-                                               node.get_ng_inputs().at(0)->get_shape().size());
+                                               node.get_ng_inputs().at(0).get_shape().size());
 
                     if (reduction_axes.empty())
                     {
                         normalized_axes = onnx_import::common::get_monotonic_range<std::size_t>(
-                            node.get_ng_inputs().at(0)->get_shape().size());
+                            node.get_ng_inputs().at(0).get_shape().size());
                     }
                     return AxisSet{normalized_axes};
                 }
@@ -53,7 +53,7 @@ namespace ngraph
                                      const Output<ngraph::Node>& ng_input,
                                      ReductionFunction reduction_function)
             {
-                auto data_shape = ng_input->get_shape();
+                auto data_shape = ng_input.get_shape();
 
                 auto reduction_axes = detail::get_reduction_axes(node);
 
