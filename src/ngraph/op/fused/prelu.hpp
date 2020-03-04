@@ -33,6 +33,7 @@ namespace ngraph
             class NGRAPH_API PRelu : public ngraph::op::util::FusedOp
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"PRelu", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 PRelu() = default;

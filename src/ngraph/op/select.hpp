@@ -44,6 +44,7 @@ namespace ngraph
             class NGRAPH_API Select : public Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"Select", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 /// \brief Constructs a selection operation.
@@ -90,6 +91,7 @@ namespace ngraph
             class NGRAPH_API Select : public Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"Select", 1};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 /// \brief Constructs a selection operation.

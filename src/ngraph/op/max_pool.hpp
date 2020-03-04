@@ -29,6 +29,7 @@ namespace ngraph
             class NGRAPH_API MaxPool : public Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"MaxPool", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 /// \brief Constructs a batched max pooling operation.
@@ -208,6 +209,7 @@ namespace ngraph
             class NGRAPH_API MaxPool : public Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"MaxPool", 1};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 /// \brief Constructs a batched max pooling operation.

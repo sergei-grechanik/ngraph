@@ -38,6 +38,7 @@ namespace ngraph
                 /// \param n The index of the tuple element to get.
                 GetOutputElement(const std::shared_ptr<Node>& arg, size_t n);
 
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"GetOutputElement", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 GetOutputElement() = default;

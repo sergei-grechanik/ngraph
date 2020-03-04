@@ -57,6 +57,7 @@ namespace ngraph
             class NGRAPH_API Gather : public Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"Gather", 1};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 Gather() = default;

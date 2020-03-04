@@ -66,6 +66,7 @@ namespace ngraph
                                            const std::shared_ptr<Node>& arg);
 
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 void validate_and_infer_types() override;
                 bool is_unary_elementwise_arithmetic() const override { return true; }
             };

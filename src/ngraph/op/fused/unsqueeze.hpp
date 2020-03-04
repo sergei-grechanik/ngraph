@@ -32,6 +32,7 @@ namespace ngraph
             class NGRAPH_API Unsqueeze : public ngraph::op::util::FusedOp
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"Unsqueeze", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 Unsqueeze() = default;

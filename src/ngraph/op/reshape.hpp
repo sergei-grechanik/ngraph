@@ -67,6 +67,7 @@ namespace ngraph
             class NGRAPH_API Reshape : public Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"Reshape", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 /// \brief Constructs a reshape operation.
@@ -119,6 +120,7 @@ namespace ngraph
             class NGRAPH_API Reshape : public Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"Reshape", 1};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 Reshape() = default;

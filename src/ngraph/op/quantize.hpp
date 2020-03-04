@@ -33,6 +33,7 @@ namespace ngraph
             class NGRAPH_API Quantize : public ngraph::op::Op
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"Quantize", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 enum class RoundMode

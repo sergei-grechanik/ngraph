@@ -37,6 +37,7 @@ namespace ngraph
             class NGRAPH_API GroupConvolutionTranspose : public util::FusedOp
             {
             public:
+                NGRAPH_NODE_ALWAYS_SINGLE_OUTPUT();
                 static constexpr NodeTypeInfo type_info{"GroupConvolutionTranspose", 0};
                 const NodeTypeInfo& get_type_info() const override { return type_info; }
                 GroupConvolutionTranspose() = default;
